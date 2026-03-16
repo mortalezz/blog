@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One Morning in Phoenix — Write where you think</title>
+    <meta name="description" content="I built a CMS this morning. The whole thing. Architecture, manifesto, deployment, first post — between coffee and lunch, in Phoenix, Arizona.">
+    <meta property="og:title" content="One Morning in Phoenix">
+    <meta property="og:description" content="I built a CMS this morning. The whole thing. Architecture, manifesto, deployment, first post — between coffee and lunch, in Phoenix, Arizona.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://mortalezz.github.io/blog//posts/one-morning-in-phoenix/">
+    <meta name="twitter:card" content="summary">
+    <link rel="canonical" href="https://mortalezz.github.io/blog//posts/one-morning-in-phoenix/">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --ink: #1a1a1a;
+            --paper: #faf9f7;
+            --dim: #6b6560;
+            --accent: #c45d3e;
+            --rule: #e0dcd7;
+            --code-bg: #f0eeeb;
+            --max-width: 42rem;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --ink: #e8e4df;
+                --paper: #191816;
+                --dim: #9a9590;
+                --accent: #e07a5f;
+                --rule: #2e2c29;
+                --code-bg: #242220;
+            }
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 18px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        body {
+            font-family: 'Newsreader', Georgia, 'Times New Roman', serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.7;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        /* --- Header / Meta --- */
+        .post-header {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 6rem 1.5rem 3rem;
+        }
+
+        .post-meta {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.78rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--dim);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .post-meta .sep {
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: var(--dim);
+            display: inline-block;
+        }
+
+        .post-title {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 2.8rem;
+            font-weight: 300;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            color: var(--ink);
+            margin-bottom: 1.5rem;
+        }
+
+        .post-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .post-tags a, .post-tags span {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--accent);
+            text-decoration: none;
+            padding: 0.2rem 0.6rem;
+            border: 1px solid var(--accent);
+            border-radius: 2px;
+            transition: all 0.2s ease;
+        }
+
+        .post-tags a:hover {
+            background: var(--accent);
+            color: var(--paper);
+        }
+
+        /* --- Content --- */
+        .post-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        .post-content p {
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        .post-content h2 {
+            font-size: 1.6rem;
+            font-weight: 400;
+            margin: 3rem 0 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .post-content h3 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin: 2.5rem 0 0.8rem;
+        }
+
+        .post-content h4 {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 2rem 0 0.8rem;
+            color: var(--dim);
+        }
+
+        .post-content a {
+            color: var(--accent);
+            text-decoration: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 2px;
+            transition: color 0.2s ease;
+        }
+
+        .post-content a:hover {
+            color: var(--ink);
+        }
+
+        .post-content blockquote {
+            border-left: 2px solid var(--accent);
+            padding: 0.2rem 0 0.2rem 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: var(--dim);
+        }
+
+        .post-content blockquote p {
+            margin-bottom: 0.5rem;
+        }
+
+        .post-content ul, .post-content ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.4rem;
+            font-weight: 300;
+        }
+
+        .post-content code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            background: var(--code-bg);
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+        }
+
+        .post-content pre {
+            background: var(--code-bg);
+            padding: 1.2rem 1.5rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 2rem 0;
+            border: 1px solid var(--rule);
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin: 2rem 0;
+        }
+
+        .post-content hr {
+            border: none;
+            height: 1px;
+            background: var(--rule);
+            margin: 3rem auto;
+            max-width: 6rem;
+        }
+
+        .post-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            font-size: 0.9rem;
+        }
+
+        .post-content th, .post-content td {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid var(--rule);
+            text-align: left;
+        }
+
+        .post-content th {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--dim);
+            font-weight: 500;
+        }
+
+        /* --- Footer / Navigation --- */
+        .post-footer {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 3rem 1.5rem 6rem;
+            border-top: 1px solid var(--rule);
+        }
+
+        .post-footer a {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.82rem;
+            letter-spacing: 0.04em;
+            color: var(--accent);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: gap 0.2s ease;
+        }
+
+        .post-footer a:hover {
+            gap: 0.7rem;
+        }
+
+        .post-footer .arrow {
+            font-size: 1.1rem;
+            line-height: 1;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 640px) {
+            html { font-size: 16px; }
+
+            .post-header { padding: 4rem 1.2rem 2rem; }
+            .post-title { font-size: 2rem; }
+            .post-content { padding: 0 1.2rem 3rem; }
+            .post-footer { padding: 2rem 1.2rem 4rem; }
+        }
+    </style>
+</head>
+<body>
+    <article>
+        <header class="post-header">
+            <div class="post-meta">
+                <time datetime="2026-03-16">March 16, 2026</time>
+                <span class="sep"></span>
+                <span>4 min read</span>
+            </div>
+            <h1 class="post-title">One Morning in Phoenix</h1>
+            
+            <div class="post-tags">
+                
+                <span>note2cms</span>
+                
+                <span>launch</span>
+                
+                <span>architecture</span>
+                
+                <span>open-source</span>
+                
+            </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>I built a CMS this morning. The whole thing. Architecture, manifesto, deployment, first post — between coffee and lunch, in Phoenix, Arizona.</p>
+<p>It started with a simple observation: the browser is for consuming. Not creating. Every CMS from WordPress to Ghost to Substack puts the editor in the browser. But authoring left the browser years ago. It moved to Apple Notes, to Obsidian, to Bear, to whatever app you think in. The browser didn&rsquo;t earn the right to be your editor. It earned the right to render beautifully.</p>
+<p>So I built note2cms.</p>
+<h2 id="what-it-is">What It Is</h2>
+<p>Four API endpoints. That&rsquo;s the whole CMS.</p>
+<p>You push Markdown — from curl, from an iOS Shortcut, from an Android share intent, from wherever. Two pipelines fire in parallel: one builds a static HTML page with beautiful typography, the other updates a lightweight taxonomy database. You get a permalink back. Share it with the world.</p>
+<p>That&rsquo;s the entire publishing flow. No admin panel. No login screen. No rich text editor that fights you. No draft state management. No plugin ecosystem. No theme marketplace. No monthly fee.</p>
+<h2 id="what-died-so-this-could-live">What Died So This Could Live</h2>
+<p>Static site generators have existed since the stone age. Hugo, Jekyll, Gatsby — they all rebuild your entire blog every time you fix a typo. Five hundred posts? Rebuild all five hundred. That&rsquo;s not architecture, that&rsquo;s a lack of it.</p>
+<p>note2cms builds one post when you publish one post. O(1). The other four hundred ninety-nine posts sitting in static HTML are untouched. Their cache headers stay valid. Their directories don&rsquo;t get rewritten.</p>
+<p>The reason nobody built this before is historical. When static generators were being designed, CI/CD was practically nonexistent. To trigger a build, you sat at a desktop and ran a command. Nobody would trigger two parallel builder pipelines in the cloud, performed by absolutely headless stateless workers. The workers that built this post you&rsquo;re reading will be dead and replaced by the time I write the next one.</p>
+<p>Times changed. The tools caught up. The CMS paradigm didn&rsquo;t.</p>
+<h2 id="the-architecture">The Architecture</h2>
+<p>The FastAPI process is the only living thing, and its job is tiny — authenticate, accept, dispatch, respond. It&rsquo;s a valve. Everything upstream is your notes app. Everything downstream is static HTML on a CDN. The dynamic surface area is four endpoints and a PostgreSQL table. That&rsquo;s the smallest possible living footprint for a publishing system that can receive input.</p>
+<p>A theme is two files. A React component for the post page, a React component for the index page. They share one CSS file. That&rsquo;s the entire theming API. Want to change your blog&rsquo;s visual identity? Replace two files. A bootcamp grad can build a production theme in an afternoon.</p>
+<p>The Markdown files are the system of record. The database is derived. The static HTML is derived. Delete everything except the Markdown, run one rebuild script, and the entire blog reconstructs itself in seconds. Your words are the only thing that matters. Your words are the only thing that survives.</p>
+<h2 id="the-deployment">The Deployment</h2>
+<p>This blog runs on Leapcell&rsquo;s free tier for the Python runtime and GitHub Pages for the static output. The PostgreSQL database is free. The CDN is free. The SSL is free.</p>
+<p>Total cost of this entire publishing infrastructure: a domain name. Twelve dollars a year.</p>
+<h2 id="how-we-built-it">How We Built It</h2>
+<p>Here&rsquo;s the part that&rsquo;s hard to believe: we built this entire system in one morning. Architected it in conversation, coded it in a sandbox, pushed it blind to GitHub, deployed it to cloud infrastructure we&rsquo;d never configured before, and debugged the production issues live — PgBouncer connection pooling, async database drivers, read-only filesystems — with real curl commands against the real endpoint.</p>
+<p>No local staging environment. No Docker compose dry run. No &ldquo;let me set up a test instance first.&rdquo; Straight to production, fix forward, ship it.</p>
+<p>The development workflow matched the product philosophy. No ceremony. No unnecessary infrastructure. Just push and it&rsquo;s there.</p>
+<h2 id="the-thesis">The Thesis</h2>
+<p>Modern developers forgot that the complexity of frameworks and workflows was born out of necessity. These tools were solving problems as it was possible at the time. With stateless worker pipelines today, layers of that complexity can be discarded for good — if you think creatively first.</p>
+<p>In the end there will be a new thinking paradigm: what in your framework actually serves the result to the intended recipient, and what is just builder toolkit that&rsquo;s not needed once the job is done — but somehow it persists, it&rsquo;s heavyweight, and its burly silhouette deters junior developers from the craft of building things.</p>
+<p>note2cms is open source. Self-hosted. Four endpoints. Your words, your server, your domain, nobody&rsquo;s platform.</p>
+<p>You are not gifting your writings to some dirty SaaS. You own it.</p>
+<hr />
+<p><em>Write where you think. Publish where they look. Own everything in between.</em></p>
+        </div>
+    </article>
+
+    <footer class="post-footer">
+        <a href="https://mortalezz.github.io/blog//posts/">
+            <span class="arrow">←</span> All posts
+        </a>
+    </footer>
+</body>
+</html>
