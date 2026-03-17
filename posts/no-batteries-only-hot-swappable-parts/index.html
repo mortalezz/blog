@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>No Batteries, Only Hot-Swappable Parts — Write where you think</title>
+    <meta name="description" content="Every framework wants you to marry its templating engine. Django gives you Django templates. Rails gives you ERB. Next.js gives you React. Hugo gives you Go templates. Learn our syntax, adopt our…">
+    <meta property="og:title" content="No Batteries, Only Hot-Swappable Parts">
+    <meta property="og:description" content="Every framework wants you to marry its templating engine. Django gives you Django templates. Rails gives you ERB. Next.js gives you React. Hugo gives you Go templates. Learn our syntax, adopt our…">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://mortalezz.github.io/blog/posts/no-batteries-only-hot-swappable-parts/">
+    <meta name="twitter:card" content="summary">
+    <link rel="canonical" href="https://mortalezz.github.io/blog/posts/no-batteries-only-hot-swappable-parts/">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --ink: #1a1a1a;
+            --paper: #faf9f7;
+            --dim: #6b6560;
+            --accent: #c45d3e;
+            --rule: #e0dcd7;
+            --code-bg: #f0eeeb;
+            --max-width: 42rem;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --ink: #e8e4df;
+                --paper: #191816;
+                --dim: #9a9590;
+                --accent: #e07a5f;
+                --rule: #2e2c29;
+                --code-bg: #242220;
+            }
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 18px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        body {
+            font-family: 'Newsreader', Georgia, 'Times New Roman', serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.7;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        /* --- Header / Meta --- */
+        .post-header {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 6rem 1.5rem 3rem;
+        }
+
+        .post-meta {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.78rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--dim);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .post-meta .sep {
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: var(--dim);
+            display: inline-block;
+        }
+
+        .post-title {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 2.8rem;
+            font-weight: 300;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            color: var(--ink);
+            margin-bottom: 1.5rem;
+        }
+
+        .post-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .post-tags a, .post-tags span {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--accent);
+            text-decoration: none;
+            padding: 0.2rem 0.6rem;
+            border: 1px solid var(--accent);
+            border-radius: 2px;
+            transition: all 0.2s ease;
+        }
+
+        .post-tags a:hover {
+            background: var(--accent);
+            color: var(--paper);
+        }
+
+        /* --- Content --- */
+        .post-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        .post-content p {
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        .post-content h2 {
+            font-size: 1.6rem;
+            font-weight: 400;
+            margin: 3rem 0 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .post-content h3 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin: 2.5rem 0 0.8rem;
+        }
+
+        .post-content h4 {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 2rem 0 0.8rem;
+            color: var(--dim);
+        }
+
+        .post-content a {
+            color: var(--accent);
+            text-decoration: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 2px;
+            transition: color 0.2s ease;
+        }
+
+        .post-content a:hover {
+            color: var(--ink);
+        }
+
+        .post-content blockquote {
+            border-left: 2px solid var(--accent);
+            padding: 0.2rem 0 0.2rem 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: var(--dim);
+        }
+
+        .post-content blockquote p {
+            margin-bottom: 0.5rem;
+        }
+
+        .post-content ul, .post-content ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.4rem;
+            font-weight: 300;
+        }
+
+        .post-content code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            background: var(--code-bg);
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+        }
+
+        .post-content pre {
+            background: var(--code-bg);
+            padding: 1.2rem 1.5rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 2rem 0;
+            border: 1px solid var(--rule);
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin: 2rem 0;
+        }
+
+        .post-content hr {
+            border: none;
+            height: 1px;
+            background: var(--rule);
+            margin: 3rem auto;
+            max-width: 6rem;
+        }
+
+        .post-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            font-size: 0.9rem;
+        }
+
+        .post-content th, .post-content td {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid var(--rule);
+            text-align: left;
+        }
+
+        .post-content th {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--dim);
+            font-weight: 500;
+        }
+
+        /* --- Footer / Navigation --- */
+        .post-footer {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 3rem 1.5rem 6rem;
+            border-top: 1px solid var(--rule);
+        }
+
+        .post-footer a {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.82rem;
+            letter-spacing: 0.04em;
+            color: var(--accent);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: gap 0.2s ease;
+        }
+
+        .post-footer a:hover {
+            gap: 0.7rem;
+        }
+
+        .post-footer .arrow {
+            font-size: 1.1rem;
+            line-height: 1;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 640px) {
+            html { font-size: 16px; }
+
+            .post-header { padding: 4rem 1.2rem 2rem; }
+            .post-title { font-size: 2rem; }
+            .post-content { padding: 0 1.2rem 3rem; }
+            .post-footer { padding: 2rem 1.2rem 4rem; }
+        }
+    </style>
+</head>
+<body>
+    <article>
+        <header class="post-header">
+            <div class="post-meta">
+                <time datetime="2026-03-16">March 16, 2026</time>
+                <span class="sep"></span>
+                <span>4 min read</span>
+            </div>
+            <h1 class="post-title">No Batteries, Only Hot-Swappable Parts</h1>
+            
+            <div class="post-tags">
+                
+                <span>architecture</span>
+                
+                <span>theming</span>
+                
+                <span>react</span>
+                
+                <span>jinja2</span>
+                
+                <span>philosophy</span>
+                
+            </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>Every framework wants you to marry its templating engine. Django gives you Django templates. Rails gives you ERB. Next.js gives you React. Hugo gives you Go templates. Learn our syntax, adopt our conventions, live in our world.</p>
+<p>note2cms does not have a templating engine. It has a slot.</p>
+<h2 id="the-contract">The Contract</h2>
+<p>A theme in note2cms is a function. It receives data — title, date, content, tags, reading time. It returns an HTML string. That is the entire interface. What happens between input and output is none of the pipeline&rsquo;s business.</p>
+<p>The default theme ships with React. Server-side rendered via renderToString, compiled from JSX by esbuild, output as pure static HTML. Zero JavaScript reaches the reader&rsquo;s browser. React is the authoring tool, not the runtime.</p>
+<p>But here is the thing: the build pipeline does not know it is running React. It calls a builder module. The builder returns HTML. If you swap that module for one that uses Jinja2, Handlebars, Svelte, or raw string concatenation — the pipeline does not notice. The API does not change. The taxonomy does not change. The deployment does not change.</p>
+<h2 id="the-swap">The Swap</h2>
+<p>The React build pipeline compiles two JSX components — Post.jsx and Index.jsx — through esbuild, then calls renderToString. It lives in a single Python file that shells out to a Node process.</p>
+<p>The Jinja2 build pipeline loads two HTML templates — post.html and index.html — and calls template.render(). It lives in a single Python file that imports Jinja2.</p>
+<p>Swapping between them is one environment variable: ACTIVE_RENDERER. Or if you prefer, just replace the builder module file. The rest of the system is oblivious.</p>
+<p>There is no migration. There is no compatibility layer. There is no adapter pattern. The builder interface is so thin that swapping implementations is less work than configuring most frameworks.</p>
+<h2 id="why-this-matters">Why This Matters</h2>
+<p>WordPress themes took years to develop because the theme system was entangled with the runtime. You had to learn template tags, the loop, hook priorities, conditional tags, template hierarchy, child themes. The theme was not a function that returns HTML — it was a participant in a complex execution model.</p>
+<p>Hugo themes are simpler but still require learning Go template syntax, partial templates, shortcodes, and Hugo&rsquo;s specific taxonomy system. The theme is coupled to the static site generator&rsquo;s mental model.</p>
+<p>note2cms themes are coupled to nothing. A React developer writes JSX. A Python developer writes Jinja2. A Svelte developer writes Svelte. They all produce the same thing: an HTML string that the pipeline deploys.</p>
+<h2 id="the-junior-developer-test">The Junior Developer Test</h2>
+<p>Ask a junior React developer to build a note2cms theme. They receive props, they return JSX. They already know how to do this. It is literally their daily task at work.</p>
+<p>Ask a junior Python developer to build a note2cms theme. They write a Jinja2 template with variables. They learned this in week two of their bootcamp.</p>
+<p>Neither of them needs to learn note2cms. They already know how to produce HTML from data. That is the entire skill required.</p>
+<p>Compare this to asking a junior developer to build a WordPress theme, a Hugo theme, or a Gatsby theme. The ramp-up time is measured in weeks, not minutes. The documentation is measured in chapters, not paragraphs.</p>
+<h2 id="no-batteries">No Batteries</h2>
+<p>Batteries-included means the framework chose for you. It chose your templating language, your data layer, your build tool, your conventions. When that choice was made in 2005, it was the right call — the ecosystem had not yet produced best-in-class standalone tools for each concern.</p>
+<p>The ecosystem matured. The batteries are now available separately, and the standalone versions are better than the bundled ones. React is a better component model than any framework&rsquo;s built-in templates. Jinja2 is a better template engine than most bundled alternatives. The era of batteries-included is over for the same reason the era of integrated stereo systems is over — the components got too good to bundle.</p>
+<p>note2cms has no batteries. It has hot-swappable parts. The templating slot accepts anything. The database slot accepts SQLite or PostgreSQL or whatever you wire in. The deployment slot accepts local filesystem or GitHub Pages or S3 or anything that can receive an HTML file.</p>
+<p>Every part is replaceable. No part is required. The only thing that persists is the Markdown — your words, the only thing that was ever supposed to persist.</p>
+<hr />
+<p><em>A theme is a function. Data in, markup out. Everything else is ceremony.</em></p>
+        </div>
+    </article>
+
+    <footer class="post-footer">
+        <a href="https://mortalezz.github.io/blog/posts/">
+            <span class="arrow">←</span> All posts
+        </a>
+    </footer>
+</body>
+</html>
