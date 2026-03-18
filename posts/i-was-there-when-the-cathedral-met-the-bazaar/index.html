@@ -12,7 +12,21 @@
     <link rel="canonical" href="https://mortalezz.github.io/blog/posts/i-was-there-when-the-cathedral-met-the-bazaar/">
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap');
+
+        :root {
+            --bg: #0a0e14;
+            --surface: #0d1117;
+            --green: #00ff88;
+            --green-dim: #00cc6a;
+            --green-glow: rgba(0, 255, 136, 0.15);
+            --amber: #ffb300;
+            --cyan: #00e5ff;
+            --text: #c0c8d8;
+            --text-dim: #5a6577;
+            --border: #1a2233;
+            --max-width: 48rem;
+        }
 
         *, *::before, *::after {
             margin: 0;
@@ -20,48 +34,79 @@
             box-sizing: border-box;
         }
 
-        html {
-            font-size: 15px;
-        }
+        html { font-size: 16px; }
 
         body {
-            font-family: 'IBM Plex Mono', 'Courier New', monospace;
-            background: #ffffff;
-            color: #000000;
-            line-height: 1.6;
-            border: 4px solid #000000;
+            font-family: 'Fira Code', 'SF Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
             min-height: 100vh;
+            position: relative;
+        }
+
+        /* CRT scanline effect */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.08) 2px,
+                rgba(0, 0, 0, 0.08) 4px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* --- Prompt bar --- */
+        .prompt-bar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0.6rem 1.5rem;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .prompt-bar .path {
+            color: var(--cyan);
         }
 
         /* --- Header --- */
         .post-header {
-            padding: 2rem 2rem 1.5rem;
-            border-bottom: 4px solid #000000;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 4rem 1.5rem 2rem;
         }
 
         .post-meta {
             font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            color: var(--text-dim);
             margin-bottom: 1rem;
             display: flex;
             gap: 1rem;
+            align-items: center;
         }
 
-        .post-meta span::before {
-            content: "[";
-        }
-        .post-meta span::after {
-            content: "]";
+        .post-meta .sep {
+            color: var(--green);
         }
 
         .post-title {
-            font-size: 2rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.4rem;
             font-weight: 700;
             line-height: 1.15;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-            word-break: break-word;
+            color: var(--green);
+            margin-bottom: 1.2rem;
+            text-shadow: 0 0 30px var(--green-glow);
         }
 
         .post-tags {
@@ -72,63 +117,78 @@
 
         .post-tags span {
             font-size: 0.7rem;
-            text-transform: uppercase;
-            border: 2px solid #000000;
-            padding: 0.15rem 0.5rem;
-            font-weight: 700;
+            color: var(--amber);
+            padding: 0.2rem 0.6rem;
+            border: 1px solid var(--amber);
+            border-radius: 2px;
         }
 
         /* --- Content --- */
         .post-content {
-            padding: 2rem;
-            max-width: 72ch;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
         }
 
         .post-content p {
-            margin-bottom: 1.2rem;
+            margin-bottom: 1.4rem;
+            font-size: 0.92rem;
         }
 
         .post-content h2 {
-            font-size: 1.3rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
             font-weight: 700;
-            text-transform: uppercase;
-            margin: 3rem 0 0.8rem;
-            padding-top: 1.5rem;
-            border-top: 2px solid #000000;
+            color: var(--green);
+            margin: 3rem 0 1rem;
+        }
+
+        .post-content h2::before {
+            content: "## ";
+            color: var(--text-dim);
         }
 
         .post-content h3 {
-            font-size: 1rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
             font-weight: 700;
-            text-transform: uppercase;
-            margin: 2rem 0 0.6rem;
+            color: var(--cyan);
+            margin: 2.5rem 0 0.8rem;
+        }
+
+        .post-content h3::before {
+            content: "### ";
+            color: var(--text-dim);
         }
 
         .post-content h4 {
             font-size: 0.85rem;
             font-weight: 700;
+            color: var(--amber);
             text-transform: uppercase;
-            margin: 1.5rem 0 0.5rem;
-            text-decoration: underline;
+            letter-spacing: 0.08em;
+            margin: 2rem 0 0.6rem;
         }
 
         .post-content a {
-            color: #000000;
+            color: var(--cyan);
             text-decoration: none;
-            border-bottom: 2px solid #000000;
-            font-weight: 700;
+            border-bottom: 1px solid var(--cyan);
         }
 
         .post-content a:hover {
-            background: #000000;
-            color: #ffffff;
+            color: var(--green);
+            border-color: var(--green);
+            text-shadow: 0 0 8px var(--green-glow);
         }
 
         .post-content blockquote {
-            border-left: 4px solid #000000;
-            padding: 0.8rem 1rem;
+            border-left: 3px solid var(--green);
+            padding: 0.5rem 1.2rem;
             margin: 1.5rem 0;
-            background: #f0f0f0;
+            background: var(--surface);
+            color: var(--green-dim);
+            font-style: italic;
         }
 
         .post-content blockquote p {
@@ -140,49 +200,58 @@
         }
 
         .post-content ul, .post-content ol {
-            padding-left: 2rem;
-            margin-bottom: 1.2rem;
+            padding-left: 1.5rem;
+            margin-bottom: 1.4rem;
         }
 
         .post-content li {
             margin-bottom: 0.3rem;
+            font-size: 0.92rem;
+        }
+
+        .post-content li::marker {
+            color: var(--green);
         }
 
         .post-content code {
             font-family: inherit;
-            background: #f0f0f0;
-            border: 1px solid #cccccc;
-            padding: 1px 4px;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 2px 5px;
+            color: var(--amber);
         }
 
         .post-content pre {
-            background: #000000;
-            color: #ffffff;
-            padding: 1.5rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--cyan);
+            padding: 1.2rem 1.5rem;
             margin: 1.5rem 0;
             overflow-x: auto;
-            border: none;
         }
 
         .post-content pre code {
             background: none;
             border: none;
-            color: inherit;
             padding: 0;
+            color: var(--text);
+            font-size: 0.85rem;
+            line-height: 1.7;
         }
 
         .post-content img {
             max-width: 100%;
             height: auto;
-            border: 4px solid #000000;
+            border: 1px solid var(--border);
             margin: 1.5rem 0;
         }
 
         .post-content hr {
             border: none;
-            border-top: 4px solid #000000;
-            margin: 2.5rem 0;
+            height: 1px;
+            background: var(--border);
+            margin: 3rem 0;
         }
 
         .post-content table {
@@ -192,66 +261,68 @@
             font-size: 0.85rem;
         }
 
-        .post-content th, .post-content td {
-            border: 2px solid #000000;
-            padding: 0.5rem;
-            text-align: left;
-        }
-
         .post-content th {
-            font-weight: 700;
+            text-align: left;
+            padding: 0.5rem 0.8rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--green);
+            font-size: 0.75rem;
             text-transform: uppercase;
-            background: #000000;
-            color: #ffffff;
+            letter-spacing: 0.05em;
         }
 
-        .post-content em {
-            font-style: italic;
-        }
-
-        .post-content strong {
-            font-weight: 700;
+        .post-content td {
+            padding: 0.5rem 0.8rem;
+            border: 1px solid var(--border);
         }
 
         /* --- Footer --- */
         .post-footer {
-            padding: 1.5rem 2rem;
-            border-top: 4px solid #000000;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+            border-top: 1px solid var(--border);
         }
 
         .post-footer a {
             font-size: 0.8rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: #000000;
+            color: var(--green);
             text-decoration: none;
-            border: 2px solid #000000;
-            padding: 0.4rem 0.8rem;
-            display: inline-block;
-            transition: all 0.1s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
         }
 
         .post-footer a:hover {
-            background: #000000;
-            color: #ffffff;
+            text-shadow: 0 0 10px var(--green-glow);
         }
 
-        /* --- Responsive --- */
+        .post-footer a::before {
+            content: "$ cd ";
+            color: var(--text-dim);
+        }
+
         @media (max-width: 640px) {
-            body { border-width: 3px; }
-            .post-header { padding: 1.5rem; }
-            .post-content { padding: 1.5rem; }
-            .post-title { font-size: 1.5rem; }
-            .post-footer { padding: 1.5rem; }
+            html { font-size: 14px; }
+            .post-header { padding: 3rem 1.2rem 1.5rem; }
+            .post-content { padding: 0 1.2rem 3rem; }
+            .post-title { font-size: 1.8rem; }
         }
     </style>
 </head>
 <body>
+    <div class="prompt-bar">
+        <span>Write where you think <span class="path">~/posts/i-was-there-when-the-cathedral-met-the-bazaar</span></span>
+        <span>11m read</span>
+    </div>
+
     <article>
         <header class="post-header">
             <div class="post-meta">
-                <span><time datetime="2026-03-17">March 17, 2026</time></span>
-                <span>11 min</span>
+                <time datetime="2026-03-17">March 17, 2026</time>
+                <span class="sep">|</span>
+                <span>11 min read</span>
             </div>
             <h1 class="post-title">I Was There When the Cathedral Met the Bazaar</h1>
             
@@ -344,7 +415,7 @@
     </article>
 
     <footer class="post-footer">
-        <a href="https://mortalezz.github.io/blog/posts/">← All Posts</a>
+        <a href="https://mortalezz.github.io/blog/posts/">../posts/</a>
     </footer>
 </body>
 </html>
