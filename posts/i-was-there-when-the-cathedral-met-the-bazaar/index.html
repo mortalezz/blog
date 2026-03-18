@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I Was There When the Cathedral Met the Bazaar — Write where you think</title>
+    <meta name="description" content="I was never a developer. But I was there.">
+    <meta property="og:title" content="I Was There When the Cathedral Met the Bazaar">
+    <meta property="og:description" content="I was never a developer. But I was there.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://mortalezz.github.io/blog/posts/i-was-there-when-the-cathedral-met-the-bazaar/">
+    <meta name="twitter:card" content="summary">
+    <link rel="canonical" href="https://mortalezz.github.io/blog/posts/i-was-there-when-the-cathedral-met-the-bazaar/">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --ink: #1a1a1a;
+            --paper: #faf9f7;
+            --dim: #6b6560;
+            --accent: #c45d3e;
+            --rule: #e0dcd7;
+            --code-bg: #f0eeeb;
+            --max-width: 42rem;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --ink: #e8e4df;
+                --paper: #191816;
+                --dim: #9a9590;
+                --accent: #e07a5f;
+                --rule: #2e2c29;
+                --code-bg: #242220;
+            }
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 18px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        body {
+            font-family: 'Newsreader', Georgia, 'Times New Roman', serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.7;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        /* --- Header / Meta --- */
+        .post-header {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 6rem 1.5rem 3rem;
+        }
+
+        .post-meta {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.78rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--dim);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .post-meta .sep {
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: var(--dim);
+            display: inline-block;
+        }
+
+        .post-title {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 2.8rem;
+            font-weight: 300;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            color: var(--ink);
+            margin-bottom: 1.5rem;
+        }
+
+        .post-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .post-tags a, .post-tags span {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--accent);
+            text-decoration: none;
+            padding: 0.2rem 0.6rem;
+            border: 1px solid var(--accent);
+            border-radius: 2px;
+            transition: all 0.2s ease;
+        }
+
+        .post-tags a:hover {
+            background: var(--accent);
+            color: var(--paper);
+        }
+
+        /* --- Content --- */
+        .post-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        .post-content p {
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        .post-content h2 {
+            font-size: 1.6rem;
+            font-weight: 400;
+            margin: 3rem 0 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .post-content h3 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin: 2.5rem 0 0.8rem;
+        }
+
+        .post-content h4 {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 2rem 0 0.8rem;
+            color: var(--dim);
+        }
+
+        .post-content a {
+            color: var(--accent);
+            text-decoration: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 2px;
+            transition: color 0.2s ease;
+        }
+
+        .post-content a:hover {
+            color: var(--ink);
+        }
+
+        .post-content blockquote {
+            border-left: 2px solid var(--accent);
+            padding: 0.2rem 0 0.2rem 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: var(--dim);
+        }
+
+        .post-content blockquote p {
+            margin-bottom: 0.5rem;
+        }
+
+        .post-content ul, .post-content ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.4rem;
+            font-weight: 300;
+        }
+
+        .post-content code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            background: var(--code-bg);
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+        }
+
+        .post-content pre {
+            background: var(--code-bg);
+            padding: 1.2rem 1.5rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 2rem 0;
+            border: 1px solid var(--rule);
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin: 2rem 0;
+        }
+
+        .post-content hr {
+            border: none;
+            height: 1px;
+            background: var(--rule);
+            margin: 3rem auto;
+            max-width: 6rem;
+        }
+
+        .post-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            font-size: 0.9rem;
+        }
+
+        .post-content th, .post-content td {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid var(--rule);
+            text-align: left;
+        }
+
+        .post-content th {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--dim);
+            font-weight: 500;
+        }
+
+        /* --- Footer / Navigation --- */
+        .post-footer {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 3rem 1.5rem 6rem;
+            border-top: 1px solid var(--rule);
+        }
+
+        .post-footer a {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.82rem;
+            letter-spacing: 0.04em;
+            color: var(--accent);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: gap 0.2s ease;
+        }
+
+        .post-footer a:hover {
+            gap: 0.7rem;
+        }
+
+        .post-footer .arrow {
+            font-size: 1.1rem;
+            line-height: 1;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 640px) {
+            html { font-size: 16px; }
+
+            .post-header { padding: 4rem 1.2rem 2rem; }
+            .post-title { font-size: 2rem; }
+            .post-content { padding: 0 1.2rem 3rem; }
+            .post-footer { padding: 2rem 1.2rem 4rem; }
+        }
+    </style>
+</head>
+<body>
+    <article>
+        <header class="post-header">
+            <div class="post-meta">
+                <time datetime="2026-03-17">March 17, 2026</time>
+                <span class="sep"></span>
+                <span>11 min read</span>
+            </div>
+            <h1 class="post-title">I Was There When the Cathedral Met the Bazaar</h1>
+            
+            <div class="post-tags">
+                
+                <span>open-source</span>
+                
+                <span>philosophy</span>
+                
+                <span>history</span>
+                
+                <span>licensing</span>
+                
+            </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>I was never a developer. But I was there.</p>
+<p>When Eric S. Raymond published <em>The Cathedral and the Bazaar</em> in 1997 — first as a paper presented at the Linux Kongress, later expanded into a book by O&rsquo;Reilly in 1999 — I was not reading it as a programmer evaluating methodologies. I was watching an argument unfold in real time. An argument about how things should be built, who should own them, and what freedom means when applied to something as abstract as source code.</p>
+<p>Raymond&rsquo;s central thesis was deceptively simple: given enough eyeballs, all bugs are shallow. He called this <em>Linus&rsquo;s Law</em>, after Torvalds, and used the success of Linux and his own fetchmail project to argue that open, decentralized development produces better software than closed, hierarchical models. The paper did not just describe a methodology. It gave the methodology a name, and names have power.</p>
+<p>But to understand why Raymond was the one to name it, you have to go further back — to a file that predates the web, predates Linux, predates the personal computer itself.</p>
+<h2 id="the-jargon-file">The Jargon File</h2>
+<p>In 1975, Raphael Finkel at Stanford began compiling a glossary of slang used by programmers at the MIT AI Lab, the Stanford AI Lab, and the scattered communities of the ARPANET. It was called the Jargon File — a living document, passed between machines via FTP, edited by anyone who had access, owned by no one. Richard Stallman was among the early contributors, adding MIT and ITS-related coinages. The file grew by fits and starts, reflecting the culture of the people who wrote it.</p>
+<p>The original Jargon File was, in retrospect, the first bazaar. No editor, no publisher, no formal process. Just hackers documenting their own language, in their own voice, on their own terms. It was description and influence simultaneously — as the File&rsquo;s own introduction acknowledged, &ldquo;the line between description and influence can become more than a little blurred.&rdquo;</p>
+<p>In 1983, Guy Steele edited the File into print as <em>The Hacker&rsquo;s Dictionary</em>. Then the File went dormant. The MIT AI Lab culture had been hit by funding cuts, the Stanford AI Lab had effectively ceased to exist, and the old ARPANET communities were scattering into startups and commercial ventures.</p>
+<p>In 1990, Raymond adopted the orphaned File. He updated it, expanded it, and published it through MIT Press in 1991 as <em>The New Hacker&rsquo;s Dictionary</em>. This was not without controversy — critics accused him of shifting the File&rsquo;s focus from the older PDP-10 and LISP cultures to the Unix hacker culture he inhabited. Paul Dourish, who maintains an archived original version, said Raymond&rsquo;s updates &ldquo;essentially destroyed what held it together.&rdquo;</p>
+<p>Raymond&rsquo;s response was characteristically pragmatic: the nature of hacking had changed, and the Jargon File should report on hacker culture as it existed, not enshrine a version that no longer reflected reality.</p>
+<p>This instinct — document the living culture, not the idealized one — is the same instinct that produced <em>The Cathedral and the Bazaar</em> seven years later. Raymond was not a theorist. He was an ethnographer with commit access.</p>
+<h2 id="the-cathedral">The Cathedral</h2>
+<p>Raymond&rsquo;s cathedral was a model of development where software is crafted by a small priesthood of architects behind closed doors. The source is revealed only at release, polished and complete, like a Gothic nave unveiled after decades of construction. The cathedral is beautiful from the outside. It is also owned by the people who built it, and you enter on their terms.</p>
+<p>He contrasted this with the Linux kernel&rsquo;s development model — a seemingly chaotic bazaar of competing agendas and approaches, held together by Torvalds&rsquo;s taste and a shared network protocol. The bazaar looked like a mess. It produced an operating system that runs the modern internet.</p>
+<p>The paper landed like a grenade. Netscape cited it as &ldquo;independent validation&rdquo; in the internal white paper that led to the release of the Mozilla source code in 1998. Frank Hecker and Jamie Zawinski used Raymond&rsquo;s framework to argue that opening the source was not charity — it was strategy. The most consequential corporate open-source decision of the decade was justified, in part, by a paper about a mail client.</p>
+<p>Every CMS I have ever used is a cathedral.</p>
+<p>WordPress began as a fork of b2/cafelog in 2003 and grew into a content management system that now powers over 40% of the web. It is the most successful cathedral ever built in open source — nominally free, practically a platform, with an ecosystem of premium themes and plugins that generates billions in annual revenue. You are welcome inside. The gift shop is to your left.</p>
+<p>Ghost launched in 2013 as the anti-WordPress — clean, focused, built for writers. A decade later it is a SaaS platform that starts at $9 per month. A tasteful cathedral, well-lit, but the door still has a card reader.</p>
+<p>Substack arrived in 2017 promising to liberate writers from advertising. It succeeded — by replacing advertising with a revenue share model where the platform keeps 10% and, more importantly, owns the relationship with your audience. The cathedral pays you to preach, then keeps the congregation&rsquo;s contact information.</p>
+<p>They are all beautiful from the outside. They are all controlled from the inside.</p>
+<h2 id="the-bazaar">The Bazaar</h2>
+<p>Raymond identified nineteen lessons from the bazaar model. The ones that matter most, nearly three decades later:</p>
+<ol>
+<li>Every good work of software starts by scratching a developer&rsquo;s personal itch.</li>
+<li>Treating your users as co-developers is your least-hassle route to rapid code improvement.</li>
+<li>Release early. Release often. And listen to your customers.</li>
+<li>Given a large enough beta-tester and co-developer base, almost every problem will be characterized quickly and the fix obvious to someone.</li>
+<li>If you treat your beta-testers as if they&rsquo;re your most valuable resource, they&rsquo;ll respond by becoming your most valuable resource.</li>
+</ol>
+<p>But Raymond also noted a prerequisite that is often overlooked: the bazaar model depends on the existence of a <em>plausible promise</em> — a running, testable system that potential contributors can evaluate and extend. &ldquo;You cannot crowdsource an architecture,&rdquo; he wrote. &ldquo;You can only crowdsource the refinement of an architecture that already works.&rdquo;</p>
+<p>The Jargon File was a plausible promise — a document that existed, was useful, and was open to contribution. Linux was a plausible promise — a kernel that booted, ran programs, and accepted patches. Fetchmail was a plausible promise — a mail client that fetched mail.</p>
+<p>I built note2cms as a plausible promise. Four API endpoints that accept Markdown and produce static HTML. The architecture is so minimal that the entire API contract fits in four lines of a table.</p>
+<h2 id="the-licensing-wars-revisited">The Licensing Wars, Revisited</h2>
+<p>The most consequential argument in the history of open source was not about code. It was about a single clause.</p>
+<p>Stallman&rsquo;s GNU General Public License, first published in 1989 and revised significantly in 1991 (GPLv2) and 2007 (GPLv3), contains what is known as the <em>copyleft</em> provision: any derivative work must be distributed under the same license. You can use GPL code, modify it, sell it — but you cannot make it proprietary. Your freedom cannot be used to remove someone else&rsquo;s freedom.</p>
+<p>The MIT License, by contrast, fits on a single page. It says, in essence: do whatever you want with this code, just keep the copyright notice. There is no copyleft. No obligation to share modifications. A company can take MIT-licensed code, fold it into a closed-source product, and sell it without releasing a line of source.</p>
+<p>These are not two versions of the same idea. They are two fundamentally different philosophies of freedom.</p>
+<p>Stallman&rsquo;s freedom is <em>positive liberty</em> — freedom to access, modify, and share, guaranteed in perpetuity by legal mechanism. The GPL is a hack on copyright law: it uses the legal infrastructure of restriction to enforce the opposite of restriction. It is, as Stallman has said, &ldquo;copyleft — all rights reversed.&rdquo;</p>
+<p>The MIT model is <em>negative liberty</em> — freedom from interference. The licensor places no obligations on the licensee. What happens next is not the licensor&rsquo;s concern.</p>
+<p>The tragedy of modern open source is that this distinction has collapsed. Developers choose MIT because it is the default on GitHub&rsquo;s license picker. They choose it the way they choose a JavaScript framework — by vibes, not by conviction. And then someone forks their project without attribution, and they are furious. They chose the license that explicitly permits this. They just never expected anyone to take them at their word.</p>
+<h2 id="what-happened-overnight">What Happened Overnight</h2>
+<p>I published note2cms under the MIT License on a Sunday morning. Four API endpoints, two build pipelines, a manifesto. The entire system deployed for free on Leapcell and GitHub Pages.</p>
+<p>By the time I woke up on Monday, a developer I had never met — @garrul4ik on GitHub — had forked the project, built a full-featured Obsidian plugin called <em>note2cms Publisher</em>, tested it on four operating systems, and submitted it to the official Obsidian community plugin registry.</p>
+<p>His plugin has features I never imagined: offline queuing, WiFi-only mode, bulk publishing by folder or tag, preview before publish, a permalink modal with copy-to-clipboard. He solved problems for his community that I did not know existed.</p>
+<p>He did not ask my permission. He did not need it. He credited the project in his plugin settings, but not prominently in his README. A modern developer might take offense at this. I did not. I felt pride — not in his work, which is his own, but in mine, which was clear enough and sound enough that a stranger could build on it overnight without reading my source code.</p>
+<p>Raymond&rsquo;s lessons, playing out in real time, in a project younger than most pull request review cycles. The developer scratched his own itch (Lesson 1). He characterized a problem — Obsidian integration — that I had not considered, and the fix was obvious to him because he was an Obsidian user (Lesson 4). He became the most valuable kind of co-developer: the kind who builds what you did not know was needed (Lesson 5).</p>
+<h2 id="the-real-credit">The Real Credit</h2>
+<p>The open source community has developed an unhealthy relationship with attribution. Developers publish under permissive licenses and then expect the social norms of academic citation. They want MIT&rsquo;s freedom with GPL&rsquo;s moral obligation. They want the bazaar&rsquo;s energy with the cathedral&rsquo;s name on the cornerstone.</p>
+<p>This is incoherent.</p>
+<p>If you publish under MIT, you are saying: this is a gift. Take it. Build on it. Make it yours. If you cannot accept that someone will do exactly this — without prominently displaying your name — then you do not believe in what MIT means. You chose a license from a dropdown menu, not from conviction.</p>
+<p>Stallman, for all his eccentricities, never had this problem. The GPL is explicit: you can use this, but you must share alike. The obligation is in the license. There is no gap between the legal text and the social expectation. If you want your name on every derivative work, the GPL family provides mechanisms for that. Use them.</p>
+<p>Or do what I did: publish under MIT and mean it. Let go. Watch what happens. The existence of a derivative work is the highest form of validation a piece of software can receive. Not a star on GitHub. Not a mention in a README. A stranger building something real on your foundation, because the foundation was worth building on.</p>
+<h2 id="the-lesson">The Lesson</h2>
+<p>The cathedral-and-bazaar debate was never resolved. It just went quiet. The cathedrals got better at marketing — they started calling themselves &ldquo;platforms&rdquo; and &ldquo;ecosystems.&rdquo; The bazaars got absorbed into centralized forges — first SourceForge, then GitHub, now a platform owned by Microsoft that can change its terms of service at any time.</p>
+<p>The Jargon File, that first bazaar, has been effectively frozen since Raymond&rsquo;s last update. The hacker culture it documented has fragmented into a thousand subcultures, each with its own jargon, its own heroes, its own arguments about licensing and attribution and credit. The File no longer describes a unified culture because the culture is no longer unified.</p>
+<p>But the bazaar pattern persists. Not in GitHub&rsquo;s social features or npm&rsquo;s download counts or the rituals of corporate open source. It persists in the moments when someone publishes something honest — something small enough to understand, clear enough to extend, and free enough to take — and a stranger shows up overnight with a contribution that the original author could not have imagined.</p>
+<p>You cannot design a bazaar. You cannot manage it into existence. You cannot create a community by building community infrastructure. You can only publish a plausible promise — a running system, a clear interface, and a license that means what it says — and wait.</p>
+<p>The bazaar either shows up or it does not. You have no control over this. You only control whether you deserved it.</p>
+<hr />
+<p><strong>References</strong></p>
+<p>Finkel, R. (1975). <em>The Jargon File</em>, version 1. Stanford AI Lab.</p>
+<p>Steele, G. L., ed. (1983). <em>The Hacker&rsquo;s Dictionary</em>. Harper &amp; Row.</p>
+<p>Stallman, R. M. (1985). &ldquo;The GNU Manifesto.&rdquo; <em>Dr. Dobb&rsquo;s Journal</em>, March 1985.</p>
+<p>Raymond, E. S., ed. (1991). <em>The New Hacker&rsquo;s Dictionary</em>. MIT Press. (Third edition, 1996.)</p>
+<p>Raymond, E. S. (1997). &ldquo;The Cathedral and the Bazaar.&rdquo; First presented at the Linux Kongress, May 27, 1997. Revised and expanded, O&rsquo;Reilly Media, 1999.</p>
+<p>Perens, B. (1999). &ldquo;The Open Source Definition.&rdquo; Open Source Initiative.</p>
+<p>Weber, S. (2004). <em>The Success of Open Source</em>. Harvard University Press.</p>
+<p>Fogel, K. (2005). <em>Producing Open Source Software: How to Run a Successful Free Software Project</em>. O&rsquo;Reilly Media.</p>
+<hr />
+<p><em>You cannot design a bazaar. You can only deserve it.</em></p>
+        </div>
+    </article>
+
+    <footer class="post-footer">
+        <a href="https://mortalezz.github.io/blog/posts/">
+            <span class="arrow">←</span> All posts
+        </a>
+    </footer>
+</body>
+</html>
