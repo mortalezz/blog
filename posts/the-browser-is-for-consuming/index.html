@@ -9,33 +9,23 @@
     <meta property="og:description" content="Every CMS gets it backwards. They put the editor in the browser. But authoring has already left.">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://mortalezz.github.io/blog/posts/the-browser-is-for-consuming/">
-    <meta name="twitter:card" content="summary">
     <link rel="canonical" href="https://mortalezz.github.io/blog/posts/the-browser-is-for-consuming/">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
-
     <style>
-        :root {
-            --ink: #1a1a1a;
-            --paper: #faf9f7;
-            --dim: #6b6560;
-            --accent: #c45d3e;
-            --rule: #e0dcd7;
-            --code-bg: #f0eeeb;
-            --max-width: 42rem;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap');
 
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --ink: #e8e4df;
-                --paper: #191816;
-                --dim: #9a9590;
-                --accent: #e07a5f;
-                --rule: #2e2c29;
-                --code-bg: #242220;
-            }
+        :root {
+            --black: #0a0a0a;
+            --white: #fafafa;
+            --red: #e63222;
+            --blue: #2244cc;
+            --yellow: #ffcc00;
+            --gray-100: #f2f2f2;
+            --gray-300: #cccccc;
+            --gray-500: #888888;
+            --gray-700: #444444;
+            --grid-unit: 8px;
+            --col-width: min(720px, 90vw);
         }
 
         *, *::before, *::after {
@@ -45,274 +35,367 @@
         }
 
         html {
-            font-size: 18px;
+            font-size: 17px;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            text-rendering: optimizeLegibility;
         }
 
         body {
-            font-family: 'Newsreader', Georgia, 'Times New Roman', serif;
-            background: var(--paper);
-            color: var(--ink);
-            line-height: 1.7;
-            padding: 0;
-            min-height: 100vh;
+            font-family: 'Instrument Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
         }
 
-        /* --- Header / Meta --- */
+        /* --- Geometric Decoration --- */
+        .geo-bar {
+            height: calc(var(--grid-unit) * 1);
+            background: var(--red);
+            width: 100%;
+        }
+
+        .geo-sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: calc(var(--grid-unit) * 1);
+            height: 100vh;
+            background: var(--blue);
+            z-index: 100;
+        }
+
+        .geo-circle {
+            position: fixed;
+            bottom: calc(var(--grid-unit) * 5);
+            left: calc(var(--grid-unit) * 4);
+            width: calc(var(--grid-unit) * 6);
+            height: calc(var(--grid-unit) * 6);
+            border-radius: 50%;
+            background: var(--yellow);
+            z-index: 100;
+            opacity: 0.9;
+        }
+
+        /* --- Layout --- */
+        .post-wrapper {
+            margin-left: calc(var(--grid-unit) * 1);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
         .post-header {
-            max-width: var(--max-width);
+            max-width: var(--col-width);
             margin: 0 auto;
-            padding: 6rem 1.5rem 3rem;
+            padding: calc(var(--grid-unit) * 10) calc(var(--grid-unit) * 3) calc(var(--grid-unit) * 5);
+            width: 100%;
         }
 
         .post-meta {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.78rem;
-            letter-spacing: 0.06em;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
             text-transform: uppercase;
-            color: var(--dim);
-            margin-bottom: 1.2rem;
+            color: var(--gray-500);
+            margin-bottom: calc(var(--grid-unit) * 2);
             display: flex;
+            gap: calc(var(--grid-unit) * 2);
             align-items: center;
-            gap: 0.6rem;
         }
 
-        .post-meta .sep {
-            width: 3px;
-            height: 3px;
-            border-radius: 50%;
-            background: var(--dim);
-            display: inline-block;
+        .post-meta .divider {
+            width: calc(var(--grid-unit) * 4);
+            height: 2px;
+            background: var(--red);
         }
 
         .post-title {
-            font-family: 'Newsreader', Georgia, serif;
-            font-size: 2.8rem;
-            font-weight: 300;
-            line-height: 1.15;
-            letter-spacing: -0.02em;
-            color: var(--ink);
-            margin-bottom: 1.5rem;
+            font-size: clamp(2.2rem, 5vw, 3.4rem);
+            font-weight: 700;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+            color: var(--black);
+            margin-bottom: calc(var(--grid-unit) * 3);
+            max-width: 14ch;
         }
 
         .post-tags {
             display: flex;
-            gap: 0.5rem;
+            gap: calc(var(--grid-unit) * 1);
             flex-wrap: wrap;
         }
 
-        .post-tags a, .post-tags span {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.72rem;
-            letter-spacing: 0.05em;
+        .post-tags span {
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
-            color: var(--accent);
-            text-decoration: none;
-            padding: 0.2rem 0.6rem;
-            border: 1px solid var(--accent);
-            border-radius: 2px;
-            transition: all 0.2s ease;
+            color: var(--white);
+            background: var(--black);
+            padding: calc(var(--grid-unit) * 0.5) calc(var(--grid-unit) * 1.5);
         }
 
-        .post-tags a:hover {
-            background: var(--accent);
-            color: var(--paper);
+        /* --- Horizontal Rule between header and content --- */
+        .header-rule {
+            max-width: var(--col-width);
+            margin: 0 auto;
+            padding: 0 calc(var(--grid-unit) * 3);
+            width: 100%;
+        }
+
+        .header-rule hr {
+            border: none;
+            height: 3px;
+            background: var(--black);
+            margin: 0;
         }
 
         /* --- Content --- */
         .post-content {
-            max-width: var(--max-width);
+            max-width: var(--col-width);
             margin: 0 auto;
-            padding: 0 1.5rem 4rem;
+            padding: calc(var(--grid-unit) * 5) calc(var(--grid-unit) * 3) calc(var(--grid-unit) * 8);
+            width: 100%;
         }
 
         .post-content p {
-            margin-bottom: 1.5rem;
-            font-weight: 300;
+            margin-bottom: calc(var(--grid-unit) * 3);
+            font-weight: 400;
+            line-height: 1.7;
         }
 
         .post-content h2 {
-            font-size: 1.6rem;
-            font-weight: 400;
-            margin: 3rem 0 1rem;
-            letter-spacing: -0.01em;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin: calc(var(--grid-unit) * 7) 0 calc(var(--grid-unit) * 2);
+            padding-left: calc(var(--grid-unit) * 2);
+            border-left: 4px solid var(--red);
         }
 
         .post-content h3 {
-            font-size: 1.25rem;
-            font-weight: 500;
-            margin: 2.5rem 0 0.8rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin: calc(var(--grid-unit) * 5) 0 calc(var(--grid-unit) * 2);
+            color: var(--blue);
         }
 
         .post-content h4 {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 500;
+            font-size: 0.8rem;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin: 2rem 0 0.8rem;
-            color: var(--dim);
+            letter-spacing: 0.12em;
+            margin: calc(var(--grid-unit) * 4) 0 calc(var(--grid-unit) * 1);
+            color: var(--gray-500);
         }
 
         .post-content a {
-            color: var(--accent);
-            text-decoration: underline;
-            text-decoration-thickness: 1px;
-            text-underline-offset: 2px;
-            transition: color 0.2s ease;
+            color: var(--blue);
+            text-decoration: none;
+            border-bottom: 2px solid var(--blue);
+            transition: border-color 0.15s;
         }
 
         .post-content a:hover {
-            color: var(--ink);
+            border-color: var(--red);
+            color: var(--red);
         }
 
         .post-content blockquote {
-            border-left: 2px solid var(--accent);
-            padding: 0.2rem 0 0.2rem 1.5rem;
-            margin: 2rem 0;
-            font-style: italic;
-            color: var(--dim);
+            border-left: 4px solid var(--yellow);
+            background: var(--gray-100);
+            padding: calc(var(--grid-unit) * 3);
+            margin: calc(var(--grid-unit) * 4) 0;
+            font-weight: 500;
         }
 
         .post-content blockquote p {
-            margin-bottom: 0.5rem;
+            margin-bottom: calc(var(--grid-unit) * 1);
+        }
+
+        .post-content blockquote p:last-child {
+            margin-bottom: 0;
         }
 
         .post-content ul, .post-content ol {
-            padding-left: 1.5rem;
-            margin-bottom: 1.5rem;
+            padding-left: calc(var(--grid-unit) * 4);
+            margin-bottom: calc(var(--grid-unit) * 3);
         }
 
         .post-content li {
-            margin-bottom: 0.4rem;
-            font-weight: 300;
+            margin-bottom: calc(var(--grid-unit) * 1);
+            line-height: 1.6;
+        }
+
+        .post-content li::marker {
+            color: var(--red);
+            font-weight: 700;
         }
 
         .post-content code {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.82rem;
-            background: var(--code-bg);
-            padding: 0.15rem 0.4rem;
-            border-radius: 3px;
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.85rem;
+            background: var(--gray-100);
+            border: 1px solid var(--gray-300);
+            padding: 2px 6px;
         }
 
         .post-content pre {
-            background: var(--code-bg);
-            padding: 1.2rem 1.5rem;
-            border-radius: 4px;
+            background: var(--black);
+            color: var(--white);
+            padding: calc(var(--grid-unit) * 3);
+            margin: calc(var(--grid-unit) * 4) 0;
             overflow-x: auto;
-            margin: 2rem 0;
-            border: 1px solid var(--rule);
+            border-left: 4px solid var(--blue);
         }
 
         .post-content pre code {
             background: none;
+            border: none;
+            color: inherit;
             padding: 0;
-            font-size: 0.8rem;
-            line-height: 1.6;
+            font-size: 0.82rem;
+            line-height: 1.7;
         }
 
         .post-content img {
             max-width: 100%;
             height: auto;
-            border-radius: 4px;
-            margin: 2rem 0;
+            margin: calc(var(--grid-unit) * 4) 0;
         }
 
         .post-content hr {
             border: none;
-            height: 1px;
-            background: var(--rule);
-            margin: 3rem auto;
-            max-width: 6rem;
+            height: 3px;
+            background: var(--black);
+            margin: calc(var(--grid-unit) * 6) 0;
+            max-width: calc(var(--grid-unit) * 12);
         }
 
         .post-content table {
             width: 100%;
             border-collapse: collapse;
-            margin: 2rem 0;
-            font-size: 0.9rem;
-        }
-
-        .post-content th, .post-content td {
-            padding: 0.6rem 1rem;
-            border-bottom: 1px solid var(--rule);
-            text-align: left;
+            margin: calc(var(--grid-unit) * 4) 0;
         }
 
         .post-content th {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: var(--dim);
-            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-align: left;
+            padding: calc(var(--grid-unit) * 1.5) calc(var(--grid-unit) * 2);
+            background: var(--black);
+            color: var(--white);
         }
 
-        /* --- Footer / Navigation --- */
+        .post-content td {
+            padding: calc(var(--grid-unit) * 1.5) calc(var(--grid-unit) * 2);
+            border-bottom: 1px solid var(--gray-300);
+        }
+
+        .post-content em {
+            font-style: italic;
+        }
+
+        .post-content strong {
+            font-weight: 700;
+        }
+
+        /* --- Footer --- */
         .post-footer {
-            max-width: var(--max-width);
+            max-width: var(--col-width);
             margin: 0 auto;
-            padding: 3rem 1.5rem 6rem;
-            border-top: 1px solid var(--rule);
+            padding: calc(var(--grid-unit) * 4) calc(var(--grid-unit) * 3) calc(var(--grid-unit) * 10);
+            width: 100%;
+            border-top: 3px solid var(--black);
         }
 
         .post-footer a {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.82rem;
-            letter-spacing: 0.04em;
-            color: var(--accent);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--blue);
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 0.4rem;
-            transition: gap 0.2s ease;
+            gap: calc(var(--grid-unit) * 1);
+            transition: color 0.15s;
         }
 
         .post-footer a:hover {
-            gap: 0.7rem;
+            color: var(--red);
         }
 
         .post-footer .arrow {
-            font-size: 1.1rem;
+            font-size: 1.4rem;
             line-height: 1;
         }
 
         /* --- Responsive --- */
         @media (max-width: 640px) {
-            html { font-size: 16px; }
+            html { font-size: 15px; }
 
-            .post-header { padding: 4rem 1.2rem 2rem; }
-            .post-title { font-size: 2rem; }
-            .post-content { padding: 0 1.2rem 3rem; }
-            .post-footer { padding: 2rem 1.2rem 4rem; }
+            .geo-circle { display: none; }
+
+            .post-header {
+                padding: calc(var(--grid-unit) * 6) calc(var(--grid-unit) * 2) calc(var(--grid-unit) * 3);
+            }
+
+            .post-title {
+                font-size: 2rem;
+                max-width: none;
+            }
+
+            .post-content {
+                padding: calc(var(--grid-unit) * 3) calc(var(--grid-unit) * 2) calc(var(--grid-unit) * 6);
+            }
+
+            .header-rule {
+                padding: 0 calc(var(--grid-unit) * 2);
+            }
+
+            .post-footer {
+                padding: calc(var(--grid-unit) * 3) calc(var(--grid-unit) * 2) calc(var(--grid-unit) * 6);
+            }
         }
     </style>
 </head>
 <body>
-    <article>
-        <header class="post-header">
-            <div class="post-meta">
-                <time datetime="2026-03-18T01:39:59.621440+00:00">March 18, 2026</time>
-                <span class="sep"></span>
-                <span>1 min read</span>
-            </div>
-            <h1 class="post-title">The Browser Is for Consuming</h1>
-            
-            <div class="post-tags">
-                
-                <span>manifesto</span>
-                
-                <span>publishing</span>
-                
-            </div>
-            
-        </header>
+    <!-- Bauhaus geometric elements -->
+    <div class="geo-sidebar"></div>
+    <div class="geo-circle"></div>
 
-        <div class="post-content">
-            <p>Every CMS gets it backwards. They put the editor in the browser. But authoring has already left.</p>
+    <div class="post-wrapper">
+        <div class="geo-bar"></div>
+
+        <article>
+            <header class="post-header">
+                <div class="post-meta">
+                    <time datetime="2026-03-18T01:47:38.594531+00:00">March 18, 2026</time>
+                    <span class="divider"></span>
+                    <span>1 min read</span>
+                </div>
+                <h1 class="post-title">The Browser Is for Consuming</h1>
+                
+                <div class="post-tags">
+                    
+                    <span>manifesto</span>
+                    
+                    <span>publishing</span>
+                    
+                </div>
+                
+            </header>
+
+            <div class="header-rule"><hr></div>
+
+            <div class="post-content">
+                <p>Every CMS gets it backwards. They put the editor in the browser. But authoring has already left.</p>
 <p>The browser did not earn the right to be your editor. It earned the right to render beautifully.</p>
 <blockquote>
 <p>The best publishing tool is the one you already use to think.</p>
@@ -320,13 +403,14 @@
 <p>Four endpoints. Two pipelines. That is the entire system.</p>
 <hr />
 <p><em>Write where you think. Publish where they look. Own everything in between.</em></p>
-        </div>
-    </article>
+            </div>
+        </article>
 
-    <footer class="post-footer">
-        <a href="https://mortalezz.github.io/blog/posts/">
-            <span class="arrow">←</span> All posts
-        </a>
-    </footer>
+        <footer class="post-footer">
+            <a href="https://mortalezz.github.io/blog/posts/">
+                <span class="arrow">←</span> All Posts
+            </a>
+        </footer>
+    </div>
 </body>
 </html>
