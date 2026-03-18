@@ -6,160 +6,230 @@
     <title>Write where you think</title>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap');
 
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg: #0a0e14;
+            --surface: #0d1117;
+            --green: #00ff88;
+            --green-dim: #00cc6a;
+            --green-glow: rgba(0, 255, 136, 0.15);
+            --amber: #ffb300;
+            --cyan: #00e5ff;
+            --text: #c0c8d8;
+            --text-dim: #5a6577;
+            --border: #1a2233;
+            --max-width: 52rem;
         }
 
-        html { font-size: 15px; }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 16px; }
 
         body {
-            font-family: 'IBM Plex Mono', 'Courier New', monospace;
-            background: #ffffff;
-            color: #000000;
+            font-family: 'Fira Code', 'SF Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
             line-height: 1.6;
-            border: 4px solid #000000;
             min-height: 100vh;
         }
 
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                0deg, transparent, transparent 2px,
+                rgba(0, 0, 0, 0.08) 2px, rgba(0, 0, 0, 0.08) 4px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .prompt-bar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0.6rem 1.5rem;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        .prompt-bar .path { color: var(--cyan); }
+
+        /* --- Header --- */
         .index-header {
-            padding: 2rem;
-            border-bottom: 4px solid #000000;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 4rem 1.5rem 2rem;
         }
 
         .index-title {
-            font-size: 1.8rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.4rem;
             font-weight: 700;
-            text-transform: uppercase;
-            line-height: 1.1;
+            color: var(--green);
             margin-bottom: 0.5rem;
+            text-shadow: 0 0 30px var(--green-glow);
         }
 
         .index-subtitle {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
+            font-size: 0.78rem;
+            color: var(--text-dim);
+        }
+
+        /* --- Divider --- */
+        .divider {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .divider hr {
+            border: none;
+            height: 1px;
+            background: var(--border);
         }
 
         /* --- Post List --- */
         .post-list {
             list-style: none;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
         }
 
         .post-item {
-            border-bottom: 2px solid #000000;
+            border-bottom: 1px solid var(--border);
         }
 
         .post-item-link {
             display: block;
-            padding: 1.2rem 2rem;
+            padding: 1.2rem 0;
             text-decoration: none;
             color: inherit;
-            transition: all 0.05s;
         }
 
-        .post-item-link:hover {
-            background: #000000;
-            color: #ffffff;
+        .post-item-link:hover .post-item-title {
+            color: var(--green);
+            text-shadow: 0 0 10px var(--green-glow);
         }
 
-        .post-item-link:hover .post-item-tags span {
-            border-color: #ffffff;
-            color: #ffffff;
-        }
-
-        .post-item-top {
+        .post-item-row {
             display: flex;
-            justify-content: space-between;
             align-items: baseline;
             gap: 1rem;
             margin-bottom: 0.3rem;
         }
 
-        .post-item-title {
-            font-size: 1rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            line-height: 1.3;
-        }
-
-        .post-item-meta {
-            font-size: 0.7rem;
+        .post-item-date {
+            font-size: 0.75rem;
+            color: var(--text-dim);
             white-space: nowrap;
             flex-shrink: 0;
+            min-width: 7rem;
+        }
+
+        .post-item-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text);
+            transition: all 0.15s;
+        }
+
+        .post-item-reading {
+            font-size: 0.7rem;
+            color: var(--amber);
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-left: auto;
         }
 
         .post-item-excerpt {
             font-size: 0.8rem;
-            line-height: 1.5;
-            opacity: 0.7;
-            margin-bottom: 0.5rem;
+            color: var(--text-dim);
+            padding-left: 8rem;
+            margin-bottom: 0.4rem;
         }
 
         .post-item-tags {
             display: flex;
             gap: 0.4rem;
             flex-wrap: wrap;
+            padding-left: 8rem;
         }
 
         .post-item-tags span {
-            font-size: 0.6rem;
-            text-transform: uppercase;
-            font-weight: 700;
-            border: 1px solid #000000;
-            padding: 0.1rem 0.35rem;
+            font-size: 0.65rem;
+            color: var(--cyan);
+            opacity: 0.7;
         }
+
+        .post-item-tags span::before { content: "#"; }
 
         /* --- Empty --- */
         .empty-state {
-            padding: 4rem 2rem;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 6rem 1.5rem;
             text-align: center;
+            color: var(--text-dim);
         }
 
-        .empty-state p {
-            margin-bottom: 0.5rem;
+        .empty-state .cursor {
+            display: inline-block;
+            width: 0.6rem;
+            height: 1.1rem;
+            background: var(--green);
+            animation: blink 1s step-end infinite;
+            vertical-align: text-bottom;
         }
 
-        .empty-state code {
-            font-family: inherit;
-            background: #f0f0f0;
-            padding: 2px 6px;
-            border: 1px solid #cccccc;
+        @keyframes blink {
+            50% { opacity: 0; }
         }
 
         /* --- Footer --- */
         .index-footer {
-            padding: 1rem 2rem;
-            border-top: 4px solid #000000;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
             font-size: 0.7rem;
-            text-transform: uppercase;
+            color: var(--text-dim);
         }
 
+        .index-footer .prompt { color: var(--green); }
+
         @media (max-width: 640px) {
-            body { border-width: 3px; }
-            .post-item-link { padding: 1rem 1.5rem; }
-            .post-item-top { flex-direction: column; gap: 0; }
-            .index-header { padding: 1.5rem; }
+            html { font-size: 14px; }
+            .post-item-row { flex-wrap: wrap; }
+            .post-item-excerpt, .post-item-tags { padding-left: 0; }
+            .index-header { padding: 3rem 1.2rem 1.5rem; }
+            .post-list { padding: 1rem 1.2rem; }
         }
     </style>
 </head>
 <body>
+    <div class="prompt-bar">
+        <span>Write where you think <span class="path">~/posts/</span></span>
+    </div>
+
     <header class="index-header">
         <h1 class="index-title">Write where you think</h1>
         <p class="index-subtitle">Write where you think. Publish where they look. Own everything in between.</p>
     </header>
+
+    <div class="divider"><hr></div>
 
     
     <ul class="post-list">
         
         <li class="post-item">
             <a href="https://mortalezz.github.io/blog/posts/i-was-there-when-the-cathedral-met-the-bazaar/" class="post-item-link">
-                <div class="post-item-top">
+                <div class="post-item-row">
+                    <span class="post-item-date">March 17, 2026</span>
                     <h2 class="post-item-title">I Was There When the Cathedral Met the Bazaar</h2>
-                    <span class="post-item-meta">[March 17, 2026] [11min]</span>
+                    <span class="post-item-reading">11m</span>
                 </div>
                 <p class="post-item-excerpt">I was never a developer. But I was there.</p>
                 
@@ -180,9 +250,10 @@
         
         <li class="post-item">
             <a href="https://mortalezz.github.io/blog/posts/no-batteries-only-hot-swappable-parts/" class="post-item-link">
-                <div class="post-item-top">
+                <div class="post-item-row">
+                    <span class="post-item-date">March 16, 2026</span>
                     <h2 class="post-item-title">No Batteries, Only Hot-Swappable Parts</h2>
-                    <span class="post-item-meta">[March 16, 2026] [4min]</span>
+                    <span class="post-item-reading">4m</span>
                 </div>
                 <p class="post-item-excerpt">Every framework wants you to marry its templating engine. Django gives you Django templates. Rails gives you ERB. Next.js gives you React. Hugo gives you Go templates. Learn our syntax, adopt our…</p>
                 
@@ -205,9 +276,10 @@
         
         <li class="post-item">
             <a href="https://mortalezz.github.io/blog/posts/one-morning-in-phoenix/" class="post-item-link">
-                <div class="post-item-top">
+                <div class="post-item-row">
+                    <span class="post-item-date">March 16, 2026</span>
                     <h2 class="post-item-title">One Morning in Phoenix</h2>
-                    <span class="post-item-meta">[March 16, 2026] [4min]</span>
+                    <span class="post-item-reading">4m</span>
                 </div>
                 <p class="post-item-excerpt">I built a CMS this morning. The whole thing. Architecture, manifesto, deployment, first post — between coffee and lunch, in Phoenix, Arizona.</p>
                 
@@ -228,9 +300,10 @@
         
         <li class="post-item">
             <a href="https://mortalezz.github.io/blog/posts/the-browser-is-for-consuming/" class="post-item-link">
-                <div class="post-item-top">
+                <div class="post-item-row">
+                    <span class="post-item-date">March 16, 2026</span>
                     <h2 class="post-item-title">The Browser Is for Consuming</h2>
-                    <span class="post-item-meta">[March 16, 2026] [1min]</span>
+                    <span class="post-item-reading">1m</span>
                 </div>
                 <p class="post-item-excerpt">Every CMS gets it backwards. They put the editor in the browser. But authoring has already left.</p>
                 
@@ -249,7 +322,7 @@
     
 
     <footer class="index-footer">
-        <p>note2cms — past-browser publishing protocol</p>
+        <p><span class="prompt">$</span> note2cms — past-browser publishing protocol</p>
     </footer>
 </body>
 </html>
