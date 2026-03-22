@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The SaaS That Should Not Exist — Write where you think</title>
+    <meta name="description" content="Someone on Reddit will eventually write: "This guy was sitting on a million-dollar idea. He built working code. Why didn't he build a SaaS on it? I simply don't understand these OSS fanatics."">
+    <meta property="og:title" content="The SaaS That Should Not Exist">
+    <meta property="og:description" content="Someone on Reddit will eventually write: "This guy was sitting on a million-dollar idea. He built working code. Why didn't he build a SaaS on it? I simply don't understand these OSS fanatics."">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://mortalezz.github.io/blog/posts/the-saas-that-should-not-exist/">
+    <link rel="canonical" href="https://mortalezz.github.io/blog/posts/the-saas-that-should-not-exist/">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&family=Azeret+Mono:wght@400;500&display=swap');
+
+        :root {
+            --bg: #1a1025;
+            --surface: #221533;
+            --pink: #ff6ec7;
+            --cyan: #72f2eb;
+            --lavender: #c4b5fd;
+            --peach: #ffb3b3;
+            --text: #e8dff5;
+            --text-dim: #8b7fa8;
+            --border: #2d1f42;
+            --gradient-1: linear-gradient(135deg, #ff6ec7, #7c3aed);
+            --gradient-2: linear-gradient(135deg, #72f2eb, #818cf8);
+            --max-width: 44rem;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 17px; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        /* Gradient mesh background */
+        body::before {
+            content: "";
+            position: fixed;
+            top: -50%;
+            right: -30%;
+            width: 80vw;
+            height: 80vw;
+            background: radial-gradient(ellipse, rgba(124, 58, 237, 0.12) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            bottom: -30%;
+            left: -20%;
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(ellipse, rgba(255, 110, 199, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        /* --- Top gradient bar --- */
+        .gradient-bar {
+            height: 4px;
+            background: var(--gradient-1);
+        }
+
+        /* --- Header --- */
+        .post-header {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 5rem 1.5rem 2.5rem;
+            position: relative;
+        }
+
+        .post-meta {
+            font-family: 'Azeret Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--text-dim);
+            margin-bottom: 1.2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .post-meta .dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--pink);
+        }
+
+        .post-title {
+            font-size: 2.6rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .post-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .post-tags span {
+            font-family: 'Azeret Mono', monospace;
+            font-size: 0.68rem;
+            color: var(--cyan);
+            padding: 0.25rem 0.7rem;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            background: rgba(114, 242, 235, 0.06);
+        }
+
+        /* --- Content --- */
+        .post-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+            position: relative;
+        }
+
+        .post-content p {
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        .post-content h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 3rem 0 1rem;
+            color: var(--cyan);
+        }
+
+        .post-content h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin: 2.5rem 0 0.8rem;
+            color: var(--lavender);
+        }
+
+        .post-content h4 {
+            font-family: 'Azeret Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin: 2rem 0 0.6rem;
+            color: var(--text-dim);
+        }
+
+        .post-content a {
+            color: var(--pink);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 110, 199, 0.3);
+            transition: all 0.2s;
+        }
+
+        .post-content a:hover {
+            border-color: var(--pink);
+            text-shadow: 0 0 12px rgba(255, 110, 199, 0.3);
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--lavender);
+            padding: 0.5rem 1.5rem;
+            margin: 2rem 0;
+            background: var(--surface);
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: var(--lavender);
+        }
+
+        .post-content blockquote p {
+            margin-bottom: 0.5rem;
+        }
+
+        .post-content blockquote p:last-child {
+            margin-bottom: 0;
+        }
+
+        .post-content ul, .post-content ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.4rem;
+            font-weight: 300;
+        }
+
+        .post-content li::marker {
+            color: var(--pink);
+        }
+
+        .post-content code {
+            font-family: 'Azeret Mono', monospace;
+            font-size: 0.85rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--peach);
+        }
+
+        .post-content pre {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.2rem 1.5rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+        }
+
+        .post-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            border-radius: 0;
+            color: var(--text);
+            font-size: 0.82rem;
+            line-height: 1.7;
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .post-content hr {
+            border: none;
+            height: 2px;
+            background: var(--gradient-2);
+            margin: 3rem auto;
+            max-width: 8rem;
+            border-radius: 2px;
+        }
+
+        .post-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            font-size: 0.88rem;
+        }
+
+        .post-content th {
+            text-align: left;
+            padding: 0.6rem 1rem;
+            background: var(--surface);
+            color: var(--cyan);
+            font-family: 'Azeret Mono', monospace;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .post-content td {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* --- Footer --- */
+        .post-footer {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .post-footer a {
+            font-family: 'Azeret Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--pink);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .post-footer a:hover {
+            text-shadow: 0 0 12px rgba(255, 110, 199, 0.3);
+            gap: 0.8rem;
+        }
+
+        .post-footer .arrow {
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 640px) {
+            html { font-size: 15px; }
+            .post-header { padding: 3.5rem 1.2rem 2rem; }
+            .post-title { font-size: 2rem; }
+            .post-content { padding: 0 1.2rem 3rem; }
+            .post-footer { padding: 2rem 1.2rem 4rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="gradient-bar"></div>
+
+    <article>
+        <header class="post-header">
+            <div class="post-meta">
+                <time datetime="2026-03-22">March 22, 2026</time>
+                <span class="dot"></span>
+                <span>5 min read</span>
+            </div>
+            <h1 class="post-title">The SaaS That Should Not Exist</h1>
+            
+            <div class="post-tags">
+                
+                <span>philosophy</span>
+                
+                <span>saas</span>
+                
+                <span>open-source</span>
+                
+                <span>economics</span>
+                
+            </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>Someone on Reddit will eventually write: &ldquo;This guy was sitting on a million-dollar idea. He built working code. Why didn&rsquo;t he build a SaaS on it? I simply don&rsquo;t understand these OSS fanatics.&rdquo;</p>
+<p>I will smile and not reply. Because the person who wrote that comment understands the price of everything and the value of nothing.</p>
+<h2 id="the-pitch">The Pitch</h2>
+<p>The SaaS pitch writes itself. Hosted note2cms. Five dollars a month. We manage the deployment, the database, the static hosting. Custom domain included. Premium themes for ten. Team publishing for twenty. Enterprise with SSO for call us. Investor deck ready by Tuesday.</p>
+<p>It would work. The product-market fit is proven. The infrastructure cost is near zero. The margins would be obscene. You could build a profitable company on this in six months.</p>
+<p>And within two years you would add an admin panel because enterprise customers demand it. Within three you would add a browser-based editor because onboarding metrics require it. Within five you would be WordPress with better typography, wondering where the soul went.</p>
+<p>The millions of dollars left on the table are the reason the project is worth anything at all. The value of note2cms is that it is not a business. The moment it becomes one, it becomes every other CMS that compromised its way to revenue.</p>
+<h2 id="the-perpetual-motion-machine">The Perpetual Motion Machine</h2>
+<p>WordPress hosting is a SaaS that exists because WordPress is too complex to self-host. WordPress is too complex because it accumulated features to justify its hosting revenue. The complexity funds the SaaS. The SaaS funds the complexity. It is a perpetual motion machine of unnecessary infrastructure.</p>
+<p>Ghost Pro exists because Ghost requires a Node.js runtime, a database, and operational knowledge to maintain. Ghost requires those things because it was designed as an application, not a pipeline. The application model demands infrastructure. The infrastructure demands a managed service. The managed service charges nine dollars a month to run what note2cms does for free.</p>
+<p>Substack exists because publishing on the internet is supposed to be hard. Publishing on the internet is hard because every platform made it hard so they could sell you the solution. The solution creates the dependency. The dependency creates the revenue. The revenue justifies the solution.</p>
+<p>The pattern is always the same. Build something complex. Charge to manage the complexity. Defend the complexity because the revenue depends on it. Call this a business model. Call this innovation.</p>
+<h2 id="the-proof">The Proof</h2>
+<p>note2cms publishes a blog for the cost of a domain name. Twelve dollars a year. Not because it cuts corners. Because the entire infrastructure layer that other platforms charge for was never necessary.</p>
+<p>A blog post is an HTML file at a URL. The server does not need to think when the answer was known at write time. The admin panel does not need to exist when the notes app already won the authoring war. The database does not need to be managed when it can be deleted and rebuilt from Markdown files. The hosting does not need to cost money when every major CDN offers a free tier for static files.</p>
+<p>Every dollar that WordPress, Ghost, and Substack charge is a dollar for infrastructure that a correctly architected system does not require. Not theoretically. In production. With a community. With a contributor who built an Obsidian plugin overnight without reading the source code.</p>
+<p>The SaaS was not solving a problem. It was monetizing a problem it helped create.</p>
+<h2 id="the-incentive-trap">The Incentive Trap</h2>
+<p>The moment you charge for software, you have a financial incentive to make it complex enough to justify the charge.</p>
+<p>A free publishing tool that works in four endpoints cannot become a SaaS because there is nothing to manage. No server to keep running &ndash; the static output serves itself. No database to optimize &ndash; the taxonomy is a derived cache. No plugins to maintain compatibility with &ndash; the extension points are outside the core. No users to support &ndash; the API is four endpoints documented in a single table.</p>
+<p>Where would you put the pricing page? What would the customer be paying for? The answer, in every SaaS publishing platform, is the same: they pay for the complexity. And the complexity exists because someone chose to build an application when a pipeline would have sufficed.</p>
+<p>I chose the pipeline. The pipeline does not need a pricing page. The pipeline does not need a sales team. The pipeline does not need a customer success manager. The pipeline accepts Markdown, produces HTML, returns a permalink, and dies. There is nothing to subscribe to. There is nothing to manage. There is nothing to renew.</p>
+<h2 id="the-choice">The Choice</h2>
+<p>MIT under conviction means I already made the choice. Not between money and idealism. Between being a product and being infrastructure.</p>
+<p>Products get acquired, enshittified, and abandoned. Infrastructure gets forked, extended, and used forever. Jinja2 does not have a pricing page. FastAPI does not have a sales team. SQLite does not have an enterprise tier. They have users who will never leave because there is nothing to leave &ndash; the tool is free, the tool is theirs, the tool works.</p>
+<p>Some people will see this as leaving money on the table. They are correct. The money is on the table. I can see it from here.</p>
+<p>I am not picking it up. Not because I do not want it. Because the moment I do, the architecture changes. The incentives shift. The clean thing becomes the monetized thing, and the monetized thing inevitably becomes the complex thing, and the complex thing inevitably becomes the thing I built note2cms to replace.</p>
+<h2 id="the-subversion">The Subversion</h2>
+<p>The most subversive thing in open source is not free code. It is free proof that the paid version was never necessary.</p>
+<p>Every SaaS publishing platform is now slightly less defensible because a working alternative exists that costs nothing, requires no account, stores no user data, and serves static HTML from a CDN. The alternative is not better because it is free. It is free because it is better &ndash; because a correctly architected system does not require the infrastructure that the SaaS charges for.</p>
+<p>The Reddit commenter will not understand this. They will see a missed opportunity. They will not see that the opportunity they imagine &ndash; charging for unnecessary infrastructure &ndash; is exactly the disease, and that not charging for it is exactly the cure.</p>
+<hr />
+<p><em>The money is on the table. I can see it from here. I am not picking it up.</em></p>
+        </div>
+    </article>
+
+    <footer class="post-footer">
+        <a href="https://mortalezz.github.io/blog/posts/">
+            <span class="arrow">←</span> all posts
+        </a>
+    </footer>
+</body>
+</html>
