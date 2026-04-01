@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One Big Beautiful Recursion — Write where you think</title>
+    <meta name="description" content="I never used Obsidian.">
+    <meta property="og:title" content="One Big Beautiful Recursion">
+    <meta property="og:description" content="I never used Obsidian.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://mortalezz.github.io/blog/posts/one-big-beautiful-recursion/">
+    <link rel="canonical" href="https://mortalezz.github.io/blog/posts/one-big-beautiful-recursion/">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&family=Azeret+Mono:wght@400;500&display=swap');
+
+        :root {
+            --bg: #1a1025;
+            --surface: #221533;
+            --pink: #ff6ec7;
+            --cyan: #72f2eb;
+            --lavender: #c4b5fd;
+            --peach: #ffb3b3;
+            --text: #e8dff5;
+            --text-dim: #8b7fa8;
+            --border: #2d1f42;
+            --gradient-1: linear-gradient(135deg, #ff6ec7, #7c3aed);
+            --gradient-2: linear-gradient(135deg, #72f2eb, #818cf8);
+            --max-width: 44rem;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 17px; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        /* Gradient mesh background */
+        body::before {
+            content: "";
+            position: fixed;
+            top: -50%;
+            right: -30%;
+            width: 80vw;
+            height: 80vw;
+            background: radial-gradient(ellipse, rgba(124, 58, 237, 0.12) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            bottom: -30%;
+            left: -20%;
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(ellipse, rgba(255, 110, 199, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        /* --- Top gradient bar --- */
+        .gradient-bar {
+            height: 4px;
+            background: var(--gradient-1);
+        }
+
+        /* --- Header --- */
+        .post-header {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 5rem 1.5rem 2.5rem;
+            position: relative;
+        }
+
+        .post-meta {
+            font-family: 'Azeret Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--text-dim);
+            margin-bottom: 1.2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .post-meta .dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--pink);
+        }
+
+        .post-title {
+            font-size: 2.6rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .post-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .post-tags span {
+            font-family: 'Azeret Mono', monospace;
+            font-size: 0.68rem;
+            color: var(--cyan);
+            padding: 0.25rem 0.7rem;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            background: rgba(114, 242, 235, 0.06);
+        }
+
+        /* --- Content --- */
+        .post-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+            position: relative;
+        }
+
+        .post-content p {
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        .post-content h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 3rem 0 1rem;
+            color: var(--cyan);
+        }
+
+        .post-content h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin: 2.5rem 0 0.8rem;
+            color: var(--lavender);
+        }
+
+        .post-content h4 {
+            font-family: 'Azeret Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin: 2rem 0 0.6rem;
+            color: var(--text-dim);
+        }
+
+        .post-content a {
+            color: var(--pink);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 110, 199, 0.3);
+            transition: all 0.2s;
+        }
+
+        .post-content a:hover {
+            border-color: var(--pink);
+            text-shadow: 0 0 12px rgba(255, 110, 199, 0.3);
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--lavender);
+            padding: 0.5rem 1.5rem;
+            margin: 2rem 0;
+            background: var(--surface);
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: var(--lavender);
+        }
+
+        .post-content blockquote p {
+            margin-bottom: 0.5rem;
+        }
+
+        .post-content blockquote p:last-child {
+            margin-bottom: 0;
+        }
+
+        .post-content ul, .post-content ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.4rem;
+            font-weight: 300;
+        }
+
+        .post-content li::marker {
+            color: var(--pink);
+        }
+
+        .post-content code {
+            font-family: 'Azeret Mono', monospace;
+            font-size: 0.85rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--peach);
+        }
+
+        .post-content pre {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.2rem 1.5rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+        }
+
+        .post-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            border-radius: 0;
+            color: var(--text);
+            font-size: 0.82rem;
+            line-height: 1.7;
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .post-content hr {
+            border: none;
+            height: 2px;
+            background: var(--gradient-2);
+            margin: 3rem auto;
+            max-width: 8rem;
+            border-radius: 2px;
+        }
+
+        .post-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            font-size: 0.88rem;
+        }
+
+        .post-content th {
+            text-align: left;
+            padding: 0.6rem 1rem;
+            background: var(--surface);
+            color: var(--cyan);
+            font-family: 'Azeret Mono', monospace;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .post-content td {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* --- Footer --- */
+        .post-footer {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .post-footer a {
+            font-family: 'Azeret Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--pink);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .post-footer a:hover {
+            text-shadow: 0 0 12px rgba(255, 110, 199, 0.3);
+            gap: 0.8rem;
+        }
+
+        .post-footer .arrow {
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 640px) {
+            html { font-size: 15px; }
+            .post-header { padding: 3.5rem 1.2rem 2rem; }
+            .post-title { font-size: 2rem; }
+            .post-content { padding: 0 1.2rem 3rem; }
+            .post-footer { padding: 2rem 1.2rem 4rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="gradient-bar"></div>
+
+    <article>
+        <header class="post-header">
+            <div class="post-meta">
+                <time datetime="2026-04-01T19:16:21.628153+00:00">April 1, 2026</time>
+                <span class="dot"></span>
+                <span>6 min read</span>
+            </div>
+            <h1 class="post-title">One Big Beautiful Recursion</h1>
+            
+            <div class="post-tags">
+                
+                <span>philosophy</span>
+                
+                <span>recursion</span>
+                
+                <span>obsidian</span>
+                
+                <span>community</span>
+                
+                <span>bazaar</span>
+                
+            </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>I never used Obsidian.</p>
+<p>I watched people get exalted over it. The graph view. The backlinks. The plugins. The community. Fair enough &ndash; I could understand the rave. But for me it always looked overburdened. Features I had no idea about. Workflows I did not need. A knowledge management system for people who wanted to manage knowledge. I just wanted to write things down.</p>
+<p>I used Apple Notes. I used Bear. I used whatever was already open when a thought arrived. The thought was the point. The tool was irrelevant. I did not need a second brain. I needed a notepad.</p>
+<p>Then I built note2cms. Four endpoints. Markdown in, permalink out. The protocol did not care what notes app you used. It accepted an HTTP POST with a JSON body containing Markdown. Where that Markdown was composed was not the system&rsquo;s concern.</p>
+<p>Then a stranger in Russia &ndash; @garrul4ik &ndash; looked at those four endpoints and saw something I did not see. He saw an Obsidian plugin.</p>
+<h2 id="the-plugin-i-did-not-imagine">The Plugin I Did Not Imagine</h2>
+<p>He built it overnight. While his wife hissed at him. Without coordinating with me. Without reading my source code beyond the API documentation. Without asking permission.</p>
+<p>The first version was simple. Open a note. Press publish. Get a permalink. The plugin prepared the Markdown payload, attached the bearer token, and POST-ed to the endpoint. Four lines of logic wrapped in Obsidian&rsquo;s plugin API.</p>
+<p>Then he kept going.</p>
+<p>Publish from a specific folder. Publish by tag &ndash; mark a note with <code>#publish</code> and it enters the queue. Bulk publish everything in a directory. Preview before publishing. Offline queue for when you have no connection. WiFi-only mode to avoid publishing over cellular. Queue management to clear failed attempts. Permalink modal with copy-to-clipboard. Post management with search and delete. Mobile confirmation dialogs. Automatic frontmatter injection when the title is missing. Error correction when the user forgets a required field.</p>
+<p>Version 1.0.0. Then 1.0.1. Then 1.0.2. Then 1.0.3. Four releases. Nineteen commits. Tested on Windows, macOS, Linux, and Android. Submitted to the official Obsidian community plugin registry.</p>
+<p>I did not ask for any of this. I did not spec it. I did not review it. I did not even know it was happening until he tweeted about it. The architecture invited the contribution by being simple enough to build against without guidance.</p>
+<h2 id="the-recursion">The Recursion</h2>
+<p>And then something happened that I did not expect.</p>
+<p>I started using Obsidian.</p>
+<p>Not because of the graph view. Not because of the backlinks. Not because of the knowledge management features that I still do not need. Because of the plugin. Because someone built a publishing tool inside Obsidian that was so good &ndash; so polished, so thoughtful, so mature &ndash; that it made Obsidian worth using for the first time.</p>
+<p>I installed Obsidian to test the plugin. I configured the plugin with my API endpoint and token. I opened a note. I wrote frontmatter. I pressed publish. The permalink appeared in a modal. I copied it. My blog post was live.</p>
+<p>And I thought: this is actually good. This is better than curl. This is better than the iOS Shortcut. This is what publishing should feel like &ndash; write in a real editor with real Markdown support, press one button, get a permalink.</p>
+<p>The tool I built made someone else build a plugin. The plugin made me adopt the app. I am now an Obsidian user because of a feature that exists only because I built a CMS that I built because I did not want to use Obsidian.</p>
+<p>I made Obsidian good for me by building something that had nothing to do with Obsidian. Someone else connected the dots. And now I am on the other side of a bridge I did not know I was building.</p>
+<h2 id="the-shape-of-recursion">The Shape of Recursion</h2>
+<p>This is not a circle. A circle returns to where it started. This is a spiral. Each pass through the loop is at a higher altitude than the last.</p>
+<p>Pass one: I do not use Obsidian. I build note2cms because I want to publish from any notes app.</p>
+<p>Pass two: Someone sees note2cms and builds an Obsidian plugin because he wants to publish from Obsidian specifically.</p>
+<p>Pass three: The plugin becomes so good that it makes Obsidian the best way to use note2cms. The generic tool acquires its best client through a contribution the author did not request.</p>
+<p>Pass four: I adopt Obsidian. The person who built the &ldquo;publish from anywhere&rdquo; tool now publishes from one specific place &ndash; because the community made that one place the best place.</p>
+<p>Pass five: My adoption validates the plugin. The plugin author sees the protocol&rsquo;s creator using his plugin. The bazaar&rsquo;s founder shopping at the bazaar&rsquo;s stall. The signal is unmistakable: this is good enough for the person who built the thing it connects to.</p>
+<p>Pass six: Other people see the creator using the plugin and adopt both. The recursion becomes a flywheel. note2cms makes the plugin possible. The plugin makes Obsidian worth using. Obsidian usage drives more note2cms publishes. More publishes prove the protocol. The proven protocol attracts more plugin builders.</p>
+<p>Each pass adds value that did not exist in the previous pass. The system is feeding itself. Not by design. By architecture.</p>
+<h2 id="the-architecture-of-accidents">The Architecture of Accidents</h2>
+<p>I did not design this recursion. I did not plan for an Obsidian plugin. I did not imagine that my CMS would make me adopt a notes app. The entire sequence is accidental.</p>
+<p>But the architecture made the accident possible. The four-endpoint API with a bearer token is so simple that building a client for it is an afternoon&rsquo;s work. The Markdown-in contract is so universal that any notes app can satisfy it. The permalink-out contract is so clean that any plugin can display it.</p>
+<p>The architecture did not specify what clients would be built. It specified the interface they would speak. The interface was simple enough that the right client appeared without being requested &ndash; because building it was easier than not building it.</p>
+<p>This is Raymond&rsquo;s bazaar in its purest form. The plausible promise &ndash; a working system with a clear interface &ndash; attracted a merchant who built something the market owner could not have imagined. And the merchant&rsquo;s product improved the market so much that the market owner became a customer.</p>
+<p>You cannot design this. You cannot plan for it. You cannot put &ldquo;create conditions for recursive community value&rdquo; on a product roadmap. You can only build something honest, make the interface clean, and wait.</p>
+<p>The recursion is the reward for architectural honesty. The community built something better than what the creator could have built alone. And the creator was humble enough to use it.</p>
+<h2 id="the-confession">The Confession</h2>
+<p>I am writing this post in Obsidian.</p>
+<p>I am going to publish it with the plugin that @garrul4ik built. The plugin will prepare the Markdown, attach my bearer token, POST to my endpoint, and return a permalink. The pipeline will parse the frontmatter, render the HTML through the Terminal theme, push to my GitHub repo, and deploy to GitHub Pages.</p>
+<p>The notes app I never wanted to use, running a plugin I never asked for, publishing to a CMS I built because I did not want to use any particular notes app.</p>
+<p>One big beautiful recursion.</p>
+<p>And I still do not use the graph view.</p>
+<hr />
+<p><em>You cannot design a bazaar. You can only deserve it. And sometimes, the bazaar builds something so good that the person who built the bazaar becomes its most grateful customer.</em></p>
+        </div>
+    </article>
+
+    <footer class="post-footer">
+        <a href="https://mortalezz.github.io/blog/posts/">
+            <span class="arrow">←</span> all posts
+        </a>
+    </footer>
+</body>
+</html>
