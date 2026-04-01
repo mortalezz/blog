@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Site Generator or Something Else — Write where you think</title>
+    <meta name="description" content="I was one of the first who got excited about static site generators. When Jekyll appeared, then Hugo, then Gatsby, then Eleventy, then dozens more -- it felt like liberation. No more WordPress. No…">
+    <meta property="og:title" content="Static Site Generator or Something Else">
+    <meta property="og:description" content="I was one of the first who got excited about static site generators. When Jekyll appeared, then Hugo, then Gatsby, then Eleventy, then dozens more -- it felt like liberation. No more WordPress. No…">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://mortalezz.github.io/blog/posts/static-site-generator-or-something-else/">
+    <link rel="canonical" href="https://mortalezz.github.io/blog/posts/static-site-generator-or-something-else/">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap');
+
+        :root {
+            --bg: #0a0e14;
+            --surface: #0d1117;
+            --green: #00ff88;
+            --green-dim: #00cc6a;
+            --green-glow: rgba(0, 255, 136, 0.15);
+            --amber: #ffb300;
+            --cyan: #00e5ff;
+            --text: #c0c8d8;
+            --text-dim: #5a6577;
+            --border: #1a2233;
+            --max-width: 48rem;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html { font-size: 16px; }
+
+        body {
+            font-family: 'Fira Code', 'SF Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* CRT scanline effect */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.08) 2px,
+                rgba(0, 0, 0, 0.08) 4px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* --- Prompt bar --- */
+        .prompt-bar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0.6rem 1.5rem;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .prompt-bar .path {
+            color: var(--cyan);
+        }
+
+        /* --- Header --- */
+        .post-header {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 4rem 1.5rem 2rem;
+        }
+
+        .post-meta {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .post-meta .sep {
+            color: var(--green);
+        }
+
+        .post-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--green);
+            margin-bottom: 1.2rem;
+            text-shadow: 0 0 30px var(--green-glow);
+        }
+
+        .post-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .post-tags span {
+            font-size: 0.7rem;
+            color: var(--amber);
+            padding: 0.2rem 0.6rem;
+            border: 1px solid var(--amber);
+            border-radius: 2px;
+        }
+
+        /* --- Content --- */
+        .post-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        .post-content p {
+            margin-bottom: 1.4rem;
+            font-size: 0.92rem;
+        }
+
+        .post-content h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--green);
+            margin: 3rem 0 1rem;
+        }
+
+        .post-content h2::before {
+            content: "## ";
+            color: var(--text-dim);
+        }
+
+        .post-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--cyan);
+            margin: 2.5rem 0 0.8rem;
+        }
+
+        .post-content h3::before {
+            content: "### ";
+            color: var(--text-dim);
+        }
+
+        .post-content h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--amber);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 2rem 0 0.6rem;
+        }
+
+        .post-content a {
+            color: var(--cyan);
+            text-decoration: none;
+            border-bottom: 1px solid var(--cyan);
+        }
+
+        .post-content a:hover {
+            color: var(--green);
+            border-color: var(--green);
+            text-shadow: 0 0 8px var(--green-glow);
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--green);
+            padding: 0.5rem 1.2rem;
+            margin: 1.5rem 0;
+            background: var(--surface);
+            color: var(--green-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote p {
+            margin-bottom: 0.4rem;
+        }
+
+        .post-content blockquote p:last-child {
+            margin-bottom: 0;
+        }
+
+        .post-content ul, .post-content ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.4rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.3rem;
+            font-size: 0.92rem;
+        }
+
+        .post-content li::marker {
+            color: var(--green);
+        }
+
+        .post-content code {
+            font-family: inherit;
+            font-size: 0.88rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 2px 5px;
+            color: var(--amber);
+        }
+
+        .post-content pre {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--cyan);
+            padding: 1.2rem 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .post-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: var(--text);
+            font-size: 0.85rem;
+            line-height: 1.7;
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border);
+            margin: 1.5rem 0;
+        }
+
+        .post-content hr {
+            border: none;
+            height: 1px;
+            background: var(--border);
+            margin: 3rem 0;
+        }
+
+        .post-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.85rem;
+        }
+
+        .post-content th {
+            text-align: left;
+            padding: 0.5rem 0.8rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--green);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .post-content td {
+            padding: 0.5rem 0.8rem;
+            border: 1px solid var(--border);
+        }
+
+        /* --- Footer --- */
+        .post-footer {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .post-footer a {
+            font-size: 0.8rem;
+            color: var(--green);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .post-footer a:hover {
+            text-shadow: 0 0 10px var(--green-glow);
+        }
+
+        .post-footer a::before {
+            content: "$ cd ";
+            color: var(--text-dim);
+        }
+
+        @media (max-width: 640px) {
+            html { font-size: 14px; }
+            .post-header { padding: 3rem 1.2rem 1.5rem; }
+            .post-content { padding: 0 1.2rem 3rem; }
+            .post-title { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="prompt-bar">
+        <span>Write where you think <span class="path">~/posts/static-site-generator-or-something-else</span></span>
+        <span>12m read</span>
+    </div>
+
+    <article>
+        <header class="post-header">
+            <div class="post-meta">
+                <time datetime="2026-04-01T19:52:11.167842+00:00">April 1, 2026</time>
+                <span class="sep">|</span>
+                <span>12 min read</span>
+            </div>
+            <h1 class="post-title">Static Site Generator or Something Else</h1>
+            
+            <div class="post-tags">
+                
+                <span>architecture</span>
+                
+                <span>philosophy</span>
+                
+                <span>ssg</span>
+                
+                <span>publishing</span>
+                
+            </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>I was one of the first who got excited about static site generators. When Jekyll appeared, then Hugo, then Gatsby, then Eleventy, then dozens more &ndash; it felt like liberation. No more WordPress. No more PHP. No more databases serving every page view. Just build the HTML once and serve it forever. The thesis was beautiful.</p>
+<p>The execution was not.</p>
+<h2 id="the-friction-nobody-removed">The Friction Nobody Removed</h2>
+<p>The promise of static site generators was simplicity. The reality was a different kind of complexity.</p>
+<p>You wanted to write a blog post. Here is what you actually did:</p>
+<p>You opened a terminal. You navigated to a project directory. You created a new file in a specific subdirectory with a specific naming convention. You wrote frontmatter that the generator required in its specific dialect. You wrote your post in an editor you may not have chosen if the SSG did not require it. You ran a build command. You watched the build output for errors. You ran a local preview server. You checked the output in a browser. You committed to git. You pushed. You waited for CI to build. You waited for the deploy to propagate. You checked the live site.</p>
+<p>Thirteen steps between thought and published post. The SSG removed the database. It did not remove the friction. It replaced one kind of friction with another and called it progress.</p>
+<h2 id="the-commands-nobody-wanted-to-learn">The Commands Nobody Wanted to Learn</h2>
+<p>Hugo requires you to learn <code>hugo new posts/my-post.md</code>. Jekyll requires <code>bundle exec jekyll serve</code>. Gatsby requires <code>gatsby develop</code> and <code>gatsby build</code>. Eleventy requires <code>npx @11ty/eleventy</code>. Each generator invented its own CLI with its own flags, its own configuration files, its own directory conventions.</p>
+<p>The user who just wanted to publish a thought now had to memorize commands for a tool they never wanted to learn. They learned these commands not because the commands were useful but because the architecture demanded them. The architecture was designed for the developer, not the writer. The writer was an afterthought in a system built by developers for developers.</p>
+<p>And the commands were never at hand. You could not publish from your phone. You could not publish from a library computer. You could not publish from a friend&rsquo;s laptop. You needed your project directory, your local install, your specific Node or Ruby or Go version, your build toolchain. The &ldquo;simple&rdquo; static site generator required more local infrastructure than the WordPress it replaced.</p>
+<p>And the dependencies rotted. Jekyll was written in Ruby. Almost every other Ruby release broke something &ndash; a gem version conflict, a native extension that would not compile, a Bundler incompatibility that produced error messages longer than the blog post you were trying to publish.</p>
+<p>You did not sign up for this. You did not know what a runtime was. You did not know Ruby. You did not want to know Ruby. You wanted to write a blog post about your weekend, and instead you were reading a stack trace about nokogiri failing to build native extensions on your operating system. You were on StackOverflow at midnight learning about rbenv and rvm and chruby &ndash; three competing tools for managing versions of a language you never chose to install. You were on forums asking bearded strangers how to rollback to the last Ruby version that did not break everything. You were debugging someone else&rsquo;s infrastructure instead of writing your own words.</p>
+<p>Why was a programming language runtime on your machine at all? Why did your blog&rsquo;s ability to exist depend on your ability to maintain a software development environment? Why was a chaotically versioned interpreted language the load-bearing wall of your personal publishing? These questions were never asked because the SSG ecosystem was built by developers who already had Ruby installed, who already understood gems, who already had opinions about version managers. The writer who wandered in hoping to publish a blog post without WordPress was collateral damage.</p>
+<p>Hugo solved this by shipping a single Go binary. No runtime, no dependencies, no gems. It was the right answer to the wrong question. The question was not &ldquo;how do we fix Ruby dependency hell.&rdquo; The question was &ldquo;why does publishing a blog post require a programming language runtime on my machine at all.&rdquo; Hugo answered the first question brilliantly. Nobody asked the second one until note2cms eliminated the local runtime entirely.</p>
+<h2 id="the-themes-nobody-could-make">The Themes Nobody Could Make</h2>
+<p>Every static site generator had a theme system. None of them made it easy.</p>
+<p>Hugo themes required understanding Go templates. Jekyll themes required Liquid. Gatsby themes required React with GraphQL queries. Eleventy themes required Nunjucks or Handlebars or any of six supported template languages.</p>
+<p>A designer who wanted to create a beautiful blog theme needed to learn a programming language&rsquo;s template syntax, understand the generator&rsquo;s data model, navigate its directory conventions, and test against its build system. This is not a theme. This is a software project.</p>
+<p>The result was predictable. A handful of developers made themes. Most of them looked the same. The themes that existed were functional and forgettable. Nobody made themes with personality because the friction of making a theme was so high that by the time you got it working, you had no energy left for beauty.</p>
+<p>Hugo has hundreds of themes. How many can you name? How many made you feel something? How many had a hidden visual trick that rewarded interaction? How many had a personality beyond &ldquo;clean and minimal&rdquo;?</p>
+<h2 id="the-blogs-that-got-bloated">The Blogs That Got Bloated</h2>
+<p>The irony of static site generators is that they produced bloated output. The HTML was static, yes. But Gatsby shipped a JavaScript runtime to the browser. Next.js shipped React hydration. Even Hugo and Jekyll themes accumulated CSS frameworks, web fonts loaded from CDNs, analytics scripts, comment system embeds, and social sharing widgets.</p>
+<p>The static HTML that was supposed to be light became heavier than the dynamic WordPress pages it replaced. The build step that was supposed to be simple became a pipeline with Node dependencies, Ruby gems, Go modules, and build caches measured in gigabytes.</p>
+<p>The simplicity was cosmetic. Underneath, the static site generator ecosystem accumulated the same complexity that WordPress accumulated &ndash; just distributed across different tools instead of concentrated in one.</p>
+<h2 id="the-thousand-post-problem">The Thousand Post Problem</h2>
+<p>Here is the fact that killed static site generators for anyone who actually blogged consistently.</p>
+<p>You wrote your thousand-and-first post. You ran the build command. The generator rebuilt every page. All one thousand index entries re-sorted. All one thousand HTML files re-rendered. All tag pages, archive pages, RSS feeds &ndash; everything regenerated from scratch because the generator had no concept of incremental builds.</p>
+<p>Hugo was fast. Hugo rebuilt a thousand posts in seconds. But Gatsby took minutes. Jekyll took minutes. Eleventy took minutes. And &ldquo;minutes&rdquo; is a generous description for a Jekyll blog with a thousand posts, custom plugins, and Sass compilation. Half an hour was not unusual. Half an hour to add one post to a blog that already had a thousand.</p>
+<p>The architecture guaranteed this. A static site generator treats the entire site as one unit. Change one post and the entire site rebuilds. The build time scales with your archive, not with your publishing frequency. The more you wrote, the more you were punished for writing.</p>
+<p>This is the fundamental architectural flaw that nobody in the SSG world addressed honestly. They optimized build times. They added caching. They parallelized template rendering. But they never questioned the premise that adding one post should touch every other post. The premise was wrong. The optimizations were bandages on a broken architecture.</p>
+<p>note2cms publishes one post by rendering one post. The five hundred posts already in your archive are untouched. Their HTML does not change. Their directories are not rewritten. The index page rebuilds because the post list changed, but the individual posts are frozen. The build time is O(1). Post number one thousand and one takes the same time as post number one.</p>
+<p>One second. Not half an hour. One second regardless of archive size. Because the architecture was honest about what actually needs to happen when you publish a new post: render one file, update one index, deploy. Everything else is waste.</p>
+<h2 id="the-one-thing-they-got-right">The One Thing They Got Right</h2>
+<p>But here is what the static site generator movement understood better than anyone: the source Markdown files are the system of record. Everything else is derived.</p>
+<p>Jekyll got this right from the beginning. Your blog was a folder of Markdown files. Delete the output, run the build again, and everything comes back. The database was not the king. The files were the king. The generated HTML was disposable because the source that produced it was permanent.</p>
+<p>Hugo got this right. Eleventy got this right. Even Gatsby, underneath all the React and GraphQL, understood that the content lived in files, not in a database.</p>
+<p>This was the SSG movement&rsquo;s most important contribution to web publishing. Not the performance. Not the security. Not the simplicity that turned out to be complex. The idea that your words belong in files you can see, copy, move, version, and back up with the tools you already have. Files that survive any tool, any framework, any platform. Files that will be readable in fifty years by any text editor on any operating system.</p>
+<p>note2cms follows this canon &ndash; accidentally. The Markdown you publish is stored in your GitHub repo as a source file alongside the rendered HTML. Delete every HTML file, hit rebuild, and the pipeline re-renders everything from the source Markdown. The system of record is the file. The rendered output is disposable. The taxonomy is a JSON file in the same repo, also disposable, also rebuildable.</p>
+<p>But note2cms goes one step further than any SSG dared. In a static site generator, your Markdown files lived in a project directory on your local machine. If your laptop died, your blog died &ndash; unless you had pushed to git. The files were the system of record, but the files were local.</p>
+<p>In note2cms, the Markdown source lives in your GitHub repo from the moment of publish. There is no local-only state. There is no &ldquo;I forgot to push.&rdquo; The act of publishing IS the act of backing up. The source Markdown, the rendered HTML, and the taxonomy index are all committed to your repo in the same atomic operation. Your blog is version-controlled, backed up, and publicly auditable from the first post.</p>
+<p>The SSG movement said: your files are the truth. note2cms says: your files are the truth, and they live somewhere safe from the moment they exist.</p>
+<h2 id="what-note2cms-is-not">What note2cms Is Not</h2>
+<p>note2cms was never envisioned as a static site generator. It does not generate a site. It does not have a build command. It does not have a project directory. It does not have a CLI you need to install. It does not have a local development server. It does not require git on your machine.</p>
+<p>note2cms is a pipeline. Markdown goes in one end. A permalink comes out the other. The thing in the middle &ndash; the parsing, the rendering, the deploying &ndash; is not your problem. It wakes, it works, it dies. You never see it.</p>
+<p>The distinction matters. A static site generator is a tool you operate. note2cms is a service you use. You do not operate a postal service. You hand it a letter and it delivers it. You do not need to know how the trucks work.</p>
+<h2 id="what-note2cms-solved-by-accident">What note2cms Solved by Accident</h2>
+<p>By refusing to be a static site generator, note2cms inadvertently solved every problem that static site generators created.</p>
+<p>The friction between thought and post. You write in whatever notes app you already use. You publish with one HTTP request. There is no terminal, no build command, no project directory, no git push. The distance between thinking and publishing is one POST request.</p>
+<p>The commands nobody wanted. There are no commands. There is one endpoint. POST your Markdown to it. You can do this from curl, from an Obsidian plugin, from an iOS Shortcut, from any app that speaks HTTP. You do not need to learn anything except the address of the endpoint.</p>
+<p>The tools that were never at hand. Your phone is at hand. The Shortcut that publishes to note2cms is on your phone. Your laptop is at hand. Curl is on your laptop. Any device with an internet connection and the ability to make an HTTP request is a publishing tool.</p>
+<p>The thousand post problem. One post published, one post rendered. O(1). One second. Always.</p>
+<p>The themes nobody could make. A note2cms theme is two HTML files. A post template and an index template. They receive variables. They return HTML. If you can write HTML and CSS, you can make a theme. No template language to learn beyond basic Jinja2 variable substitution. No data model to understand. No build system to fight. Two files.</p>
+<p>And the themes have personality because the barrier to making them is so low that the creator has energy left for beauty. The Brutalist theme has a binary hover inversion. The Ink theme has a brushstroke animation. The Darkroom theme has photographs that develop on scroll. These tricks exist because the theme system is simple enough that the designer could focus on design instead of infrastructure.</p>
+<p>The bloated output. note2cms produces static HTML with zero JavaScript. No framework. No hydration. No runtime. The reader&rsquo;s browser receives HTML and CSS and nothing else. The page loads instantly, renders completely, and works forever. It is archivable by the Wayback Machine and printable on paper.</p>
+<p>The source of truth. Your Markdown lives in your GitHub repo from the moment you publish. Delete the HTML, rebuild, everything returns. The SSG canon preserved, the SSG friction eliminated.</p>
+<h2 id="the-accidental-thesis">The Accidental Thesis</h2>
+<p>I did not set out to fix static site generators. I set out to publish a blog post without opening a browser. The solution happened to be a pipeline that accepts Markdown via HTTP and produces static HTML on a CDN.</p>
+<p>That this pipeline solves the problems of the SSG ecosystem is an accident of architecture. When you strip publishing down to its absolute minimum &ndash; Markdown in, permalink out &ndash; the problems that static site generators created do not arise because the complexity that caused them was never introduced.</p>
+<p>The commands do not exist because there is no CLI. The local toolchain does not exist because there is no local build. The themes are simple because the template system is simple. The output is light because nothing unnecessary was added. The build is O(1) because only the new post is rendered. The source is safe because publishing IS backing up.</p>
+<p>Static site generators started from the developer&rsquo;s perspective and tried to accommodate writers. note2cms started from the writer&rsquo;s perspective and never needed to accommodate developers. The writer just writes. The pipeline just works.</p>
+<p>That is not a static site generator. It is something else. Something that did not have a name until now.</p>
+<hr />
+<p><em>The distance between thinking and publishing is one POST request. Everything else was a detour.</em></p>
+        </div>
+    </article>
+
+    <footer class="post-footer">
+        <a href="https://mortalezz.github.io/blog/posts/">../posts/</a>
+    </footer>
+</body>
+</html>
