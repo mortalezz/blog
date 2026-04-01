@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Matchstick — Write where you think</title>
+    <meta name="description" content="The closest analogy I can find is a matchstick.">
+    <meta property="og:title" content="The Matchstick">
+    <meta property="og:description" content="The closest analogy I can find is a matchstick.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://mortalezz.github.io/blog/posts/the-matchstick/">
+    <link rel="canonical" href="https://mortalezz.github.io/blog/posts/the-matchstick/">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap');
+
+        :root {
+            --bg: #0a0e14;
+            --surface: #0d1117;
+            --green: #00ff88;
+            --green-dim: #00cc6a;
+            --green-glow: rgba(0, 255, 136, 0.15);
+            --amber: #ffb300;
+            --cyan: #00e5ff;
+            --text: #c0c8d8;
+            --text-dim: #5a6577;
+            --border: #1a2233;
+            --max-width: 48rem;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html { font-size: 16px; }
+
+        body {
+            font-family: 'Fira Code', 'SF Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* CRT scanline effect */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.08) 2px,
+                rgba(0, 0, 0, 0.08) 4px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* --- Prompt bar --- */
+        .prompt-bar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0.6rem 1.5rem;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .prompt-bar .path {
+            color: var(--cyan);
+        }
+
+        /* --- Header --- */
+        .post-header {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 4rem 1.5rem 2rem;
+        }
+
+        .post-meta {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .post-meta .sep {
+            color: var(--green);
+        }
+
+        .post-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--green);
+            margin-bottom: 1.2rem;
+            text-shadow: 0 0 30px var(--green-glow);
+        }
+
+        .post-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .post-tags span {
+            font-size: 0.7rem;
+            color: var(--amber);
+            padding: 0.2rem 0.6rem;
+            border: 1px solid var(--amber);
+            border-radius: 2px;
+        }
+
+        /* --- Content --- */
+        .post-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        .post-content p {
+            margin-bottom: 1.4rem;
+            font-size: 0.92rem;
+        }
+
+        .post-content h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--green);
+            margin: 3rem 0 1rem;
+        }
+
+        .post-content h2::before {
+            content: "## ";
+            color: var(--text-dim);
+        }
+
+        .post-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--cyan);
+            margin: 2.5rem 0 0.8rem;
+        }
+
+        .post-content h3::before {
+            content: "### ";
+            color: var(--text-dim);
+        }
+
+        .post-content h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--amber);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 2rem 0 0.6rem;
+        }
+
+        .post-content a {
+            color: var(--cyan);
+            text-decoration: none;
+            border-bottom: 1px solid var(--cyan);
+        }
+
+        .post-content a:hover {
+            color: var(--green);
+            border-color: var(--green);
+            text-shadow: 0 0 8px var(--green-glow);
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--green);
+            padding: 0.5rem 1.2rem;
+            margin: 1.5rem 0;
+            background: var(--surface);
+            color: var(--green-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote p {
+            margin-bottom: 0.4rem;
+        }
+
+        .post-content blockquote p:last-child {
+            margin-bottom: 0;
+        }
+
+        .post-content ul, .post-content ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.4rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.3rem;
+            font-size: 0.92rem;
+        }
+
+        .post-content li::marker {
+            color: var(--green);
+        }
+
+        .post-content code {
+            font-family: inherit;
+            font-size: 0.88rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 2px 5px;
+            color: var(--amber);
+        }
+
+        .post-content pre {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--cyan);
+            padding: 1.2rem 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .post-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: var(--text);
+            font-size: 0.85rem;
+            line-height: 1.7;
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border);
+            margin: 1.5rem 0;
+        }
+
+        .post-content hr {
+            border: none;
+            height: 1px;
+            background: var(--border);
+            margin: 3rem 0;
+        }
+
+        .post-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.85rem;
+        }
+
+        .post-content th {
+            text-align: left;
+            padding: 0.5rem 0.8rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--green);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .post-content td {
+            padding: 0.5rem 0.8rem;
+            border: 1px solid var(--border);
+        }
+
+        /* --- Footer --- */
+        .post-footer {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .post-footer a {
+            font-size: 0.8rem;
+            color: var(--green);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .post-footer a:hover {
+            text-shadow: 0 0 10px var(--green-glow);
+        }
+
+        .post-footer a::before {
+            content: "$ cd ";
+            color: var(--text-dim);
+        }
+
+        @media (max-width: 640px) {
+            html { font-size: 14px; }
+            .post-header { padding: 3rem 1.2rem 1.5rem; }
+            .post-content { padding: 0 1.2rem 3rem; }
+            .post-title { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="prompt-bar">
+        <span>Write where you think <span class="path">~/posts/the-matchstick</span></span>
+        <span>7m read</span>
+    </div>
+
+    <article>
+        <header class="post-header">
+            <div class="post-meta">
+                <time datetime="2026-04-01T23:09:46.575501+00:00">April 1, 2026</time>
+                <span class="sep">|</span>
+                <span>7 min read</span>
+            </div>
+            <h1 class="post-title">The Matchstick</h1>
+            
+            <div class="post-tags">
+                
+                <span>architecture</span>
+                
+                <span>philosophy</span>
+                
+                <span>metaphor</span>
+                
+            </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>The closest analogy I can find is a matchstick.</p>
+<p>You have a note. In Obsidian, in Bear, in Apple Notes, in a text file on your desktop. You have been refining it. Adding a sentence. Removing two. Reading it back. Fixing the rhythm. At some point a thought enters your head:</p>
+<p>This is ready. I need to share this with the world.</p>
+<p>You strike the match. POST /publish. The matchstick ignites.</p>
+<p>The flame parses your frontmatter. It extracts the title, the date, the tags. It renders your Markdown through a Jinja2 template &ndash; the Terminal theme, or Brutalist, or Ink, or whichever personality you chose. It fetches the taxonomy from your GitHub repo. It appends your post to the index. It pushes four files in one atomic commit &ndash; the rendered HTML, the source Markdown, the updated taxonomy, the new index page. It returns a permalink.</p>
+<p>The match burns out. The process terminates. The flame is gone.</p>
+<p>But the cigarette is lit. The blog post is live. The permalink is in your clipboard. The static HTML is on a CDN, served to anyone in the world at the speed of light. The thing you wrote in your notes app three minutes ago now has a permanent address on the open web.</p>
+<p>The match existed for one second. The post exists forever.</p>
+<h2 id="the-speed-of-doubt">The Speed of Doubt</h2>
+<p>Here is what the matchstick captures that no technical description can.</p>
+<p>The pipeline is faster than hesitation. You press publish and before you can second-guess yourself &ndash; before you can reread the opening paragraph one more time, before you can wonder if the title is right, before you can question whether anyone will care &ndash; the permalink is already in your hands. The decision and the result are separated by one second. There is no window for doubt.</p>
+<p>Every other publishing system inserts a gap between the decision and the result. WordPress shows you a preview page with a &ldquo;Publish&rdquo; button that asks &ldquo;Are you sure?&rdquo; Jekyll requires you to commit, push, wait for CI, and watch the deploy. Ghost shows a loading spinner. Substack asks you to review the email preview. Each gap is an invitation to hesitate. Each hesitation is an opportunity to decide this is not good enough, not ready, not worth sharing.</p>
+<p>The matchstick does not ask if you are sure. You struck it. It burned. It is done. The post is live. If you do not like it, delete it. But the default is published, not draft. The default is live, not pending. The default is courage, not caution.</p>
+<p>More good writing dies in the gap between &ldquo;I should publish this&rdquo; and &ldquo;maybe tomorrow&rdquo; than to any other cause. The matchstick eliminates the gap. One second. No gap. No tomorrow. Now.</p>
+<h2 id="what-burns">What Burns</h2>
+<p>The match consumes itself. This is not a defect. It is the design.</p>
+<p>The FastAPI process that handled your request does not persist. The memory it allocated is returned. The database connection it opened is closed. The Jinja2 template it loaded is forgotten. The httpx client it used to push to GitHub is garbage collected. Every object, every variable, every byte of state that participated in transforming your Markdown into a blog post is destroyed.</p>
+<p>Nothing remains of the pipeline except the output. The HTML on the CDN. The Markdown in the repo. The taxonomy entry in the JSON file. The artifacts survive. The process that created them does not. Like a matchstick that leaves behind light and warmth but no matchstick.</p>
+<p>This is what makes the system trustworthy. A process that persists is a process that accumulates &ndash; state, bugs, memory leaks, security vulnerabilities. A process that dies after every use cannot accumulate anything. It is born clean and dies before it can get dirty. The next request gets a new match from the box. Fresh, unused, identical to every match before it.</p>
+<h2 id="what-does-not-burn">What Does Not Burn</h2>
+<p>The post. The words. The permalink. The static HTML that loads in 200 milliseconds on any device on any network in any country. The source Markdown in the git history, version-controlled, backed up, permanently retrievable. The taxonomy entry that tells the index page this post exists.</p>
+<p>The permanent things are permanent. The ephemeral things are ephemeral. The system does not confuse the two. The words matter, so they are stored in a git repo that GitHub backs up across multiple data centers. The pipeline does not matter, so it is destroyed after every use. The theme does not change between publishes, so it lives in the source code. The rendered HTML does not change after publication, so it lives on a CDN.</p>
+<p>Every piece of data lives in the place that matches its lifecycle. Permanent data in permanent storage. Ephemeral processes in ephemeral compute. Nothing is over-stored. Nothing is under-stored. The matchstick does not try to be a candle. The candle does not try to be a matchstick. Each exists for exactly as long as it should.</p>
+<h2 id="why-a-matchstick-and-not-a-lighter">Why a Matchstick and Not a Lighter</h2>
+<p>A lighter persists. You carry it in your pocket. It accumulates lint, loses fluid, develops a finicky spark wheel. It requires maintenance. You refill it. You adjust the flame. You replace the flint. The lighter is a small persistent server in your pocket &ndash; always ready, always consuming space, always one mechanical failure away from not working.</p>
+<p>A matchstick is pulled from a box when needed and discarded after use. The box is the serverless runtime. The matches are the workers. Each match is identical. Each match works on the first strike. There is no maintenance because there is no mechanism. There is no mechanical failure because the mechanism is chemistry, not engineering. Phosphorus meets friction. Fire happens. The match burns. Done.</p>
+<p>The note2cms pipeline is a matchstick, not a lighter. It is not always ready. It does not idle in your pocket. It springs into existence when you need it and ceases to exist when you do not. There is no maintenance because there is nothing to maintain. There is no state to corrupt because there is no state. There is no configuration to drift because every execution starts from the same configuration.</p>
+<p>A lighter is convenient. A matchstick is reliable. The industry chose lighters. note2cms chose matches.</p>
+<h2 id="the-box">The Box</h2>
+<p>If the match is the pipeline, the box is the protocol. PBPP. Four endpoints. One bearer token. Markdown in, permalink out.</p>
+<p>The box does not care which match you pull. The first match and the thousandth match are identical. The box does not track which matches have been used. It does not maintain state about previous strikes. It holds matches and dispenses them. That is its entire function.</p>
+<p>The Neon database &ndash; one table, one row per user &ndash; is the label on the box. It tells the match where to send the flame. This user&rsquo;s match lights their GitHub repo. That user&rsquo;s match lights theirs. The match burns the same way regardless. The output destination is configuration, not behavior.</p>
+<p>The protocol is the box. The pipeline is the match. The blog is the light. The match is gone but the light remains.</p>
+<h2 id="finality">Finality</h2>
+<p>I did not plan this metaphor. I was trying to explain to someone on Twitter what the pipeline does, and the matchstick appeared. It appeared because it is accurate. Not poetically accurate &ndash; structurally accurate. The ephemeral worker pattern IS a matchstick. Born from a box of identical instances. Activated by a single strike. Burns for exactly as long as the job requires. Produces a lasting result. Destroys itself in the process.</p>
+<p>The entire note2cms architecture is a box of matches in a world of lighters. The lighters are impressive. They are engineered. They have adjustable flames and windproof housings and refillable reservoirs. They are designed to last.</p>
+<p>The matches are designed to work. Once. Perfectly. And then to disappear.</p>
+<p>There is a matchstick that burned one second ago. You are reading its output right now. The match is gone. The words remain.</p>
+<p>That is the entire philosophy.</p>
+<hr />
+<p><em>You struck the match. It burned. The post is live. The match is gone. The words remain.</em></p>
+        </div>
+    </article>
+
+    <footer class="post-footer">
+        <a href="https://mortalezz.github.io/blog/posts/">../posts/</a>
+    </footer>
+</body>
+</html>
