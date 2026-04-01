@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ephemeral. Shiny. Chrome — Write where you think</title>
+    <meta name="description" content="Most servers are built to survive. They are heavy, lumbering monuments to overhead, clinging to a 99.9% uptime they never earned. They sit on cloud instances consuming memory between requests,…">
+    <meta property="og:title" content="Ephemeral. Shiny. Chrome">
+    <meta property="og:description" content="Most servers are built to survive. They are heavy, lumbering monuments to overhead, clinging to a 99.9% uptime they never earned. They sit on cloud instances consuming memory between requests,…">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://mortalezz.github.io/blog/posts/ephemeral-shiny-chrome/">
+    <link rel="canonical" href="https://mortalezz.github.io/blog/posts/ephemeral-shiny-chrome/">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap');
+
+        :root {
+            --bg: #0a0e14;
+            --surface: #0d1117;
+            --green: #00ff88;
+            --green-dim: #00cc6a;
+            --green-glow: rgba(0, 255, 136, 0.15);
+            --amber: #ffb300;
+            --cyan: #00e5ff;
+            --text: #c0c8d8;
+            --text-dim: #5a6577;
+            --border: #1a2233;
+            --max-width: 48rem;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html { font-size: 16px; }
+
+        body {
+            font-family: 'Fira Code', 'SF Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* CRT scanline effect */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.08) 2px,
+                rgba(0, 0, 0, 0.08) 4px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* --- Prompt bar --- */
+        .prompt-bar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0.6rem 1.5rem;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .prompt-bar .path {
+            color: var(--cyan);
+        }
+
+        /* --- Header --- */
+        .post-header {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 4rem 1.5rem 2rem;
+        }
+
+        .post-meta {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .post-meta .sep {
+            color: var(--green);
+        }
+
+        .post-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--green);
+            margin-bottom: 1.2rem;
+            text-shadow: 0 0 30px var(--green-glow);
+        }
+
+        .post-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .post-tags span {
+            font-size: 0.7rem;
+            color: var(--amber);
+            padding: 0.2rem 0.6rem;
+            border: 1px solid var(--amber);
+            border-radius: 2px;
+        }
+
+        /* --- Content --- */
+        .post-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        .post-content p {
+            margin-bottom: 1.4rem;
+            font-size: 0.92rem;
+        }
+
+        .post-content h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--green);
+            margin: 3rem 0 1rem;
+        }
+
+        .post-content h2::before {
+            content: "## ";
+            color: var(--text-dim);
+        }
+
+        .post-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--cyan);
+            margin: 2.5rem 0 0.8rem;
+        }
+
+        .post-content h3::before {
+            content: "### ";
+            color: var(--text-dim);
+        }
+
+        .post-content h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--amber);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 2rem 0 0.6rem;
+        }
+
+        .post-content a {
+            color: var(--cyan);
+            text-decoration: none;
+            border-bottom: 1px solid var(--cyan);
+        }
+
+        .post-content a:hover {
+            color: var(--green);
+            border-color: var(--green);
+            text-shadow: 0 0 8px var(--green-glow);
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--green);
+            padding: 0.5rem 1.2rem;
+            margin: 1.5rem 0;
+            background: var(--surface);
+            color: var(--green-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote p {
+            margin-bottom: 0.4rem;
+        }
+
+        .post-content blockquote p:last-child {
+            margin-bottom: 0;
+        }
+
+        .post-content ul, .post-content ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.4rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.3rem;
+            font-size: 0.92rem;
+        }
+
+        .post-content li::marker {
+            color: var(--green);
+        }
+
+        .post-content code {
+            font-family: inherit;
+            font-size: 0.88rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 2px 5px;
+            color: var(--amber);
+        }
+
+        .post-content pre {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--cyan);
+            padding: 1.2rem 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .post-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: var(--text);
+            font-size: 0.85rem;
+            line-height: 1.7;
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border);
+            margin: 1.5rem 0;
+        }
+
+        .post-content hr {
+            border: none;
+            height: 1px;
+            background: var(--border);
+            margin: 3rem 0;
+        }
+
+        .post-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.85rem;
+        }
+
+        .post-content th {
+            text-align: left;
+            padding: 0.5rem 0.8rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--green);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .post-content td {
+            padding: 0.5rem 0.8rem;
+            border: 1px solid var(--border);
+        }
+
+        /* --- Footer --- */
+        .post-footer {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .post-footer a {
+            font-size: 0.8rem;
+            color: var(--green);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .post-footer a:hover {
+            text-shadow: 0 0 10px var(--green-glow);
+        }
+
+        .post-footer a::before {
+            content: "$ cd ";
+            color: var(--text-dim);
+        }
+
+        @media (max-width: 640px) {
+            html { font-size: 14px; }
+            .post-header { padding: 3rem 1.2rem 1.5rem; }
+            .post-content { padding: 0 1.2rem 3rem; }
+            .post-title { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="prompt-bar">
+        <span>Write where you think <span class="path">~/posts/ephemeral-shiny-chrome</span></span>
+        <span>9m read</span>
+    </div>
+
+    <article>
+        <header class="post-header">
+            <div class="post-meta">
+                <time datetime="2026-04-01T22:19:40.402552+00:00">April 1, 2026</time>
+                <span class="sep">|</span>
+                <span>9 min read</span>
+            </div>
+            <h1 class="post-title">Ephemeral. Shiny. Chrome</h1>
+            
+            <div class="post-tags">
+                
+                <span>architecture</span>
+                
+                <span>philosophy</span>
+                
+                <span>infrastructure</span>
+                
+                <span>note2cms</span>
+                
+            </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>Most servers are built to survive. They are heavy, lumbering monuments to overhead, clinging to a 99.9% uptime they never earned. They sit on cloud instances consuming memory between requests, aggregating logs nobody reads, and rotting from the inside with every unpatched dependency. They are the computational web at its most stagnant &ndash; a standing army guarding an empty room.</p>
+<p>The note2cms pipeline worker is not that.</p>
+<p>It is a stateless projectile. Born from a single HTTP POST, it wakes in the dark, parses your frontmatter, renders your Markdown through a Jinja2 template, pushes four files to a GitHub repo, returns a permalink, and self-terminates. The entire lifespan is measured in milliseconds. By the time you read the permalink in your terminal, the process that created it no longer exists.</p>
+<p>Seven super slow libraries of super slow Python. One second. Then nothing.</p>
+<h2 id="the-defense-of-the-void">The Defense of the Void</h2>
+<p>In traditional architecture, the server is a fortress. You patch it weekly. You monitor its state with dashboards nobody checks until something breaks. You rotate credentials on a schedule. You pray a zero-day does not slip through the gate while you are sleeping. The fortress demands maintenance simply because it exists. Its uptime is a liability masquerading as a feature.</p>
+<p>The ephemeral worker eliminates the battlefield entirely. You cannot siege what is not there.</p>
+<p>No memory leaks. A process cannot leak what it does not hold. The worker allocates memory for one transformation, completes it, and returns everything to the operating system. There is no long-running process accumulating garbage. There is no heap growing between requests. There is no memory profiler to run because there is no memory to profile.</p>
+<p>No state corruption. Every execution is a pristine environment. No configuration drift. No shadow modifications. No &ldquo;it worked yesterday but today the server is in a weird state.&rdquo; The inputs map to the outputs with mathematical certainty because there is no state from a previous request contaminating the current one. Every publish is the first publish. Every render is a clean render.</p>
+<p>Zero attack surface. You cannot exploit a ghost. By the time an automated scanner identifies a footprint, the worker has already vanished. It offers no shell to hijack, no file system to traverse, no persistent memory to dump, no session to steal. The worker does not have an SSH port. It does not have an admin panel. It does not have a debug endpoint that someone forgot to disable in production. It has four endpoints that accept JSON and return JSON. The authentication is a string comparison. The attack surface is the width of a bearer token.</p>
+<p>WordPress has accumulated over 40,000 CVEs in its lifetime. note2cms has an attack surface that exists for one second per publish. The math is not subtle.</p>
+<h2 id="the-o1-absolute">The O(1) Absolute</h2>
+<p>The persistent web punishes you for accumulation. Static site generators treat your archive as a single unit &ndash; change one post and rebuild everything. Jekyll rebuilds a thousand posts to add the thousand-and-first. Gatsby recompiles the entire React tree. The build time scales with your history. The more you wrote, the more you are punished for writing.</p>
+<p>The ephemeral worker operates in O(1). It does not know how many posts exist in your archive. It does not care. It parses one frontmatter block. It renders one Markdown file. It fetches one taxonomy JSON. It appends one entry. It pushes one commit with four files. It returns one permalink. The five hundred posts already on your blog are untouched. Their HTML does not change. Their directories are not rewritten.</p>
+<p>Post number one takes one second. Post number ten thousand and one takes one second. The performance graph is a flat line extending to infinity. Not because the worker is fast. Because the worker only does what needs to be done, and what needs to be done is always the same amount of work regardless of what came before.</p>
+<p>This is not an optimization. It is an architectural inevitability. When the worker has no memory of previous executions, it cannot be burdened by them. The O(1) guarantee is not a feature. It is a consequence of ephemerality.</p>
+<h2 id="the-bazaars-engine">The Bazaar&rsquo;s Engine</h2>
+<p>Because the worker demands so little &ndash; awake, work, die &ndash; the interface becomes universally accessible. The barrier to entry is not low. It is absent.</p>
+<p>Can you make an HTTP POST? You are a note2cms client. You do not need an SDK. You do not need a framework. You do not need a programming language. You need curl. Or an Obsidian plugin. Or an iOS Shortcut. Or a Python script. Or a Siri voice command. Or anything that can put JSON in a POST body and read JSON from a response.</p>
+<p>This is the exact condition required for the bazaar to flourish. When the protocol is this rigid and the payload this simple, the cost of building a client approaches zero. A developer in Russia built a full-featured Obsidian plugin overnight &ndash; with offline queuing, bulk publishing, tag-based filtering, and a preview system &ndash; because the endpoint he was building against does one thing and does it predictably. The pipeline does not discriminate between clients. It does not care if the Markdown arrived from a ten-thousand-dollar MacBook or a five-dollar Raspberry Pi. It only executes.</p>
+<p>The ephemerality of the worker is what makes the protocol trustworthy. A persistent server accumulates behavior &ndash; caches that go stale, rate limiters that drift, session state that corrupts. The ephemeral worker has no behavior to accumulate. Every request gets the same worker in the same state with the same dependencies. The protocol&rsquo;s promise &ndash; Markdown in, permalink out &ndash; is guaranteed by the architecture, not by testing.</p>
+<h2 id="the-infrastructure-that-was-never-built">The Infrastructure That Was Never Built</h2>
+<p>The worker&rsquo;s most important property is not what it does. It is what it does not require.</p>
+<p>No process manager. There is no PM2, no systemd unit, no supervisor daemon keeping the worker alive. The worker does not need to be kept alive. It is not alive between requests. It springs into existence when called and ceases to exist when finished. The orchestration layer is the cloud runtime itself &ndash; FastAPI Cloud, Leapcell, any serverless platform that can run a Python process.</p>
+<p>No log aggregation. The worker produces one log line per publish: the slug, the permalink, the timestamp. There is no log rotation strategy because there are no logs to rotate. There is no ELK stack. There is no Datadog integration. The worker&rsquo;s entire observable history fits in a terminal window.</p>
+<p>No monitoring dashboard. What would it monitor? The worker is either running a transformation or it does not exist. There is no CPU graph to watch because the CPU is only consumed for one second per publish. There is no memory chart to worry about because memory is allocated and freed within the same second. The monitoring dashboard for note2cms is the blog itself &ndash; if the post is live, the worker succeeded.</p>
+<p>No backup strategy. The worker holds nothing. The content is in the user&rsquo;s GitHub repo, backed up by GitHub&rsquo;s infrastructure. The taxonomy is a JSON file in the same repo. The theme templates are in the source repository. The only persistent data is one row per user in a Neon table &ndash; a token and a repo name. The backup strategy for note2cms is: do nothing. There is nothing to back up. The worker was never there.</p>
+<p>Every piece of infrastructure that note2cms does not require is a piece of infrastructure that cannot fail, cannot be misconfigured, cannot be exploited, and cannot send you an alert at 3 AM. The void is the feature.</p>
+<h2 id="the-thermal-argument">The Thermal Argument</h2>
+<p>A traditional server idles at some baseline resource consumption. Even when nobody is reading, even when nobody is publishing, the process is running, the database connection is open, the memory is allocated. This idle consumption is thermal waste &ndash; energy spent maintaining the possibility of work rather than performing work.</p>
+<p>The ephemeral worker has zero thermal waste. When nobody publishes, the worker does not exist. The Neon database is asleep. The FastAPI Cloud instance is scaled to zero. The system consumes nothing. Not &ldquo;almost nothing.&rdquo; Nothing. The electrical cost of note2cms between publishes is zero watts.</p>
+<p>This is not an environmental argument, though it could be. It is an architectural argument. A system that consumes resources when idle is a system that has confused readiness with existence. The ephemeral worker does not need to be ready. It needs to be callable. The difference is the difference between a standing army and a draft notice. The standing army costs you every day. The draft notice costs you only when war arrives.</p>
+<p>Publishing is not war. It happens a few times a day, a few times a week. The pipeline should exist for those seconds and not exist for the rest. Any other arrangement is overhead pretending to be architecture.</p>
+<h2 id="finality">Finality</h2>
+<p>There is a surgical beauty in code that embraces its own destruction. The worker does not gracefully shut down. It does not drain connections. It does not save state for next time. It completes its transformation and vanishes. The next request gets a new worker that has never seen the previous one. Every publish is a birth and a death separated by one second of useful work.</p>
+<p>This is what Sebastian Ramirez built FastAPI for &ndash; though perhaps not in this extreme form. The async framework that starts instantly, processes a request, and returns to idle. The framework that does not accumulate. The framework that gets out of the way. note2cms takes that philosophy to its logical conclusion: the framework does not just get out of the way. The framework ceases to exist.</p>
+<p>Armin Ronacher&rsquo;s Jinja2 renders one template and forgets it rendered anything. Tom Christie&rsquo;s httpx makes one API call and forgets it made a call. The libraries have no memory because they are functions, not services. Data in, result out, state discarded. The ephemeral worker is the natural habitat of functional tools. They were always meant to be called once and forgotten. note2cms just had the honesty to build the architecture that matches.</p>
+<p>Everything else &ndash; the persistent servers, the long-running processes, the connection pools, the cache layers, the session stores, the background workers &ndash; is just liability disguised as capability. Infrastructure that exists to maintain itself. Complexity that justifies its own existence by being complex.</p>
+<p>The ephemeral worker is the cure. Not because it is better at being a server. Because it refuses to be a server at all.</p>
+<p>Markdown in. Permalink out. Awake. Work. Die.</p>
+<p>Ephemeral. Shiny. Chrome.</p>
+        </div>
+    </article>
+
+    <footer class="post-footer">
+        <a href="https://mortalezz.github.io/blog/posts/">../posts/</a>
+    </footer>
+</body>
+</html>
