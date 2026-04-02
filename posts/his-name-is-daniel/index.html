@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>His Name is Daniel — Write where you think</title>
+    <meta name="description" content="---
+title: His Name Is Daniel
+tags: [philosophy, open-source, curl, heroes]
+date: 2026-04-02
+---">
+    <meta property="og:title" content="His Name is Daniel">
+    <meta property="og:description" content="---
+title: His Name Is Daniel
+tags: [philosophy, open-source, curl, heroes]
+date: 2026-04-02
+---">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://mortalezz.github.io/blog/posts/his-name-is-daniel/">
+    <link rel="canonical" href="https://mortalezz.github.io/blog/posts/his-name-is-daniel/">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap');
+
+        :root {
+            --bg: #0a0e14;
+            --surface: #0d1117;
+            --green: #00ff88;
+            --green-dim: #00cc6a;
+            --green-glow: rgba(0, 255, 136, 0.15);
+            --amber: #ffb300;
+            --cyan: #00e5ff;
+            --text: #c0c8d8;
+            --text-dim: #5a6577;
+            --border: #1a2233;
+            --max-width: 48rem;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html { font-size: 16px; }
+
+        body {
+            font-family: 'Fira Code', 'SF Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* CRT scanline effect */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.08) 2px,
+                rgba(0, 0, 0, 0.08) 4px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* --- Prompt bar --- */
+        .prompt-bar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0.6rem 1.5rem;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .prompt-bar .path {
+            color: var(--cyan);
+        }
+
+        /* --- Header --- */
+        .post-header {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 4rem 1.5rem 2rem;
+        }
+
+        .post-meta {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .post-meta .sep {
+            color: var(--green);
+        }
+
+        .post-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--green);
+            margin-bottom: 1.2rem;
+            text-shadow: 0 0 30px var(--green-glow);
+        }
+
+        .post-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .post-tags span {
+            font-size: 0.7rem;
+            color: var(--amber);
+            padding: 0.2rem 0.6rem;
+            border: 1px solid var(--amber);
+            border-radius: 2px;
+        }
+
+        /* --- Content --- */
+        .post-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        .post-content p {
+            margin-bottom: 1.4rem;
+            font-size: 0.92rem;
+        }
+
+        .post-content h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--green);
+            margin: 3rem 0 1rem;
+        }
+
+        .post-content h2::before {
+            content: "## ";
+            color: var(--text-dim);
+        }
+
+        .post-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--cyan);
+            margin: 2.5rem 0 0.8rem;
+        }
+
+        .post-content h3::before {
+            content: "### ";
+            color: var(--text-dim);
+        }
+
+        .post-content h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--amber);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 2rem 0 0.6rem;
+        }
+
+        .post-content a {
+            color: var(--cyan);
+            text-decoration: none;
+            border-bottom: 1px solid var(--cyan);
+        }
+
+        .post-content a:hover {
+            color: var(--green);
+            border-color: var(--green);
+            text-shadow: 0 0 8px var(--green-glow);
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--green);
+            padding: 0.5rem 1.2rem;
+            margin: 1.5rem 0;
+            background: var(--surface);
+            color: var(--green-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote p {
+            margin-bottom: 0.4rem;
+        }
+
+        .post-content blockquote p:last-child {
+            margin-bottom: 0;
+        }
+
+        .post-content ul, .post-content ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.4rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.3rem;
+            font-size: 0.92rem;
+        }
+
+        .post-content li::marker {
+            color: var(--green);
+        }
+
+        .post-content code {
+            font-family: inherit;
+            font-size: 0.88rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 2px 5px;
+            color: var(--amber);
+        }
+
+        .post-content pre {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--cyan);
+            padding: 1.2rem 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .post-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: var(--text);
+            font-size: 0.85rem;
+            line-height: 1.7;
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border);
+            margin: 1.5rem 0;
+        }
+
+        .post-content hr {
+            border: none;
+            height: 1px;
+            background: var(--border);
+            margin: 3rem 0;
+        }
+
+        .post-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.85rem;
+        }
+
+        .post-content th {
+            text-align: left;
+            padding: 0.5rem 0.8rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--green);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .post-content td {
+            padding: 0.5rem 0.8rem;
+            border: 1px solid var(--border);
+        }
+
+        /* --- Footer --- */
+        .post-footer {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .post-footer a {
+            font-size: 0.8rem;
+            color: var(--green);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .post-footer a:hover {
+            text-shadow: 0 0 10px var(--green-glow);
+        }
+
+        .post-footer a::before {
+            content: "$ cd ";
+            color: var(--text-dim);
+        }
+
+        @media (max-width: 640px) {
+            html { font-size: 14px; }
+            .post-header { padding: 3rem 1.2rem 1.5rem; }
+            .post-content { padding: 0 1.2rem 3rem; }
+            .post-title { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="prompt-bar">
+        <span>Write where you think <span class="path">~/posts/his-name-is-daniel</span></span>
+        <span>9m read</span>
+    </div>
+
+    <article>
+        <header class="post-header">
+            <div class="post-meta">
+                <time datetime="2026-04-02T23:29:59.355876+00:00">April 2, 2026</time>
+                <span class="sep">|</span>
+                <span>9 min read</span>
+            </div>
+            <h1 class="post-title">His Name is Daniel</h1>
+            
+            <div class="post-tags">
+                
+                <span>open-source</span>
+                
+                <span>philosophy</span>
+                
+                <span>curl</span>
+                
+                <span>heroes</span>
+                
+            </div>
+            
+        </header>
+
+        <div class="post-content">
+            <hr />
+<p>title: His Name Is Daniel
+tags: [philosophy, open-source, curl, heroes]
+date: 2026-04-02</p>
+<hr />
+<p>Every note2cms publish begins with curl.</p>
+<p>Not metaphorically. Literally. The first client anyone uses to test the protocol is curl. The documentation shows curl commands. The iOS Shortcut is curl with a GUI. The Obsidian plugin is curl with a better editor. Every client that will ever be built for note2cms is a wrapper around what curl does natively in one line.</p>
+<p>And when someone dismisses this architecture &ndash; &ldquo;it is just a curl command to an endpoint&rdquo; &ndash; they are accidentally describing the highest compliment the system can receive. Because curl is the most installed software on earth. And the man who built it has been refining it for twenty-eight years from a home office south of Stockholm.</p>
+<p>His name is Daniel Stenberg. Say his name.</p>
+<h2 id="300-lines-of-c">300 Lines of C</h2>
+<p>In 1996, Daniel wrote a small tool to fetch currency exchange rates from a website. It was called httpget. It was 300 lines of C. He did not have world-conquering ideas. He did not have a business plan. He did not have venture capital. He had a problem &ndash; he wanted to see exchange rates in his terminal &ndash; and he wrote the minimum code that solved it.</p>
+<p>The tool grew. It learned FTP. He renamed it urlget. It learned more protocols. He renamed it curl. It learned HTTPS, IMAP, SMTP, LDAP, MQTT, and twenty other protocols. The 300 lines became 172,000 lines. But the core idea never changed: transfer data from a URL. That is what curl does. That is all curl does.</p>
+<p>Twenty billion installations. Every iPhone. Every Android phone. Every Linux server. Every smart car from twenty-two major brands. Every IoT device with a network connection. Every copy of Windows since Windows 10. Every macOS installation. Every PHP runtime. Every Docker image. Every CI/CD pipeline. Every developer&rsquo;s terminal.</p>
+<p>Twenty billion installations of a tool that started because a Swedish programmer wanted to see currency exchange rates.</p>
+<h2 id="the-ultimate-dinosaur">The Ultimate Dinosaur</h2>
+<p>Daniel Stenberg is the purest example of the engineer who refined.</p>
+<p>He has been the lead developer of curl for twenty-eight years. The same project. The same core mission. Transfer data from URLs. He did not pivot to a platform. He did not start a SaaS. He did not raise funding. He did not build an enterprise edition. He did not even change jobs to work on something more exciting &ndash; he changed jobs to work on curl full-time.</p>
+<p>From IBM to Mozilla to wolfSSL &ndash; each move was made to spend more time on curl, not less. He is now paid to do what he did for free for two decades: refine curl. Fix bugs. Improve error messages. Add protocol support. Make transfers faster, more reliable, more correct. The same tool, getting imperceptibly better every day, for twenty-eight years.</p>
+<p>He received the Polhem Prize &ndash; Sweden&rsquo;s highest technical innovation award. The Royal Swedish Academy gave him their Gold Medal. He was named European Open Source Achievement Award winner. Developer of the Year. Microsoft MVP. GitHub Star. Five Google Open Source bonuses. Every institution that recognizes technical excellence has recognized Daniel.</p>
+<p>And he still sits in his home office in Huddinge, south of Stockholm, streaming curl development on Twitch, fixing bugs, reviewing patches, and answering questions from strangers on the internet about how to make an HTTP request.</p>
+<h2 id="the-most-dismissed-tool">The Most Dismissed Tool</h2>
+<p>The industry&rsquo;s relationship with curl is schizophrenic.</p>
+<p>Every developer uses it. Every tutorial starts with it. Every API documentation includes curl examples. Every debugging session reaches for it. When something is broken and you need to know if the server is responding, you do not open Postman. You do not write a Python script. You type <code>curl -v</code> and read the headers.</p>
+<p>And yet. When someone builds a system where curl is the primary client &ndash; where the entire publishing workflow is a single curl command &ndash; the industry calls it primitive. &ldquo;You cannot expect users to use curl.&rdquo; &ldquo;That is a developer tool, not a user tool.&rdquo; &ldquo;Where is the dashboard?&rdquo; &ldquo;Where is the GUI?&rdquo;</p>
+<p>The tool that twenty billion devices trust to transfer data is somehow not good enough for a blog post. The tool that powers the internet&rsquo;s infrastructure is somehow not suitable for the internet&rsquo;s content. The tool that Daniel has refined for twenty-eight years until it handles every edge case, every protocol quirk, every network condition &ndash; that tool is dismissed as &ldquo;just a command-line utility.&rdquo;</p>
+<p>note2cms does not dismiss curl. note2cms treats curl as the first-class client it always was. The publishing command is:</p>
+<p>One command. One line. The same tool that fetches web pages, tests APIs, downloads files, and transfers data across twenty-six protocols &ndash; now publishes a blog post. Not as a workaround. Not as a developer shortcut. As the canonical client. The documentation does not apologize for using curl. The documentation celebrates it.</p>
+<h2 id="the-refinement">The Refinement</h2>
+<p>Daniel&rsquo;s curl is the ultimate proof that refinement beats expansion.</p>
+<p>He could have built a web browser. He had the HTTP stack. He had the TLS integration. He had the cookie handling. He had every component needed to render web pages. He chose not to. He chose to make curl the best transfer tool instead of an adequate browser.</p>
+<p>He could have built an API platform. Postman makes hundreds of millions in revenue doing what curl does with a GUI on top. Daniel could have added a graphical interface, a collaboration layer, a cloud sync feature. He chose not to. He chose to make curl the tool that Postman is built on top of.</p>
+<p>He could have built a framework. libcurl is used as the HTTP engine inside countless applications. He could have expanded it into a full application framework with routing, middleware, and request handling. He chose not to. He chose to keep libcurl as a transfer library that other frameworks build upon.</p>
+<p>Every feature he did not add is a boundary he maintained. Every expansion he refused is a composition he enabled. curl does one thing, and because it does one thing, it composes with everything. It is the universal connector. The tool that fits between any two systems because it has no opinions about what those systems do.</p>
+<p>Twenty-eight years of saying no. Twenty-eight years of fixing bugs instead of adding features. Twenty-eight years of making the same tool better instead of making a different tool. The contribution graph does not capture this. The changelog does not celebrate this. But twenty billion installations testify to it.</p>
+<h2 id="the-parallel">The Parallel</h2>
+<p>When I built note2cms, I did not think about curl. I thought about publishing a blog post without opening a browser. The solution happened to be an HTTP POST with a JSON body &ndash; which is what curl was born to do.</p>
+<p>The alignment was not designed. It was inevitable. When you strip a problem down to its minimum &ndash; transferring a payload from point A to point B &ndash; you arrive at the tool that has been solving that exact problem since 1996. note2cms did not choose curl. note2cms chose simplicity, and simplicity led to curl.</p>
+<p>Daniel did not build curl for note2cms. Daniel built curl for currency exchange rates in 1996, and then refined it until it could transfer anything to anywhere. note2cms is one of twenty billion use cases. But it might be the one that honors curl most directly &ndash; because note2cms does not wrap curl in an abstraction. It does not hide curl behind an SDK. It says: curl is the client. The command-line tool that Daniel built is the interface. The thing he has been refining for twenty-eight years is the thing you type to publish your words to the internet.</p>
+<h2 id="the-community-of-quiet-giants">The Community of Quiet Giants</h2>
+<p>Daniel belongs in the same community as Sebastian and Armin and Tom and Samuel and Charlie and Guy Steele. The community of people who build small things, refine them for decades, and watch the world build on top of them without asking for credit.</p>
+<p>curl is in twenty billion devices and most people do not know Daniel&rsquo;s name. Jinja2 renders templates across the entire Python ecosystem and most people do not know Armin&rsquo;s name. FastAPI powers thousands of production APIs and most people do not know Sebastian&rsquo;s name. These are the people who built the internet&rsquo;s plumbing and never sent an invoice.</p>
+<p>note2cms is plumbing too. Four endpoints. A thin pipe between a notes app and a static host. It will never be as important as curl. Nothing will be as important as curl. But it follows the same ethic: do one thing, do it well, refine it, and do not pretend it is more than it is.</p>
+<p>Daniel started with 300 lines of C and a desire to see exchange rates. I started with four endpoints and a desire to publish without opening a browser. Both tools do one thing. Both tools use curl.</p>
+<h2 id="say-his-name">Say His Name</h2>
+<p>The next time someone demonstrates an API, they will use curl. The next time someone debugs a server, they will use curl. The next time someone writes documentation, the examples will be in curl. The next time someone publishes a blog post through note2cms, the command will start with curl.</p>
+<p>And none of them will think about Daniel. None of them will think about twenty-eight years of refinement. None of them will think about the home office in Huddinge where a Swedish programmer streams development on Twitch and fixes bugs in a tool that runs on twenty billion devices.</p>
+<p>The tool is invisible because it is perfect. The creator is invisible because the tool is. That is the highest compliment and the deepest injustice of open source. The best tools disappear into the infrastructure. The best creators disappear with them.</p>
+<p>His name is Daniel Stenberg. He built the tool you use every day without thinking. He has been refining it since 1996. He will be refining it tomorrow. He received a gold medal from a royal academy and he is still fixing bugs in a home office in a suburb of Stockholm.</p>
+<p>Every note2cms publish begins with what Daniel built.</p>
+<p>Say his name.</p>
+<hr />
+<p><em>The most installed software on earth was written by one person who has been refining it for twenty-eight years. The most used tool in your terminal was built because someone wanted to see currency exchange rates. The foundation of the internet&rsquo;s infrastructure is maintained from a home office in a suburb of Stockholm. His name is Daniel Stenberg. Say his name.</em></p>
+        </div>
+    </article>
+
+    <footer class="post-footer">
+        <a href="https://mortalezz.github.io/blog/posts/">../posts/</a>
+    </footer>
+</body>
+</html>
