@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go Nuclear First — Write where you think</title>
+    <meta name="description" content="Every theme in every static site generator gallery was designed from the same direction. Start from the user's comfort. Work backward toward minimalism. Stop when it feels like enough. Add some…">
+    <meta property="og:title" content="Go Nuclear First">
+    <meta property="og:description" content="Every theme in every static site generator gallery was designed from the same direction. Start from the user's comfort. Work backward toward minimalism. Stop when it feels like enough. Add some…">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://mortalezz.github.io/blog/posts/go-nuclear-first/">
+    <link rel="canonical" href="https://mortalezz.github.io/blog/posts/go-nuclear-first/">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap');
+
+        :root {
+            --bg: #0a0e14;
+            --surface: #0d1117;
+            --green: #00ff88;
+            --green-dim: #00cc6a;
+            --green-glow: rgba(0, 255, 136, 0.15);
+            --amber: #ffb300;
+            --cyan: #00e5ff;
+            --text: #c0c8d8;
+            --text-dim: #5a6577;
+            --border: #1a2233;
+            --max-width: 48rem;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html { font-size: 16px; }
+
+        body {
+            font-family: 'Fira Code', 'SF Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* CRT scanline effect */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.08) 2px,
+                rgba(0, 0, 0, 0.08) 4px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* --- Prompt bar --- */
+        .prompt-bar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0.6rem 1.5rem;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .prompt-bar .path {
+            color: var(--cyan);
+        }
+
+        /* --- Header --- */
+        .post-header {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 4rem 1.5rem 2rem;
+        }
+
+        .post-meta {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .post-meta .sep {
+            color: var(--green);
+        }
+
+        .post-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--green);
+            margin-bottom: 1.2rem;
+            text-shadow: 0 0 30px var(--green-glow);
+        }
+
+        .post-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .post-tags span {
+            font-size: 0.7rem;
+            color: var(--amber);
+            padding: 0.2rem 0.6rem;
+            border: 1px solid var(--amber);
+            border-radius: 2px;
+        }
+
+        /* --- Content --- */
+        .post-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        .post-content p {
+            margin-bottom: 1.4rem;
+            font-size: 0.92rem;
+        }
+
+        .post-content h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--green);
+            margin: 3rem 0 1rem;
+        }
+
+        .post-content h2::before {
+            content: "## ";
+            color: var(--text-dim);
+        }
+
+        .post-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--cyan);
+            margin: 2.5rem 0 0.8rem;
+        }
+
+        .post-content h3::before {
+            content: "### ";
+            color: var(--text-dim);
+        }
+
+        .post-content h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--amber);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 2rem 0 0.6rem;
+        }
+
+        .post-content a {
+            color: var(--cyan);
+            text-decoration: none;
+            border-bottom: 1px solid var(--cyan);
+        }
+
+        .post-content a:hover {
+            color: var(--green);
+            border-color: var(--green);
+            text-shadow: 0 0 8px var(--green-glow);
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--green);
+            padding: 0.5rem 1.2rem;
+            margin: 1.5rem 0;
+            background: var(--surface);
+            color: var(--green-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote p {
+            margin-bottom: 0.4rem;
+        }
+
+        .post-content blockquote p:last-child {
+            margin-bottom: 0;
+        }
+
+        .post-content ul, .post-content ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.4rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.3rem;
+            font-size: 0.92rem;
+        }
+
+        .post-content li::marker {
+            color: var(--green);
+        }
+
+        .post-content code {
+            font-family: inherit;
+            font-size: 0.88rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 2px 5px;
+            color: var(--amber);
+        }
+
+        .post-content pre {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--cyan);
+            padding: 1.2rem 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .post-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: var(--text);
+            font-size: 0.85rem;
+            line-height: 1.7;
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border);
+            margin: 1.5rem 0;
+        }
+
+        .post-content hr {
+            border: none;
+            height: 1px;
+            background: var(--border);
+            margin: 3rem 0;
+        }
+
+        .post-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.85rem;
+        }
+
+        .post-content th {
+            text-align: left;
+            padding: 0.5rem 0.8rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--green);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .post-content td {
+            padding: 0.5rem 0.8rem;
+            border: 1px solid var(--border);
+        }
+
+        /* --- Footer --- */
+        .post-footer {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .post-footer a {
+            font-size: 0.8rem;
+            color: var(--green);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .post-footer a:hover {
+            text-shadow: 0 0 10px var(--green-glow);
+        }
+
+        .post-footer a::before {
+            content: "$ cd ";
+            color: var(--text-dim);
+        }
+
+        @media (max-width: 640px) {
+            html { font-size: 14px; }
+            .post-header { padding: 3rem 1.2rem 1.5rem; }
+            .post-content { padding: 0 1.2rem 3rem; }
+            .post-title { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="prompt-bar">
+        <span>Write where you think <span class="path">~/posts/go-nuclear-first</span></span>
+        <span>9m read</span>
+    </div>
+
+    <article>
+        <header class="post-header">
+            <div class="post-meta">
+                <time datetime="2026-04-03T05:03:47.174775+00:00">April 3, 2026</time>
+                <span class="sep">|</span>
+                <span>9 min read</span>
+            </div>
+            <h1 class="post-title">Go Nuclear First</h1>
+            
+            <div class="post-tags">
+                
+                <span>design</span>
+                
+                <span>theming</span>
+                
+                <span>philosophy</span>
+                
+                <span>css</span>
+                
+            </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>Every theme in every static site generator gallery was designed from the same direction. Start from the user&rsquo;s comfort. Work backward toward minimalism. Stop when it feels like enough. Add some tasteful touches. Ship.</p>
+<p>The result is a thousand themes that balance on the edge of minimalism without ever falling over it. A little bit of whitespace. A little bit of serif. A little bit of muted color. A little bit of everything and a lot of nothing. The themes land in the middle because the middle is safe. The middle is rational. The middle is where nobody complains and nobody remembers.</p>
+<p>I went the other direction. I went full nuclear first. And then I looked back.</p>
+<h2 id="the-wrong-direction">The Wrong Direction</h2>
+<p>The conventional approach to theme design asks: what will the reader tolerate?</p>
+<p>This question produces compromise. The designer starts with a blank page and adds elements until the page feels &ldquo;enough.&rdquo; Enough typography. Enough color. Enough spacing. Enough personality. The threshold is comfort. The goal is adequacy. The reader should not be confused, not be alienated, not be challenged. The theme should be pleasant.</p>
+<p>Pleasant is the enemy of memorable. Nobody remembers pleasant. Nobody screenshots pleasant and sends it to a friend. Nobody chooses a publishing platform because the theme was adequate. Pleasant themes are wallpaper. They exist behind the content without contributing to it. They are the visual equivalent of hold music &ndash; technically present, functionally absent.</p>
+<p>Hugo has hundreds of themes. Name three. Gatsby had a theme ecosystem. Name one. Jekyll themes powered millions of blogs. Which one made you feel something? Which one had a personality you could describe in a sentence? Which one would you recognize from a screenshot without seeing the content?</p>
+<p>The themes are forgotten because they were designed to be inoffensive. Inoffensive is another word for invisible. And invisible themes produce invisible blogs.</p>
+<h2 id="full-nuclear">Full Nuclear</h2>
+<p>The Brutalist theme in note2cms does not ask what the reader will tolerate. It does not care.</p>
+<p>IBM Plex Mono. The entire blog in monospace. Not just code blocks &ndash; body text, headings, dates, tags, navigation. Everything in a typeface designed for terminals and code editors, applied to prose without apology.</p>
+<p>Four-pixel black borders. Not hairline borders. Not subtle separators. Four pixels of black on every container, every card, every section boundary. The borders are not decorative. They are structural. They say: this is a box. The content is inside. The border is the wall.</p>
+<p>Zero color. Black text on white background. No accent color. No brand color. No subtle tint on the headings. No muted tone on the metadata. Black and white. The entire chromatic range of a photocopied document.</p>
+<p>Zero curves. No border-radius. No rounded corners. No soft edges. Every element is a rectangle with ninety-degree angles. The page is a grid of boxes. The boxes do not apologize for being boxes.</p>
+<p>This is not minimalism. Minimalism implies careful reduction &ndash; a designer choosing what to remove. This is brutalism. It implies no choice at all. There is nothing to remove because nothing was added. The theme is the default state of HTML with a monospace font and thick borders. It is what a web page looks like before a designer touches it, except the designer touched it deliberately to keep it that way.</p>
+<p>Every SSG theme designer looked at this combination and said: too much. Too stark. Too aggressive. Too uncomfortable. The reader will not tolerate this. The designer is correct &ndash; the reader will not tolerate this in a theme that is trying to be pleasant. But the Brutalist theme is not trying to be pleasant. It is trying to be honest. And honesty in monospace with four-pixel borders is more memorable than pleasantry in Georgia with a muted color palette.</p>
+<h2 id="then-one-trick">Then One Trick</h2>
+<p>After going full nuclear &ndash; after committing to the extremity without reservation, without escape hatches, without a &ldquo;but we should soften this&rdquo; compromise &ndash; then and only then did I add one trick.</p>
+<p>The hover inversion. When you hover over a post title in the index, the entire row flips. White text on black background. Instant. No transition. No easing. No animation duration. Binary. On or off. Zero or one.</p>
+<p>The CSS is two lines:</p>
+<p>That is the entire trick. Two properties. On any other theme &ndash; on a theme with color, with curves, with decoration &ndash; this hover effect would be invisible. One more visual event in a sea of visual events. The reader would not notice because there would be nothing to notice against. The baseline is already active. The trick has no contrast to work with.</p>
+<p>On Brutalist, the hover inversion is an event. The reader has adjusted to the austerity. Their eye has accepted that this page will not do anything interesting. It is monospace text in black-bordered boxes. What could it possibly do?</p>
+<p>And then they hover. And the row inverts. And they stop moving their mouse. And they hover again to confirm what happened. And they remember.</p>
+<p>The trick works because of what preceded it. The austerity earned the inversion. The silence earned the sound. The nuclear commitment earned the single violation. The trick is not the two lines of CSS. The trick is the entire theme leading up to those two lines.</p>
+<h2 id="the-sequence">The Sequence</h2>
+<p>This is the discovery: extreme first, trick second. Never the reverse.</p>
+<p>The SSG theme world does it backwards. Start moderate, add tricks to make it interesting. An animation on page load. A parallax scroll effect. A gradient that shifts on hover. A card that lifts with a shadow. A dozen tricks scattered across a theme that committed to nothing. The tricks compete for attention. None of them land because none of them have contrast. The theme is a moderate baseline with moderate violations. The result is moderate impact.</p>
+<p>note2cms themes follow the opposite sequence. Commit to an extreme. Go all the way. Do not stop at the edge. Fall over it. Live there. And then &ndash; only then &ndash; add one trick from the opposite direction.</p>
+<p>The Ink theme commits to stillness. Japanese calligraphy aesthetics. Cormorant Garamond on rice paper. Vermillion accents. Everything is quiet, poised, motionless. The metaphor is a scroll in a temple. Scrolls do not move. And then on page load, a vermillion brushstroke unfurls beneath the title &ndash; left to right, with a slight overshoot, like wet ink dragged across paper. One animation. One moment of motion. The stillness earned it.</p>
+<p>The Darkroom theme commits to darkness. Source Serif on deep black. Amber accents like a safelight in a windowless room. A radial vignette darkening the edges. The metaphor is a photography darkroom. Everything is dim. And then images &ldquo;develop&rdquo; &ndash; they start nearly black with sepia toning and slowly emerge into full visibility, like a photograph materializing in a tray of developer fluid. One animation. One reveal. The darkness earned it.</p>
+<p>The Manuscript theme commits to academic austerity. Literata body text. Courier Prime metadata. Cream paper. A vertical red line in the margin like ruled notebook paper. The metaphor is a reviewed academic paper. And then section headings get automatically numbered in the margin &ndash; faint red annotations that brighten on hover, as if a reviewer had penciled them in. One trick. One implication that someone has already read this document. The austerity earned it.</p>
+<p>Each theme goes nuclear in one direction. Each theme adds one trick from the opposite direction. The nuclear commitment is what makes the trick land. Without the commitment, the trick is decoration. With the commitment, the trick is revelation.</p>
+<h2 id="why-nobody-did-this">Why Nobody Did This</h2>
+<p>The SSG theme designers did not lack skill. Many of them are better designers than I am. They did not lack tools &ndash; CSS animations, transitions, pseudo-elements, and keyframes have been available for a decade. They did not lack imagination &ndash; the CSS art community proves that browsers can render anything.</p>
+<p>They lacked permission. The implicit contract of an SSG theme is that it should serve the content without challenging the reader. The theme should be a container, not a participant. The designer&rsquo;s job is to disappear &ndash; to create a vessel so neutral that any content fits inside it.</p>
+<p>This contract produces adequate themes. It does not produce memorable ones. Because a theme that disappears cannot, by definition, be remembered. And a theme that cannot be remembered cannot differentiate one blog from another. And blogs that cannot be differentiated are blogs that nobody bookmarks, nobody returns to, nobody recommends.</p>
+<p>note2cms broke this contract by refusing to sign it. The themes are participants, not containers. The Brutalist theme does not disappear behind the content. It frames the content with four-pixel borders and monospace type and dares the content to be worthy of the frame. The Ink theme does not neutrally present the content. It sets a mood of calligraphic stillness and then breaks it with one brushstroke. The Darkroom theme does not politely display images. It develops them like photographs, making the reader wait and watch.</p>
+<p>The themes have opinions. The themes have personalities. The themes have tricks. And the tricks work because each theme committed to an extreme before adding the trick. The commitment is the permission. The extreme is the context. The trick is the payoff.</p>
+<h2 id="the-validation">The Validation</h2>
+<p>The strongest validation of this approach is not that people liked the themes. It is that garrul4ik &ndash; the first outside contributor, a developer who has written themes himself, who understands every CSS trick available &ndash; chose Brutalist for his own blog and never switched.</p>
+<p>He did not choose it because he lacks options. He has eight themes available and has built more himself. He chose it because he understands what Brutalist offers that no other theme does: the dare. Brutalist dares the writer to be good enough. It offers no decoration to hide behind. No atmosphere to lean on. No visual warmth to compensate for weak prose. The words carry themselves or they do not.</p>
+<p>His blog has Shakespeare&rsquo;s Hamlet. A Telegram privacy expose. An Obsidian plugin announcement. A heroic Russian ode. Technical documentation and medieval poetry and security journalism &ndash; all in uppercase IBM Plex Mono with four-pixel black borders. Every post works because the theme demands that the content work. The austerity is the quality filter.</p>
+<p>A chef who cooks elaborate meals for others eats simply at home. A theme designer who builds visual experiences for others publishes in Brutalist. Both know what is possible. Both chose what is honest.</p>
+<h2 id="the-principle">The Principle</h2>
+<p>Go nuclear first. Commit to the extreme. Do not stop at the edge of monochrome, or the edge of stillness, or the edge of darkness, or the edge of austerity. Fall over the edge. Live there.</p>
+<p>Then add one trick. Only one. From the opposite direction. A moment of motion in a still design. A flash of color in a monochrome design. A reveal of light in a dark design. A whisper of annotation in an austere design.</p>
+<p>The extreme earns the trick. The trick rewards the reader for engaging with the extreme. The combination &ndash; commitment plus violation &ndash; is what the reader remembers.</p>
+<p>A dozen tricks on a moderate theme is noise. One trick on a nuclear theme is music.</p>
+<p>That is the visual flair principle. That is why note2cms themes feel designed when SSG themes feel generated. Not because the CSS is more complex. Because the commitment is more total. The themes went somewhere the SSG world was afraid to go. And from that place, one small trick was all it took.</p>
+<hr />
+<p><em>Go nuclear first. Then add one trick. The extreme earns the trick. The trick rewards the reader. Everything else is wallpaper.</em></p>
+        </div>
+    </article>
+
+    <footer class="post-footer">
+        <a href="https://mortalezz.github.io/blog/posts/">../posts/</a>
+    </footer>
+</body>
+</html>
