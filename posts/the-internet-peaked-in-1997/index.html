@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Internet Peaked in 1997 — Write where you think</title>
+    <meta name="description" content="There is a generation of people who believe the internet peaked in the late 1990s. They are correct.">
+    <meta property="og:title" content="The Internet Peaked in 1997">
+    <meta property="og:description" content="There is a generation of people who believe the internet peaked in the late 1990s. They are correct.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://mortalezz.github.io/blog/posts/the-internet-peaked-in-1997/">
+    <link rel="canonical" href="https://mortalezz.github.io/blog/posts/the-internet-peaked-in-1997/">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap');
+
+        :root {
+            --bg: #0a0e14;
+            --surface: #0d1117;
+            --green: #00ff88;
+            --green-dim: #00cc6a;
+            --green-glow: rgba(0, 255, 136, 0.15);
+            --amber: #ffb300;
+            --cyan: #00e5ff;
+            --text: #c0c8d8;
+            --text-dim: #5a6577;
+            --border: #1a2233;
+            --max-width: 48rem;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html { font-size: 16px; }
+
+        body {
+            font-family: 'Fira Code', 'SF Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* CRT scanline effect */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.08) 2px,
+                rgba(0, 0, 0, 0.08) 4px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* --- Prompt bar --- */
+        .prompt-bar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0.6rem 1.5rem;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .prompt-bar .path {
+            color: var(--cyan);
+        }
+
+        /* --- Header --- */
+        .post-header {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 4rem 1.5rem 2rem;
+        }
+
+        .post-meta {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .post-meta .sep {
+            color: var(--green);
+        }
+
+        .post-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--green);
+            margin-bottom: 1.2rem;
+            text-shadow: 0 0 30px var(--green-glow);
+        }
+
+        .post-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .post-tags span {
+            font-size: 0.7rem;
+            color: var(--amber);
+            padding: 0.2rem 0.6rem;
+            border: 1px solid var(--amber);
+            border-radius: 2px;
+        }
+
+        /* --- Content --- */
+        .post-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        .post-content p {
+            margin-bottom: 1.4rem;
+            font-size: 0.92rem;
+        }
+
+        .post-content h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--green);
+            margin: 3rem 0 1rem;
+        }
+
+        .post-content h2::before {
+            content: "## ";
+            color: var(--text-dim);
+        }
+
+        .post-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--cyan);
+            margin: 2.5rem 0 0.8rem;
+        }
+
+        .post-content h3::before {
+            content: "### ";
+            color: var(--text-dim);
+        }
+
+        .post-content h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--amber);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 2rem 0 0.6rem;
+        }
+
+        .post-content a {
+            color: var(--cyan);
+            text-decoration: none;
+            border-bottom: 1px solid var(--cyan);
+        }
+
+        .post-content a:hover {
+            color: var(--green);
+            border-color: var(--green);
+            text-shadow: 0 0 8px var(--green-glow);
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--green);
+            padding: 0.5rem 1.2rem;
+            margin: 1.5rem 0;
+            background: var(--surface);
+            color: var(--green-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote p {
+            margin-bottom: 0.4rem;
+        }
+
+        .post-content blockquote p:last-child {
+            margin-bottom: 0;
+        }
+
+        .post-content ul, .post-content ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.4rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.3rem;
+            font-size: 0.92rem;
+        }
+
+        .post-content li::marker {
+            color: var(--green);
+        }
+
+        .post-content code {
+            font-family: inherit;
+            font-size: 0.88rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 2px 5px;
+            color: var(--amber);
+        }
+
+        .post-content pre {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--cyan);
+            padding: 1.2rem 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .post-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: var(--text);
+            font-size: 0.85rem;
+            line-height: 1.7;
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border);
+            margin: 1.5rem 0;
+        }
+
+        .post-content hr {
+            border: none;
+            height: 1px;
+            background: var(--border);
+            margin: 3rem 0;
+        }
+
+        .post-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.85rem;
+        }
+
+        .post-content th {
+            text-align: left;
+            padding: 0.5rem 0.8rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--green);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .post-content td {
+            padding: 0.5rem 0.8rem;
+            border: 1px solid var(--border);
+        }
+
+        /* --- Footer --- */
+        .post-footer {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .post-footer a {
+            font-size: 0.8rem;
+            color: var(--green);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .post-footer a:hover {
+            text-shadow: 0 0 10px var(--green-glow);
+        }
+
+        .post-footer a::before {
+            content: "$ cd ";
+            color: var(--text-dim);
+        }
+
+        @media (max-width: 640px) {
+            html { font-size: 14px; }
+            .post-header { padding: 3rem 1.2rem 1.5rem; }
+            .post-content { padding: 0 1.2rem 3rem; }
+            .post-title { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="prompt-bar">
+        <span>Write where you think <span class="path">~/posts/the-internet-peaked-in-1997</span></span>
+        <span>7m read</span>
+    </div>
+
+    <article>
+        <header class="post-header">
+            <div class="post-meta">
+                <time datetime="2026-04-03T19:14:14.653682+00:00">April 3, 2026</time>
+                <span class="sep">|</span>
+                <span>7 min read</span>
+            </div>
+            <h1 class="post-title">The Internet Peaked in 1997</h1>
+            
+            <div class="post-tags">
+                
+                <span>design</span>
+                
+                <span>theming</span>
+                
+                <span>vaporwave</span>
+                
+                <span>philosophy</span>
+                
+            </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>There is a generation of people who believe the internet peaked in the late 1990s. They are correct.</p>
+<p>Not technologically. Technologically the 90s internet was a disaster &ndash; 56k modems, table-based layouts, animated GIF counters, auto-playing MIDI files, and the blink tag. The infrastructure was amateur. The code was criminal. The bandwidth was a joke.</p>
+<p>But the feeling was real.</p>
+<h2 id="what-was-lost">What Was Lost</h2>
+<p>The 90s internet had no algorithm. Nobody curated your experience. Nobody optimized for engagement. Nobody tracked your attention across fourteen advertising platforms. You opened a browser, typed a URL, and arrived at a page that someone made because they wanted to make it.</p>
+<p>The pages were ugly. Tiled backgrounds. Comic Sans. Neon text on dark backgrounds. Frames that broke navigation. Java applets that crashed your browser. Every page was a crime against design.</p>
+<p>And every page was someone&rsquo;s. Someone made that tiled background because they liked it. Someone chose Comic Sans because it felt friendly. Someone picked neon green on purple because it looked cool to them at 2 AM. The aesthetic choices were terrible and they were honest. Nobody was optimizing for conversion. Nobody was following a design system. Nobody had read a UX research paper. They were decorating their corner of the internet the way a teenager decorates their bedroom &ndash; badly, but with conviction.</p>
+<p>That conviction is what was lost. The modern internet is beautiful and empty. Every SaaS landing page looks the same. Every startup uses the same Tailwind components. Every blog runs the same theme with the same typography and the same muted color palette. The design is professional and the soul is absent.</p>
+<p>The 90s internet was ugly and alive. The 2020s internet is beautiful and dead.</p>
+<h2 id="what-vaporwave-remembers">What Vaporwave Remembers</h2>
+<p>Vaporwave as a musical genre started in the early 2010s. Slowed-down samples of 80s and 90s pop, smooth jazz, and elevator music. The aesthetic followed &ndash; pink and purple gradients, Japanese text, Roman busts, sunset grids, Windows 95 interfaces, early internet imagery.</p>
+<p>The genre was ironic. The aesthetic was not.</p>
+<p>Underneath the irony, vaporwave was mourning something genuine. It was mourning the internet that felt like a place. The internet of personal homepages and webrings and guestbooks and &ldquo;under construction&rdquo; GIFs. The internet where every page was handmade and the handmade quality was visible and nobody was embarrassed by it.</p>
+<p>Vaporwave did not want to go back to 56k modems. It wanted to go back to the feeling that the internet was yours. That your corner of it reflected you. That the aesthetic was personal, not professional. That the design choices &ndash; however questionable &ndash; were made by a human being expressing something, not by a framework optimizing something.</p>
+<h2 id="the-vaporwave-theme">The Vaporwave Theme</h2>
+<p>The note2cms Vaporwave theme is not ironic. It is not a joke. It is not a nostalgic costume.</p>
+<p>It is an attempt to build what the 90s internet felt like with the tools the 2020s internet provides. The feeling without the MIDI files. The personality without the table layouts. The conviction without the Comic Sans.</p>
+<p>Pink to purple gradients on a deep dark background. Not the flat gradients of modern UI &ndash; layered gradients with depth, like the sky at the exact moment between sunset and night. The color palette of a convenience store at 3 AM in 1997.</p>
+<p>Floating card elements with subtle shadows that lift on hover. Not flat cards. Not material design cards with prescribed elevation levels. Cards that float like windows on a CRT monitor &ndash; slightly detached from the background, slightly luminous, as if backlit by phosphor.</p>
+<p>Soft radial glows in the background. Not decorative. Atmospheric. The glow of a neon sign seen through fog. The bloom on an overexposed VHS tape. Light that does not illuminate &ndash; it haunts.</p>
+<p>And the trick: hover a post card in the index and it lifts. The shadow deepens. The title shifts color from white to pink. The card separates from the page as if being pulled toward the reader. One interaction. One moment of depth in a flat medium.</p>
+<p>The 90s internet page would have used a JavaScript mouseover to swap an image. The Vaporwave theme uses a CSS transition to shift a box-shadow and a color. Same intent &ndash; reward the reader for interacting &ndash; executed with thirty years of better tools.</p>
+<h2 id="for-the-exiles">For the Exiles</h2>
+<p>The Vaporwave theme is for a specific person. Not every person. Not most people.</p>
+<p>It is for the person who had a GeoCities page. Who remembers choosing a &ldquo;neighborhood&rdquo; for their homepage. Who had a guestbook that three friends signed. Who spent an afternoon picking a tiled background from a library of 500 options and chose the one with stars because stars were cool.</p>
+<p>It is for the person who misses the internet being weird. Who opens modern websites and sees the same Tailwind gray and the same Inter font and the same hero section with the same gradient and feels nothing. Who remembers feeling something when they opened a webpage &ndash; not engagement, not conversion, not retention. Wonder. The wonder of arriving at a place someone made for no reason other than wanting to make it.</p>
+<p>It is for the person who types their blog posts at 2 AM and wants the page to look like 2 AM feels. Not dark mode &ndash; dark mode is functional. Vaporwave dark is atmospheric. Dark mode saves your eyes. Vaporwave dark saves your soul.</p>
+<p>The pink gradient is not a color choice. It is a time of day. The purple is not an accent. It is a decade. The floating cards are not a layout pattern. They are windows on a monitor that nobody makes anymore.</p>
+<h2 id="the-argument">The Argument</h2>
+<p>Every theme in note2cms makes an argument. Brutalist argues that the words are sufficient. Terminal argues that the blog is a machine. Ink argues that the blog is a scroll. Darkroom argues that the blog is a photograph.</p>
+<p>Vaporwave argues that the blog is a place.</p>
+<p>Not a page. Not a document. Not a feed. A place. A corner of the internet that someone decorated according to their own taste, their own nostalgia, their own midnight aesthetic. A place you visit, not a page you scroll. A place with atmosphere, not a document with margins.</p>
+<p>The 90s internet understood this instinctively. Every GeoCities page was a place. You went there. You looked around. You signed the guestbook. You left. The page had a feeling that persisted after you closed the browser.</p>
+<p>The modern internet lost this. Pages are content now. You do not visit content. You consume it. You scroll past it. You engage with it for seven seconds and move on. The page has no feeling because feelings require atmosphere and atmosphere requires someone giving a damn about the aesthetic.</p>
+<p>The Vaporwave theme gives a damn. The gradient is deliberate. The glow is intentional. The floating cards are a choice. Someone &ndash; a human being, not a framework &ndash; decided that this blog should feel like a convenience store at 3 AM in 1997. That decision is visible on every pixel of every page.</p>
+<p>The internet peaked in 1997 because in 1997 every page had a decision like this. Now almost none of them do. The Vaporwave theme is one page that does.</p>
+<h2 id="static-and-alive">Static and Alive</h2>
+<p>The irony of the Vaporwave theme is that it is the most visually complex theme in note2cms and it is rendered as static HTML with zero JavaScript.</p>
+<p>The gradients are CSS. The glows are CSS. The floating cards are CSS. The hover lift is CSS. The atmospheric background radials are CSS. Every visual element that makes this page feel like a place instead of a document is achieved with stylesheet rules frozen into the HTML at build time.</p>
+<p>The page does not compute. The page does not execute. The page does not run. It loads and it is there &ndash; all at once, completely, like a photograph of a neon sign. The atmosphere is permanent. The vibe is cached.</p>
+<p>This is the ultimate proof of the visual flair principle. Static does not mean dead. Static means every bit of life was considered. The Vaporwave theme considered a lot of life. Pink gradients and floating cards and ambient glows and the ghost of a 1997 internet that nobody built a memorial for.</p>
+<p>Until now.</p>
+<hr />
+<p><em>The internet peaked in 1997. Not technologically. Emotionally. The Vaporwave theme is a memorial for the internet that felt like a place. Static HTML. Zero JavaScript. All atmosphere.</em></p>
+        </div>
+    </article>
+
+    <footer class="post-footer">
+        <a href="https://mortalezz.github.io/blog/posts/">../posts/</a>
+    </footer>
+</body>
+</html>
