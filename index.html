@@ -6,79 +6,65 @@
     <title>Write where you think</title>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+JP:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;1,8..60,300;1,8..60,400&family=DM+Mono:wght@400;500&display=swap');
 
         :root {
-            --ink: #1a1714;
-            --paper: #f5f0e8;
-            --wash: #e8e0d0;
-            --vermillion: #cc3333;
-            --stone: #6b5f52;
-            --faded: #9a8f80;
-            --max-width: 40rem;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --ink: #e0d8cc;
-                --paper: #171412;
-                --wash: #221e1a;
-                --vermillion: #e04040;
-                --stone: #9a8e80;
-                --faded: #5a5248;
-            }
+            --bg: #111111;
+            --surface: #1a1a1a;
+            --amber: #d4943a;
+            --amber-dim: #a07030;
+            --amber-glow: rgba(212, 148, 58, 0.08);
+            --text: #c8c0b4;
+            --text-dim: #706860;
+            --border: #2a2520;
+            --max-width: 42rem;
         }
 
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        html { font-size: 18px; }
+        html { font-size: 17px; }
 
         body {
-            font-family: 'Cormorant Garamond', 'Noto Sans JP', Georgia, serif;
-            background: var(--paper);
-            color: var(--ink);
-            line-height: 1.8;
+            font-family: 'Source Serif 4', Georgia, serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.75;
             min-height: 100vh;
         }
 
-        body::before {
+        body::after {
             content: "";
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.4) 100%);
             pointer-events: none;
         }
 
         .index-wrapper { position: relative; z-index: 1; }
 
+        .safelight {
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, var(--amber) 20%, var(--amber) 80%, transparent 100%);
+            opacity: 0.6;
+        }
+
         .index-header {
             max-width: var(--max-width);
             margin: 0 auto;
-            padding: 6rem 1.5rem 3rem;
-            text-align: center;
+            padding: 5rem 1.5rem 2.5rem;
         }
 
         .index-title {
-            font-size: 2.4rem;
-            font-weight: 400;
-            letter-spacing: 0.02em;
-            margin-bottom: 0.5rem;
+            font-size: 2rem;
+            font-weight: 300;
+            color: var(--amber);
+            margin-bottom: 0.4rem;
         }
 
         .index-subtitle {
-            font-size: 0.78rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--stone);
-        }
-
-        /* Decorative mark below header */
-        .header-mark {
-            text-align: center;
-            padding: 1.5rem 0 0;
-            color: var(--vermillion);
-            font-size: 0.8rem;
-            opacity: 0.4;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--text-dim);
         }
 
         .divider {
@@ -90,7 +76,7 @@
         .divider hr {
             border: none;
             height: 1px;
-            background: var(--wash);
+            background: var(--border);
         }
 
         /* --- Post List --- */
@@ -98,74 +84,170 @@
             list-style: none;
             max-width: var(--max-width);
             margin: 0 auto;
-            padding: 1rem 1.5rem 4rem;
+            padding: 0.5rem 1.5rem 4rem;
         }
 
         .post-item {
-            padding: 2rem 0;
-            border-bottom: 1px solid var(--wash);
+            border-bottom: 1px solid var(--border);
+            position: relative;
         }
 
         .post-item-link {
             display: block;
+            padding: 1.8rem 0 1.8rem 2.5rem;
             text-decoration: none;
             color: inherit;
+            transition: background 0.3s;
+        }
+
+        /* The trick: amber exposure bar on the left — height based on reading time */
+        .post-item-link::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 1.8rem;
+            width: 3px;
+            height: 0;
+            background: var(--amber);
+            opacity: 0.2;
+            transition: opacity 0.4s, box-shadow 0.4s;
+        }
+
+        /* Reading time fills: 1min=15%, up to ~10min=100% */
+        
+        .post-item:nth-child(1) .post-item-link::before {
+            height: min(calc(1 * 12%), 90%);
+        }
+        
+        .post-item:nth-child(2) .post-item-link::before {
+            height: min(calc(9 * 12%), 90%);
+        }
+        
+        .post-item:nth-child(3) .post-item-link::before {
+            height: min(calc(8 * 12%), 90%);
+        }
+        
+        .post-item:nth-child(4) .post-item-link::before {
+            height: min(calc(7 * 12%), 90%);
+        }
+        
+        .post-item:nth-child(5) .post-item-link::before {
+            height: min(calc(6 * 12%), 90%);
+        }
+        
+        .post-item:nth-child(6) .post-item-link::before {
+            height: min(calc(9 * 12%), 90%);
+        }
+        
+        .post-item:nth-child(7) .post-item-link::before {
+            height: min(calc(8 * 12%), 90%);
+        }
+        
+        .post-item:nth-child(8) .post-item-link::before {
+            height: min(calc(7 * 12%), 90%);
+        }
+        
+        .post-item:nth-child(9) .post-item-link::before {
+            height: min(calc(9 * 12%), 90%);
+        }
+        
+        .post-item:nth-child(10) .post-item-link::before {
+            height: min(calc(12 * 12%), 90%);
+        }
+        
+        .post-item:nth-child(11) .post-item-link::before {
+            height: min(calc(6 * 12%), 90%);
+        }
+        
+        .post-item:nth-child(12) .post-item-link::before {
+            height: min(calc(6 * 12%), 90%);
+        }
+        
+        .post-item:nth-child(13) .post-item-link::before {
+            height: min(calc(4 * 12%), 90%);
+        }
+        
+        .post-item:nth-child(14) .post-item-link::before {
+            height: min(calc(1 * 12%), 90%);
+        }
+        
+        .post-item:nth-child(15) .post-item-link::before {
+            height: min(calc(3 * 12%), 90%);
+        }
+        
+        .post-item:nth-child(16) .post-item-link::before {
+            height: min(calc(5 * 12%), 90%);
+        }
+        
+        .post-item:nth-child(17) .post-item-link::before {
+            height: min(calc(5 * 12%), 90%);
+        }
+        
+        .post-item:nth-child(18) .post-item-link::before {
+            height: min(calc(1 * 12%), 90%);
+        }
+        
+        .post-item:nth-child(19) .post-item-link::before {
+            height: min(calc(4 * 12%), 90%);
+        }
+        
+        .post-item:nth-child(20) .post-item-link::before {
+            height: min(calc(3 * 12%), 90%);
+        }
+        
+        .post-item:nth-child(21) .post-item-link::before {
+            height: min(calc(11 * 12%), 90%);
+        }
+        
+        .post-item:nth-child(22) .post-item-link::before {
+            height: min(calc(4 * 12%), 90%);
+        }
+        
+        .post-item:nth-child(23) .post-item-link::before {
+            height: min(calc(4 * 12%), 90%);
+        }
+        
+        .post-item:nth-child(24) .post-item-link::before {
+            height: min(calc(1 * 12%), 90%);
+        }
+        
+
+        .post-item-link:hover::before {
+            opacity: 0.9;
+            box-shadow: 0 0 8px var(--amber-glow), 0 0 2px var(--amber-dim);
+        }
+
+        .post-item-link:hover {
+            background: var(--amber-glow);
         }
 
         .post-item-meta {
+            font-family: 'DM Mono', monospace;
             font-size: 0.68rem;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--stone);
-            margin-bottom: 0.5rem;
-        }
-
-        .post-item-meta .sep {
-            margin: 0 0.5rem;
-            color: var(--faded);
+            color: var(--text-dim);
+            margin-bottom: 0.4rem;
+            display: flex;
+            gap: 0.8rem;
         }
 
         .post-item-title {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 400;
             line-height: 1.3;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
             transition: color 0.3s;
-            position: relative;
-            display: inline;
-        }
-
-        /* The trick: vermillion dot appears after title on hover, pulses like wet ink */
-        .post-item-title::after {
-            content: " ●";
-            color: var(--vermillion);
-            opacity: 0;
-            font-size: 0.5em;
-            vertical-align: middle;
-            transition: opacity 0.3s;
-        }
-
-        .post-item-link:hover .post-item-title::after {
-            opacity: 0.6;
-            animation: inkpulse 2s ease-in-out infinite;
-        }
-
-        @keyframes inkpulse {
-            0%, 100% { opacity: 0.4; }
-            50% { opacity: 0.8; }
         }
 
         .post-item-link:hover .post-item-title {
-            color: var(--vermillion);
+            color: var(--amber);
         }
 
         .post-item-excerpt {
-            font-size: 0.92rem;
-            font-weight: 400;
-            color: var(--stone);
-            line-height: 1.6;
-            margin-top: 0.5rem;
-            margin-bottom: 0.6rem;
+            font-size: 0.88rem;
+            font-weight: 300;
+            color: var(--text-dim);
+            line-height: 1.5;
+            margin-bottom: 0.5rem;
         }
 
         .post-item-tags {
@@ -175,14 +257,11 @@
         }
 
         .post-item-tags span {
+            font-family: 'DM Mono', monospace;
             font-size: 0.6rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--faded);
+            color: var(--text-dim);
+            opacity: 0.6;
         }
-
-        .post-item-tags span::before { content: "〈"; }
-        .post-item-tags span::after { content: "〉"; }
 
         /* --- Empty --- */
         .empty-state {
@@ -190,38 +269,40 @@
             margin: 0 auto;
             padding: 6rem 1.5rem;
             text-align: center;
-            color: var(--stone);
-            font-weight: 400;
+            color: var(--text-dim);
+            font-weight: 300;
+            font-style: italic;
         }
 
         /* --- Footer --- */
         .index-footer {
             max-width: var(--max-width);
             margin: 0 auto;
-            padding: 2rem 1.5rem 5rem;
-            text-align: center;
+            padding: 2rem 1.5rem 4rem;
         }
 
         .index-footer p {
+            font-family: 'DM Mono', monospace;
             font-size: 0.68rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--faded);
+            color: var(--text-dim);
+            opacity: 0.5;
         }
 
         @media (max-width: 640px) {
-            html { font-size: 16px; }
-            .index-header { padding: 4rem 1.2rem 2rem; }
-            .post-list { padding: 1rem 1.2rem 3rem; }
+            html { font-size: 15px; }
+            .index-header { padding: 3.5rem 1.2rem 2rem; }
+            .post-list { padding: 0.5rem 1.2rem 3rem; }
+            .post-item-link { padding-left: 1.5rem; }
         }
     </style>
 </head>
 <body>
     <div class="index-wrapper">
+        <div class="safelight"></div>
+
         <header class="index-header">
             <h1 class="index-title">Write where you think</h1>
             <p class="index-subtitle">Write where you think. Publish where they look. Own everything in between.</p>
-            <div class="header-mark">◆</div>
         </header>
 
         <div class="divider"><hr></div>
@@ -233,8 +314,7 @@
                 <a href="https://mortalezz.github.io/blog/posts/breakfast-at-tiffany/" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="2026-04-03">April 3, 2026</time>
-                        <span class="sep">·</span>
-                        <span>1 min read</span>
+                        <span>1 min</span>
                     </div>
                     <h2 class="post-item-title">Breakfast at Tiffany</h2>
                     <p class="post-item-excerpt">Some mornings you don't build ephemeral worker pipelines. Some mornings you don't write manifestos about SaaSless publishing. Some mornings you sit across from your wife in a Japanese restaurant in…</p>
@@ -256,8 +336,7 @@
                 <a href="https://mortalezz.github.io/blog/posts/the-brush-moves-once/" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="2026-04-03T20:13:36.325750+00:00">April 3, 2026</time>
-                        <span class="sep">·</span>
-                        <span>9 min read</span>
+                        <span>9 min</span>
                     </div>
                     <h2 class="post-item-title">The Brush Moves Once</h2>
                     <p class="post-item-excerpt">In Japanese calligraphy there is a concept called ichi-go ichi-e. One time, one meeting. Every brushstroke is unrepeatable. The ink touches the paper and the moment is permanent. There is no undo.…</p>
@@ -281,8 +360,7 @@
                 <a href="https://mortalezz.github.io/blog/posts/why-terminal/" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="2026-04-03T19:35:22.263189+00:00">April 3, 2026</time>
-                        <span class="sep">·</span>
-                        <span>8 min read</span>
+                        <span>8 min</span>
                     </div>
                     <h2 class="post-item-title">Why Terminal</h2>
                     <p class="post-item-excerpt">People see the Terminal theme and think: hacker aesthetic. Green text on black. Minimal. Another developer blog that looks like a terminal because the developer could not be bothered to choose a real…</p>
@@ -306,8 +384,7 @@
                 <a href="https://mortalezz.github.io/blog/posts/the-internet-peaked-in-1997/" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="2026-04-03T19:14:14.653682+00:00">April 3, 2026</time>
-                        <span class="sep">·</span>
-                        <span>7 min read</span>
+                        <span>7 min</span>
                     </div>
                     <h2 class="post-item-title">The Internet Peaked in 1997</h2>
                     <p class="post-item-excerpt">There is a generation of people who believe the internet peaked in the late 1990s. They are correct.</p>
@@ -331,8 +408,7 @@
                 <a href="https://mortalezz.github.io/blog/posts/the-grid-does-not-apologize/" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="2026-04-03T19:05:30.139769+00:00">April 3, 2026</time>
-                        <span class="sep">·</span>
-                        <span>6 min read</span>
+                        <span>6 min</span>
                     </div>
                     <h2 class="post-item-title">The Grid Does Not Apologize</h2>
                     <p class="post-item-excerpt">In 1928, Jan Tschichold published Die Neue Typographie -- The New Typography. The thesis was aggressive: ornamentation is dishonest. Centered text is lazy. Serif fonts are relics. The only honest…</p>
@@ -356,8 +432,7 @@
                 <a href="https://mortalezz.github.io/blog/posts/go-nuclear-first/" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="2026-04-03T05:03:47.174775+00:00">April 3, 2026</time>
-                        <span class="sep">·</span>
-                        <span>9 min read</span>
+                        <span>9 min</span>
                     </div>
                     <h2 class="post-item-title">Go Nuclear First</h2>
                     <p class="post-item-excerpt">Every theme in every static site generator gallery was designed from the same direction. Start from the user's comfort. Work backward toward minimalism. Stop when it feels like enough. Add some…</p>
@@ -381,8 +456,7 @@
                 <a href="https://mortalezz.github.io/blog/posts/his-name-is-daniel/" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="2026-04-02T23:32:07.298247+00:00">April 2, 2026</time>
-                        <span class="sep">·</span>
-                        <span>8 min read</span>
+                        <span>8 min</span>
                     </div>
                     <h2 class="post-item-title">His Name is Daniel</h2>
                     <p class="post-item-excerpt">Every note2cms publish begins with curl.</p>
@@ -406,8 +480,7 @@
                 <a href="https://mortalezz.github.io/blog/posts/the-matchstick/" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="2026-04-01T23:09:46.575501+00:00">April 1, 2026</time>
-                        <span class="sep">·</span>
-                        <span>7 min read</span>
+                        <span>7 min</span>
                     </div>
                     <h2 class="post-item-title">The Matchstick</h2>
                     <p class="post-item-excerpt">The closest analogy I can find is a matchstick.</p>
@@ -429,8 +502,7 @@
                 <a href="https://mortalezz.github.io/blog/posts/ephemeral-shiny-chrome/" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="2026-04-01T22:19:40.402552+00:00">April 1, 2026</time>
-                        <span class="sep">·</span>
-                        <span>9 min read</span>
+                        <span>9 min</span>
                     </div>
                     <h2 class="post-item-title">Ephemeral. Shiny. Chrome</h2>
                     <p class="post-item-excerpt">Most servers are built to survive. They are heavy, lumbering monuments to overhead, clinging to a 99.9% uptime they never earned. They sit on cloud instances consuming memory between requests,…</p>
@@ -454,8 +526,7 @@
                 <a href="https://mortalezz.github.io/blog/posts/static-site-generator-or-something-else/" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="2026-04-01T19:52:11.167842+00:00">April 1, 2026</time>
-                        <span class="sep">·</span>
-                        <span>12 min read</span>
+                        <span>12 min</span>
                     </div>
                     <h2 class="post-item-title">Static Site Generator or Something Else</h2>
                     <p class="post-item-excerpt">I was one of the first who got excited about static site generators. When Jekyll appeared, then Hugo, then Gatsby, then Eleventy, then dozens more -- it felt like liberation. No more WordPress. No…</p>
@@ -479,8 +550,7 @@
                 <a href="https://mortalezz.github.io/blog/posts/one-big-beautiful-recursion/" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="2026-04-01T19:16:21.628153+00:00">April 1, 2026</time>
-                        <span class="sep">·</span>
-                        <span>6 min read</span>
+                        <span>6 min</span>
                     </div>
                     <h2 class="post-item-title">One Big Beautiful Recursion</h2>
                     <p class="post-item-excerpt">I never used Obsidian.</p>
@@ -506,8 +576,7 @@
                 <a href="https://mortalezz.github.io/blog/posts/the-computational-web-is-a-parasite-on-the-parametric-one/" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="2026-03-31">March 31, 2026</time>
-                        <span class="sep">·</span>
-                        <span>6 min read</span>
+                        <span>6 min</span>
                     </div>
                     <h2 class="post-item-title">The Computational Web Is a Parasite on the Parametric One</h2>
                     <p class="post-item-excerpt">There are two webs. They share the same wires, the same protocols, the same browser. But they are fundamentally different organisms, and one of them is eating the other alive.</p>
@@ -531,8 +600,7 @@
                 <a href="https://mortalezz.github.io/blog/posts/saasless/" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="2026-03-31">March 31, 2026</time>
-                        <span class="sep">·</span>
-                        <span>4 min read</span>
+                        <span>4 min</span>
                     </div>
                     <h2 class="post-item-title">SaasLess</h2>
                     <p class="post-item-excerpt">There is a word missing from the industry's vocabulary. We have SaaS. We have self-hosted. We have open-source. But we do not have a word for what happens when someone deploys an open-source pipeline…</p>
@@ -556,8 +624,7 @@
                 <a href="https://mortalezz.github.io/blog/posts/shortcut-test/" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="2026-03-23">March 23, 2026</time>
-                        <span class="sep">·</span>
-                        <span>1 min read</span>
+                        <span>1 min</span>
                     </div>
                     <h2 class="post-item-title">Shortcut Test</h2>
                     <p class="post-item-excerpt">Published from iOS Shortcuts.</p>
@@ -575,8 +642,7 @@
                 <a href="https://mortalezz.github.io/blog/posts/the-token-is-the-byline/" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="2026-03-23T20:53:54.335960+00:00">March 23, 2026</time>
-                        <span class="sep">·</span>
-                        <span>3 min read</span>
+                        <span>3 min</span>
                     </div>
                     <h2 class="post-item-title">The Token Is the Byline</h2>
                     <p class="post-item-excerpt">There is no author field in note2cms. This is not an oversight.</p>
@@ -600,8 +666,7 @@
                 <a href="https://mortalezz.github.io/blog/posts/i-did-not-invent-anything/" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="2026-03-22">March 22, 2026</time>
-                        <span class="sep">·</span>
-                        <span>5 min read</span>
+                        <span>5 min</span>
                     </div>
                     <h2 class="post-item-title">I Did Not Invent Anything</h2>
                     <p class="post-item-excerpt">I did not write a Markdown parser. Michel Fortin and Waylan Limberg wrote one. It is called Python-Markdown. It has been maintained since 2004. It handles fenced code blocks, tables, table of…</p>
@@ -625,8 +690,7 @@
                 <a href="https://mortalezz.github.io/blog/posts/the-saas-that-should-not-exist/" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="2026-03-22">March 22, 2026</time>
-                        <span class="sep">·</span>
-                        <span>5 min read</span>
+                        <span>5 min</span>
                     </div>
                     <h2 class="post-item-title">The SaaS That Should Not Exist</h2>
                     <p class="post-item-excerpt">Someone on Reddit will eventually write: "This guy was sitting on a million-dollar idea. He built working code. Why didn't he build a SaaS on it? I simply don't understand these OSS fanatics."</p>
@@ -650,8 +714,7 @@
                 <a href="https://mortalezz.github.io/blog/posts/dushenka/" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="1898-??">1898-??</time>
-                        <span class="sep">·</span>
-                        <span>1 min read</span>
+                        <span>1 min</span>
                     </div>
                     <h2 class="post-item-title">Untitled 4</h2>
                     <p class="post-item-excerpt">Душечка — короткий рассказ о любви и подражании.</p>
@@ -663,8 +726,7 @@
                 <a href="https://mortalezz.github.io/blog/posts/glory-to-albert-a-heroic-ode/" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="2026-03-21">March 21, 2026</time>
-                        <span class="sep">·</span>
-                        <span>4 min read</span>
+                        <span>4 min</span>
                     </div>
                     <h2 class="post-item-title">Glory to Albert - A Heroic Ode</h2>
                     <p class="post-item-excerpt">A frivolous English translation of the heroic Russian ode written by garrul4ik -- the first outside contributor to note2cms, who built the Obsidian plugin overnight while his wife hissed at him. The…</p>
@@ -686,8 +748,7 @@
                 <a href="https://mortalezz.github.io/blog/posts//" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="2026-03-21T18:16:59.167193+00:00">March 21, 2026</time>
-                        <span class="sep">·</span>
-                        <span>3 min read</span>
+                        <span>3 min</span>
                     </div>
                     <h2 class="post-item-title">---</h2>
                     <p class="post-item-excerpt">title: Glory to Albert
@@ -701,8 +762,7 @@ date: 2026-03-21</p>
                 <a href="https://mortalezz.github.io/blog/posts/i-was-there-when-the-cathedral-met-the-bazaar/" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="2026-03-17">March 17, 2026</time>
-                        <span class="sep">·</span>
-                        <span>11 min read</span>
+                        <span>11 min</span>
                     </div>
                     <h2 class="post-item-title">I Was There When the Cathedral Met the Bazaar</h2>
                     <p class="post-item-excerpt">I was never a developer. But I was there.</p>
@@ -726,8 +786,7 @@ date: 2026-03-21</p>
                 <a href="https://mortalezz.github.io/blog/posts/no-batteries-only-hot-swappable-parts/" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="2026-03-16">March 16, 2026</time>
-                        <span class="sep">·</span>
-                        <span>4 min read</span>
+                        <span>4 min</span>
                     </div>
                     <h2 class="post-item-title">No Batteries, Only Hot-Swappable Parts</h2>
                     <p class="post-item-excerpt">Every framework wants you to marry its templating engine. Django gives you Django templates. Rails gives you ERB. Next.js gives you React. Hugo gives you Go templates. Learn our syntax, adopt our…</p>
@@ -753,8 +812,7 @@ date: 2026-03-21</p>
                 <a href="https://mortalezz.github.io/blog/posts/one-morning-in-phoenix/" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="2026-03-16">March 16, 2026</time>
-                        <span class="sep">·</span>
-                        <span>4 min read</span>
+                        <span>4 min</span>
                     </div>
                     <h2 class="post-item-title">One Morning in Phoenix</h2>
                     <p class="post-item-excerpt">I built a CMS this morning. The whole thing. Architecture, manifesto, deployment, first post — between coffee and lunch, in Phoenix, Arizona.</p>
@@ -778,8 +836,7 @@ date: 2026-03-21</p>
                 <a href="https://mortalezz.github.io/blog/posts/the-browser-is-for-consuming/" class="post-item-link">
                     <div class="post-item-meta">
                         <time datetime="2026-03-16T23:35:10.227165+00:00">March 16, 2026</time>
-                        <span class="sep">·</span>
-                        <span>1 min read</span>
+                        <span>1 min</span>
                     </div>
                     <h2 class="post-item-title">The Browser Is for Consuming</h2>
                     <p class="post-item-excerpt">Every CMS gets it backwards. They put the editor in the browser. But authoring has already left.</p>
