@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Brush Moves Once — Write where you think</title>
+    <meta name="description" content="In Japanese calligraphy there is a concept called ichi-go ichi-e. One time, one meeting. Every brushstroke is unrepeatable. The ink touches the paper and the moment is permanent. There is no undo.…">
+    <meta property="og:title" content="The Brush Moves Once">
+    <meta property="og:description" content="In Japanese calligraphy there is a concept called ichi-go ichi-e. One time, one meeting. Every brushstroke is unrepeatable. The ink touches the paper and the moment is permanent. There is no undo.…">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://mortalezz.github.io/blog/posts/the-brush-moves-once/">
+    <link rel="canonical" href="https://mortalezz.github.io/blog/posts/the-brush-moves-once/">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+JP:wght@300;400;500&display=swap');
+
+        :root {
+            --ink: #1a1714;
+            --paper: #f5f0e8;
+            --wash: #e8e0d0;
+            --vermillion: #cc3333;
+            --stone: #6b5f52;
+            --faded: #9a8f80;
+            --max-width: 40rem;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --ink: #e0d8cc;
+                --paper: #171412;
+                --wash: #221e1a;
+                --vermillion: #e04040;
+                --stone: #9a8e80;
+                --faded: #5a5248;
+            }
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 18px; }
+
+        body {
+            font-family: 'Cormorant Garamond', 'Noto Sans JP', Georgia, serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        /* Subtle paper texture */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .post-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- Header --- */
+        .post-header {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 6rem 1.5rem 3rem;
+            text-align: center;
+        }
+
+        .post-meta {
+            font-size: 0.72rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--stone);
+            margin-bottom: 2rem;
+        }
+
+        .post-meta .sep {
+            margin: 0 0.8rem;
+            color: var(--faded);
+        }
+
+        .post-title {
+            font-size: 2.6rem;
+            font-weight: 400;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        /* The trick: ink brushstroke under title */
+        .post-title::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 10%;
+            width: 80%;
+            height: 3px;
+            background: var(--vermillion);
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: brushstroke 1.2s ease-out 0.5s forwards;
+        }
+
+        @keyframes brushstroke {
+            0% { transform: scaleX(0); opacity: 0.3; }
+            60% { transform: scaleX(1.05); opacity: 1; }
+            100% { transform: scaleX(1); opacity: 0.8; }
+        }
+
+        .post-tags {
+            display: flex;
+            justify-content: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .post-tags span {
+            font-size: 0.68rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--stone);
+            padding: 0.15rem 0.5rem;
+            border: 1px solid var(--faded);
+        }
+
+        /* --- Content --- */
+        .post-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem 5rem;
+        }
+
+        .post-content p {
+            margin-bottom: 1.6rem;
+            font-weight: 400;
+            font-size: 1.05rem;
+        }
+
+        .post-content h2 {
+            font-size: 1.6rem;
+            font-weight: 400;
+            margin: 3.5rem 0 1rem;
+            padding-bottom: 0.4rem;
+            position: relative;
+        }
+
+        /* Brushstroke under h2 — appears on scroll */
+        .post-content h2::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 3rem;
+            height: 2px;
+            background: var(--vermillion);
+            opacity: 0.7;
+            transition: width 0.6s ease;
+        }
+
+        .post-content h2:hover::after {
+            width: 100%;
+        }
+
+        .post-content h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin: 2.5rem 0 0.8rem;
+            color: var(--ink);
+        }
+
+        .post-content h4 {
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--stone);
+            margin: 2rem 0 0.6rem;
+        }
+
+        .post-content a {
+            color: var(--ink);
+            text-decoration: none;
+            border-bottom: 1px solid var(--vermillion);
+            transition: border-width 0.2s;
+        }
+
+        .post-content a:hover {
+            border-bottom-width: 2px;
+        }
+
+        /* The trick: blockquotes get a vermillion chop mark */
+        .post-content blockquote {
+            border: none;
+            padding: 1.5rem 2rem 1.5rem 2.5rem;
+            margin: 2.5rem 0;
+            font-style: italic;
+            font-weight: 400;
+            color: var(--stone);
+            position: relative;
+            background: transparent;
+        }
+
+        .post-content blockquote::before {
+            content: "";
+            position: absolute;
+            top: 0.8rem;
+            left: 0;
+            width: 4px;
+            height: calc(100% - 1.6rem);
+            background: var(--vermillion);
+            opacity: 0.5;
+        }
+
+        /* Red chop mark (hanko) */
+        .post-content blockquote::after {
+            content: "◆";
+            position: absolute;
+            bottom: -0.5rem;
+            right: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--vermillion);
+            opacity: 0.4;
+            font-style: normal;
+        }
+
+        .post-content blockquote p {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .post-content blockquote p:last-child {
+            margin-bottom: 0;
+        }
+
+        .post-content ul, .post-content ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.6rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.4rem;
+            font-weight: 400;
+        }
+
+        .post-content li::marker {
+            color: var(--vermillion);
+        }
+
+        .post-content code {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.82rem;
+            background: var(--wash);
+            padding: 2px 5px;
+            border-radius: 2px;
+        }
+
+        .post-content pre {
+            background: var(--ink);
+            color: var(--paper);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+            border-radius: 2px;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+            font-size: 0.8rem;
+            line-height: 1.7;
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            margin: 2rem 0;
+        }
+
+        .post-content hr {
+            border: none;
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .post-content hr::after {
+            content: "◇ ◇ ◇";
+            color: var(--faded);
+            font-size: 0.7rem;
+            letter-spacing: 0.5rem;
+        }
+
+        .post-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            font-size: 0.9rem;
+        }
+
+        .post-content th, .post-content td {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid var(--wash);
+            text-align: left;
+        }
+
+        .post-content th {
+            font-size: 0.72rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--stone);
+        }
+
+        /* --- Footer --- */
+        .post-footer {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 6rem;
+            border-top: 1px solid var(--wash);
+            text-align: center;
+        }
+
+        .post-footer a {
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--stone);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .post-footer a:hover {
+            color: var(--vermillion);
+        }
+
+        @media (max-width: 640px) {
+            html { font-size: 16px; }
+            .post-header { padding: 4rem 1.2rem 2rem; }
+            .post-title { font-size: 2rem; }
+            .post-content { padding: 0 1.2rem 4rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="post-wrapper">
+        <article>
+            <header class="post-header">
+                <div class="post-meta">
+                    <time datetime="2026-04-03T20:13:36.325750+00:00">April 3, 2026</time>
+                    <span class="sep">·</span>
+                    <span>9 min read</span>
+                </div>
+                <h1 class="post-title">The Brush Moves Once</h1>
+                
+                <div class="post-tags">
+                    
+                    <span>design</span>
+                    
+                    <span>theming</span>
+                    
+                    <span>ink</span>
+                    
+                    <span>philosophy</span>
+                    
+                </div>
+                
+            </header>
+
+            <div class="post-content">
+                <p>In Japanese calligraphy there is a concept called ichi-go ichi-e. One time, one meeting. Every brushstroke is unrepeatable. The ink touches the paper and the moment is permanent. There is no undo. There is no eraser. There is no revision. The brush moves once and the result is the result.</p>
+<p>The calligrapher does not mourn this. The calligrapher trains for this. Years of practice so that the one stroke is correct. Not perfect &ndash; correct. Perfection implies an external standard. Correctness implies alignment between intention and execution. The brush did what the hand intended. The hand intended what the mind composed. The mind composed what the years of practice made possible.</p>
+<p>One stroke. Unrepeatable. Correct.</p>
+<h2 id="the-template">The Template</h2>
+<p>The Ink theme began with one question: what does stillness look like on a screen?</p>
+<p>Not emptiness. Not minimalism. Not whitespace used as negative space in a graphic design sense. Stillness. The quality of a room where nothing needs to move because everything is in its place. The quality of a scroll hanging in a tokonoma &ndash; the recessed alcove in a Japanese room where one artwork is displayed. Not a gallery wall with twelve pieces competing. One artwork. One alcove. Stillness.</p>
+<p>Cormorant Garamond. A serif typeface with calligraphic DNA &ndash; the letters have a hand-drawn quality that mechanical serifs lack. The strokes vary in weight as if pressure was applied by a hand, not calculated by a font editor. At large sizes the letterforms reveal their calligraphic ancestry. At body size they are readable and quiet. The typeface whispers.</p>
+<p>Rice paper background. Not white. <code>#f5f0e8</code>. A warm cream with a yellow undertone that suggests aged paper, handmade paper, paper with texture you can almost feel through the screen. White backgrounds are clinical. Cream backgrounds are warm. Rice paper backgrounds are inhabited &ndash; someone has touched this surface before.</p>
+<p>Vermillion accents. <code>#cc3333</code>. The red of a hanko &ndash; the personal seal stamp used in East Asian calligraphy. Not fire engine red. Not crimson. Vermillion &ndash; the specific red of cinnabar pigment mixed with lacquer, used for centuries on seals, on torii gates, on the circles of the Japanese flag. A red with history. A red that means &ldquo;this was placed here deliberately by a human hand.&rdquo;</p>
+<p>The palette is three values: cream, dark brown, and vermillion. Three colors. Like a calligraphy set: paper, ink, and seal.</p>
+<h2 id="the-brushstroke">The Brushstroke</h2>
+<p>On page load, a vermillion line unfurls beneath the title. Left to right. With a slight overshoot at 60% progress &ndash; the line extends past its final position and then settles back, like a brush loaded with ink dragged across paper by a hand that applied slightly too much momentum.</p>
+<p><code>@keyframes brushstroke {
+0% { transform: scaleX(0); opacity: 0.3; }
+60% { transform: scaleX(1.05); opacity: 1; }
+100% { transform: scaleX(1); opacity: 0.8; }
+}</code></p>
+<p>The overshoot is the detail that makes it a brushstroke and not a loading bar. A loading bar fills from left to right at constant speed. A brushstroke accelerates, overshoots, and settles. The physics are different because the instrument is different. A progress indicator is driven by a machine. A brushstroke is driven by a wrist.</p>
+<p>The animation plays once. It does not loop. It does not replay on scroll. It does not restart when the reader returns to the page. One time, one meeting. The brush moves once. If you missed it, you missed it. The moment was not designed to be caught. It was designed to be experienced by the reader who arrived at the page and was paying attention.</p>
+<p>This is the opposite of modern web animation, which repeats infinitely to ensure maximum engagement. The brushstroke respects the reader enough to happen once and trust that once was sufficient. Ichi-go ichi-e.</p>
+<h2 id="the-pulse">The Pulse</h2>
+<p>On the index page, hovering a post title causes a small vermillion dot to appear beside the title. The dot pulses gently &ndash; a two-second sinusoidal opacity cycle between 0.4 and 1.0.</p>
+<p>The pulse is almost subliminal. The reader may not consciously notice it. But their eye is drawn to it because it is the only moving element on a completely still page. The stillness earned the pulse. The pulse rewards the hover. The reader discovers that the page was alive all along &ndash; it was just waiting for them to interact.</p>
+<p>The dot is ink that has not yet dried. That is the metaphor. The page is a scroll. The ink has been applied. Everything is still because the ink is dry. But when you hover &ndash; when you reach toward the scroll &ndash; one drop of ink responds. It is still wet. The page remembers being written.</p>
+<h2 id="what-ink-does-to-content">What Ink Does to Content</h2>
+<p>The Ink theme is the most opinionated theme about content. Not about layout or color or typography &ndash; about what the content should feel like.</p>
+<p>Brutalist accepts anything. A rant, a tutorial, a poem, a list &ndash; the monospace and black borders frame everything equally. Terminal accepts anything with the right voice &ndash; if it reads like a command or a manifesto, the phosphor green carries it. Vaporwave accepts anything nostalgic or atmospheric.</p>
+<p>Ink demands contemplation. A post rendered in Ink that does not reward slow reading feels wrong. The rice paper, the calligraphic serif, the vermillion accents, the stillness &ndash; they create an expectation that the words were chosen carefully. That the sentences were composed, not typed. That the paragraphs were arranged, not streamed.</p>
+<p>A hot take does not belong on Ink. A tweet thread reformatted as a blog post does not belong on Ink. A listicle does not belong on Ink. These formats are liquid &ndash; they flow, they scan, they skim. Ink is solid. Ink demands that the reader stop and read each sentence as a sentence, not as a bullet point in a feed.</p>
+<p>This is a design constraint on the author, not on the reader. The theme tells the author: if you publish here, your words must be worth the paper. The rice paper. The vermillion seal. The single brushstroke that unfurls once and never again. Your words must be worthy of the stillness that surrounds them.</p>
+<p>Some authors will find this oppressive. They should use Terminal. Some authors will find this pretentious. They should use Brutalist. Some authors will find this beautiful and write to match. They are the Ink authors. The theme chose them by demanding more than they planned to give.</p>
+<h2 id="the-dark-mode">The Dark Mode</h2>
+<p>In dark mode, the rice paper becomes dark walnut. <code>#171412</code>. The ink becomes warm cream. <code>#e0d8cc</code>. The vermillion brightens slightly &ndash; <code>#e04040</code> &ndash; because red needs to be louder on dark backgrounds to maintain the same visual weight.</p>
+<p>The metaphor shifts. Light mode is a scroll in a bright room. Dark mode is a scroll by candlelight. The ink is lighter because it is reflecting firelight instead of daylight. The paper is darker because the room is darker. But the scroll is the same scroll. The words are the same words. The vermillion seal is the same seal.</p>
+<p>The brushstroke animation works in both modes. In light mode the vermillion line unfurls on cream &ndash; warm on warm. In dark mode the vermillion line unfurls on walnut &ndash; warm on dark. The latter is more dramatic. The red has more contrast against dark wood than against cream paper. The brushstroke in dark mode is closer to the experience of watching actual calligraphy &ndash; dark ink on dark paper, illuminated by the red of the seal.</p>
+<h2 id="the-silence">The Silence</h2>
+<p>The most important element of the Ink theme is not an element. It is the absence of elements.</p>
+<p>No tag badges with borders. The tags are listed in plain text, separated by spacing, in the color of stone. They are metadata, not decoration. They do not call attention to themselves.</p>
+<p>No reading time with a clock icon. The reading time is a number and a word. &ldquo;7 min read.&rdquo; Plain text. No visual weight. If you notice it, fine. If you do not, the post will take the same seven minutes regardless.</p>
+<p>No social sharing buttons. No newsletter signup. No related posts carousel. No author bio with a headshot. No comment section. The post ends with a horizontal rule and a link back to all posts. The link says &ldquo;all posts.&rdquo; Not &ldquo;read more.&rdquo; Not &ldquo;continue exploring.&rdquo; &ldquo;All posts.&rdquo; The directness is the courtesy.</p>
+<p>The silence around the content is what gives the content its weight. A diamond in a velvet-lined box looks like a diamond. A diamond on a cluttered desk looks like glass. The Ink theme is the velvet-lined box. The silence is the velvet. The content is whatever the author placed inside.</p>
+<h2 id="why-this-blog-is-on-ink-right-now">Why This Blog Is on Ink Right Now</h2>
+<p>I am testing the themes by living in them. Each theme changes how the blog feels. Terminal made it feel like a command center. Brutalist made it feel like a brutalist manifesto. Vaporwave made it feel like a midnight memory.</p>
+<p>Ink makes it feel like a library.</p>
+<p>Not a modern library with fluorescent lights and computer terminals. An old library. Dark wood shelves. Paper that smells like time. Books that open with a crack because the spine has not been bent in years. The kind of library where you speak quietly not because of the rules but because the room demands it.</p>
+<p>The posts on this blog &ndash; about ephemeral workers and SaaSless publishing and the cathedral and the bazaar &ndash; they were written with fury. They are aggressive, opinionated, uncompromising. They land like grenades.</p>
+<p>But grenades in a library hit differently than grenades on a battlefield. On a battlefield, an explosion is expected. In a library, an explosion is sacrilege. The contrast between the quiet room and the loud words amplifies both. The room feels quieter because of the words. The words feel louder because of the room.</p>
+<p>&ldquo;You cannot exploit a ghost&rdquo; on Terminal is a hacker&rsquo;s motto. &ldquo;You cannot exploit a ghost&rdquo; on Ink is a line of poetry.</p>
+<p>Same words. Different room. Different meaning. That is the power of theming as identity, not decoration. The theme does not style the content. The theme recontextualizes the content. The words change meaning depending on the room they are read in.</p>
+<p>Ink is the room where aggressive words become contemplative. Where manifestos become scrolls. Where grenades become calligraphy.</p>
+<p>The brush moves once. The words remain.</p>
+<hr />
+<p><em>Ichi-go ichi-e. One time, one meeting. The brush moves once. The ink dries. The words remain on rice paper in a room where nothing needs to move because everything is in its place.</em></p>
+            </div>
+        </article>
+
+        <footer class="post-footer">
+            <a href="https://mortalezz.github.io/blog/posts/">← All posts</a>
+        </footer>
+    </div>
+</body>
+</html>
