@@ -12,348 +12,300 @@
     <link rel="canonical" href="https://mortalezz.github.io/blog/posts/the-computational-web-is-a-parasite-on-the-parametric-one/">
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+JP:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,300;1,8..60,400&family=DM+Mono:wght@400;500&display=swap');
 
         :root {
-            --ink: #1a1714;
-            --paper: #f5f0e8;
-            --wash: #e8e0d0;
-            --vermillion: #cc3333;
-            --stone: #6b5f52;
-            --faded: #9a8f80;
-            --max-width: 40rem;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --ink: #e0d8cc;
-                --paper: #171412;
-                --wash: #221e1a;
-                --vermillion: #e04040;
-                --stone: #9a8e80;
-                --faded: #5a5248;
-            }
+            --bg: #111111;
+            --surface: #1a1a1a;
+            --amber: #d4943a;
+            --amber-dim: #a07030;
+            --amber-glow: rgba(212, 148, 58, 0.08);
+            --red-safe: #661a1a;
+            --text: #c8c0b4;
+            --text-dim: #706860;
+            --border: #2a2520;
+            --max-width: 42rem;
         }
 
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        html { font-size: 18px; }
+        html { font-size: 17px; }
 
         body {
-            font-family: 'Cormorant Garamond', 'Noto Sans JP', Georgia, serif;
-            background: var(--paper);
-            color: var(--ink);
-            line-height: 1.8;
+            font-family: 'Source Serif 4', Georgia, serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.75;
             min-height: 100vh;
         }
 
-        /* Subtle paper texture */
-        body::before {
+        /* Subtle vignette */
+        body::after {
             content: "";
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.4) 100%);
             pointer-events: none;
-            z-index: 0;
         }
 
-        .post-wrapper {
-            position: relative;
-            z-index: 1;
+        .post-wrapper { position: relative; z-index: 1; }
+
+        /* Amber safelight bar */
+        .safelight {
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, var(--amber) 20%, var(--amber) 80%, transparent 100%);
+            opacity: 0.6;
         }
 
         /* --- Header --- */
         .post-header {
             max-width: var(--max-width);
             margin: 0 auto;
-            padding: 6rem 1.5rem 3rem;
-            text-align: center;
+            padding: 5rem 1.5rem 2.5rem;
         }
 
         .post-meta {
+            font-family: 'DM Mono', monospace;
             font-size: 0.72rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--stone);
-            margin-bottom: 2rem;
+            color: var(--text-dim);
+            margin-bottom: 1.2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
         }
 
-        .post-meta .sep {
-            margin: 0 0.8rem;
-            color: var(--faded);
+        .post-meta .dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--amber);
+            opacity: 0.6;
         }
 
         .post-title {
-            font-size: 2.6rem;
-            font-weight: 400;
+            font-size: 2.4rem;
+            font-weight: 300;
             line-height: 1.2;
             letter-spacing: -0.01em;
-            margin-bottom: 2rem;
-            position: relative;
-            display: inline-block;
-        }
-
-        /* The trick: ink brushstroke under title */
-        .post-title::after {
-            content: "";
-            position: absolute;
-            bottom: -8px;
-            left: 10%;
-            width: 80%;
-            height: 3px;
-            background: var(--vermillion);
-            transform: scaleX(0);
-            transform-origin: left;
-            animation: brushstroke 1.2s ease-out 0.5s forwards;
-        }
-
-        @keyframes brushstroke {
-            0% { transform: scaleX(0); opacity: 0.3; }
-            60% { transform: scaleX(1.05); opacity: 1; }
-            100% { transform: scaleX(1); opacity: 0.8; }
+            color: var(--amber);
+            margin-bottom: 1.5rem;
         }
 
         .post-tags {
             display: flex;
-            justify-content: center;
-            gap: 0.6rem;
+            gap: 0.5rem;
             flex-wrap: wrap;
         }
 
         .post-tags span {
-            font-size: 0.68rem;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--stone);
-            padding: 0.15rem 0.5rem;
-            border: 1px solid var(--faded);
+            font-family: 'DM Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            padding: 0.2rem 0.5rem;
+            border: 1px solid var(--border);
         }
 
         /* --- Content --- */
         .post-content {
             max-width: var(--max-width);
             margin: 0 auto;
-            padding: 0 1.5rem 5rem;
+            padding: 0 1.5rem 4rem;
         }
 
         .post-content p {
-            margin-bottom: 1.6rem;
-            font-weight: 400;
-            font-size: 1.05rem;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
         }
 
         .post-content h2 {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 400;
-            margin: 3.5rem 0 1rem;
-            padding-bottom: 0.4rem;
+            color: var(--amber);
+            margin: 3rem 0 1rem;
             position: relative;
+            padding-left: 1rem;
         }
 
-        /* Brushstroke under h2 — appears on scroll */
-        .post-content h2::after {
+        /* The trick: amber line beside h2 that glows on hover */
+        .post-content h2::before {
             content: "";
             position: absolute;
-            bottom: 0;
             left: 0;
-            width: 3rem;
-            height: 2px;
-            background: var(--vermillion);
-            opacity: 0.7;
-            transition: width 0.6s ease;
+            top: 0.2rem;
+            width: 3px;
+            height: 1em;
+            background: var(--amber);
+            opacity: 0.4;
+            transition: opacity 0.4s, height 0.4s, box-shadow 0.4s;
         }
 
-        .post-content h2:hover::after {
-            width: 100%;
+        .post-content h2:hover::before {
+            opacity: 1;
+            height: 100%;
+            box-shadow: 0 0 12px var(--amber-glow), 0 0 4px var(--amber-dim);
         }
 
         .post-content h3 {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             font-weight: 500;
             margin: 2.5rem 0 0.8rem;
-            color: var(--ink);
+            color: var(--text);
         }
 
         .post-content h4 {
-            font-size: 0.8rem;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.78rem;
             font-weight: 500;
-            letter-spacing: 0.1em;
             text-transform: uppercase;
-            color: var(--stone);
+            letter-spacing: 0.08em;
             margin: 2rem 0 0.6rem;
+            color: var(--text-dim);
         }
 
         .post-content a {
-            color: var(--ink);
+            color: var(--amber);
             text-decoration: none;
-            border-bottom: 1px solid var(--vermillion);
-            transition: border-width 0.2s;
+            border-bottom: 1px solid var(--border);
+            transition: border-color 0.3s;
         }
 
         .post-content a:hover {
-            border-bottom-width: 2px;
+            border-color: var(--amber);
         }
 
-        /* The trick: blockquotes get a vermillion chop mark */
+        /* Blockquotes: red safelight tint */
         .post-content blockquote {
-            border: none;
-            padding: 1.5rem 2rem 1.5rem 2.5rem;
-            margin: 2.5rem 0;
+            border-left: 2px solid var(--amber-dim);
+            padding: 0.8rem 1.5rem;
+            margin: 2rem 0;
+            background: rgba(102, 26, 26, 0.08);
             font-style: italic;
-            font-weight: 400;
-            color: var(--stone);
-            position: relative;
-            background: transparent;
+            color: var(--text-dim);
         }
 
-        .post-content blockquote::before {
-            content: "";
-            position: absolute;
-            top: 0.8rem;
-            left: 0;
-            width: 4px;
-            height: calc(100% - 1.6rem);
-            background: var(--vermillion);
-            opacity: 0.5;
-        }
-
-        /* Red chop mark (hanko) */
-        .post-content blockquote::after {
-            content: "◆";
-            position: absolute;
-            bottom: -0.5rem;
-            right: 0.5rem;
-            font-size: 0.9rem;
-            color: var(--vermillion);
-            opacity: 0.4;
-            font-style: normal;
-        }
-
-        .post-content blockquote p {
-            margin-bottom: 0.5rem;
-            font-size: 1rem;
-        }
-
-        .post-content blockquote p:last-child {
-            margin-bottom: 0;
-        }
+        .post-content blockquote p { margin-bottom: 0.4rem; }
+        .post-content blockquote p:last-child { margin-bottom: 0; }
 
         .post-content ul, .post-content ol {
             padding-left: 1.5rem;
-            margin-bottom: 1.6rem;
+            margin-bottom: 1.5rem;
         }
 
         .post-content li {
             margin-bottom: 0.4rem;
-            font-weight: 400;
+            font-weight: 300;
         }
 
-        .post-content li::marker {
-            color: var(--vermillion);
-        }
+        .post-content li::marker { color: var(--amber-dim); }
 
         .post-content code {
-            font-family: 'SF Mono', 'Fira Code', monospace;
-            font-size: 0.82rem;
-            background: var(--wash);
+            font-family: 'DM Mono', monospace;
+            font-size: 0.84rem;
+            background: var(--surface);
             padding: 2px 5px;
-            border-radius: 2px;
+            border: 1px solid var(--border);
+            color: var(--amber);
         }
 
         .post-content pre {
-            background: var(--ink);
-            color: var(--paper);
-            padding: 1.5rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 1.2rem 1.5rem;
             margin: 2rem 0;
             overflow-x: auto;
-            border-radius: 2px;
         }
 
         .post-content pre code {
             background: none;
+            border: none;
             padding: 0;
-            color: inherit;
-            font-size: 0.8rem;
+            color: var(--text);
+            font-size: 0.82rem;
             line-height: 1.7;
         }
 
+        /* The trick: images "develop" — start dark, fade in like a photo in developer fluid */
         .post-content img {
             max-width: 100%;
             height: auto;
             margin: 2rem 0;
+            border: 1px solid var(--border);
+            animation: develop 2s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes develop {
+            0% { opacity: 0; filter: brightness(0.1) sepia(1) saturate(0.3); }
+            40% { opacity: 0.6; filter: brightness(0.5) sepia(0.5) saturate(0.7); }
+            100% { opacity: 1; filter: brightness(1) sepia(0) saturate(1); }
         }
 
         .post-content hr {
             border: none;
-            text-align: center;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--amber-dim), transparent);
             margin: 3rem 0;
-        }
-
-        .post-content hr::after {
-            content: "◇ ◇ ◇";
-            color: var(--faded);
-            font-size: 0.7rem;
-            letter-spacing: 0.5rem;
+            opacity: 0.4;
         }
 
         .post-content table {
             width: 100%;
             border-collapse: collapse;
             margin: 2rem 0;
-            font-size: 0.9rem;
-        }
-
-        .post-content th, .post-content td {
-            padding: 0.6rem 1rem;
-            border-bottom: 1px solid var(--wash);
-            text-align: left;
+            font-size: 0.88rem;
         }
 
         .post-content th {
-            font-size: 0.72rem;
-            font-weight: 500;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--stone);
+            letter-spacing: 0.06em;
+            text-align: left;
+            padding: 0.5rem 0.8rem;
+            color: var(--amber-dim);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .post-content td {
+            padding: 0.5rem 0.8rem;
+            border-bottom: 1px solid var(--border);
         }
 
         /* --- Footer --- */
         .post-footer {
             max-width: var(--max-width);
             margin: 0 auto;
-            padding: 2.5rem 1.5rem 6rem;
-            border-top: 1px solid var(--wash);
-            text-align: center;
+            padding: 2rem 1.5rem 5rem;
+            border-top: 1px solid var(--border);
         }
 
         .post-footer a {
+            font-family: 'DM Mono', monospace;
             font-size: 0.75rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--stone);
+            color: var(--text-dim);
             text-decoration: none;
-            transition: color 0.2s;
+            transition: color 0.3s;
         }
 
-        .post-footer a:hover {
-            color: var(--vermillion);
-        }
+        .post-footer a:hover { color: var(--amber); }
 
         @media (max-width: 640px) {
-            html { font-size: 16px; }
-            .post-header { padding: 4rem 1.2rem 2rem; }
-            .post-title { font-size: 2rem; }
-            .post-content { padding: 0 1.2rem 4rem; }
+            html { font-size: 15px; }
+            .post-header { padding: 3.5rem 1.2rem 2rem; }
+            .post-title { font-size: 1.9rem; }
+            .post-content { padding: 0 1.2rem 3rem; }
         }
     </style>
 </head>
 <body>
     <div class="post-wrapper">
+        <div class="safelight"></div>
+
         <article>
             <header class="post-header">
                 <div class="post-meta">
                     <time datetime="2026-03-31">March 31, 2026</time>
-                    <span class="sep">·</span>
+                    <span class="dot"></span>
                     <span>6 min read</span>
                 </div>
                 <h1 class="post-title">The Computational Web Is a Parasite on the Parametric One</h1>
@@ -407,7 +359,7 @@
         </article>
 
         <footer class="post-footer">
-            <a href="https://mortalezz.github.io/blog/posts/">← All posts</a>
+            <a href="https://mortalezz.github.io/blog/posts/">← all posts</a>
         </footer>
     </div>
 </body>
