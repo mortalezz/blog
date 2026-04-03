@@ -12,101 +12,83 @@
     <link rel="canonical" href="https://mortalezz.github.io/blog/posts/ephemeral-shiny-chrome/">
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,300;1,8..60,400&family=DM+Mono:wght@400;500&display=swap');
 
         :root {
-            --bg: #0a0e14;
-            --surface: #0d1117;
-            --green: #00ff88;
-            --green-dim: #00cc6a;
-            --green-glow: rgba(0, 255, 136, 0.15);
-            --amber: #ffb300;
-            --cyan: #00e5ff;
-            --text: #c0c8d8;
-            --text-dim: #5a6577;
-            --border: #1a2233;
-            --max-width: 48rem;
+            --bg: #111111;
+            --surface: #1a1a1a;
+            --amber: #d4943a;
+            --amber-dim: #a07030;
+            --amber-glow: rgba(212, 148, 58, 0.08);
+            --red-safe: #661a1a;
+            --text: #c8c0b4;
+            --text-dim: #706860;
+            --border: #2a2520;
+            --max-width: 42rem;
         }
 
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html { font-size: 16px; }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 17px; }
 
         body {
-            font-family: 'Fira Code', 'SF Mono', monospace;
+            font-family: 'Source Serif 4', Georgia, serif;
             background: var(--bg);
             color: var(--text);
-            line-height: 1.7;
+            line-height: 1.75;
             min-height: 100vh;
-            position: relative;
         }
 
-        /* CRT scanline effect */
+        /* Subtle vignette */
         body::after {
             content: "";
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 2px,
-                rgba(0, 0, 0, 0.08) 2px,
-                rgba(0, 0, 0, 0.08) 4px
-            );
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.4) 100%);
             pointer-events: none;
-            z-index: 1000;
         }
 
-        /* --- Prompt bar --- */
-        .prompt-bar {
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            padding: 0.6rem 1.5rem;
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            display: flex;
-            justify-content: space-between;
-        }
+        .post-wrapper { position: relative; z-index: 1; }
 
-        .prompt-bar .path {
-            color: var(--cyan);
+        /* Amber safelight bar */
+        .safelight {
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, var(--amber) 20%, var(--amber) 80%, transparent 100%);
+            opacity: 0.6;
         }
 
         /* --- Header --- */
         .post-header {
             max-width: var(--max-width);
             margin: 0 auto;
-            padding: 4rem 1.5rem 2rem;
+            padding: 5rem 1.5rem 2.5rem;
         }
 
         .post-meta {
-            font-size: 0.75rem;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
             color: var(--text-dim);
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
             display: flex;
             gap: 1rem;
             align-items: center;
         }
 
-        .post-meta .sep {
-            color: var(--green);
+        .post-meta .dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--amber);
+            opacity: 0.6;
         }
 
         .post-title {
-            font-family: 'Space Grotesk', sans-serif;
             font-size: 2.4rem;
-            font-weight: 700;
-            line-height: 1.15;
-            color: var(--green);
-            margin-bottom: 1.2rem;
-            text-shadow: 0 0 30px var(--green-glow);
+            font-weight: 300;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+            color: var(--amber);
+            margin-bottom: 1.5rem;
         }
 
         .post-tags {
@@ -116,11 +98,11 @@
         }
 
         .post-tags span {
-            font-size: 0.7rem;
-            color: var(--amber);
-            padding: 0.2rem 0.6rem;
-            border: 1px solid var(--amber);
-            border-radius: 2px;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            padding: 0.2rem 0.5rem;
+            border: 1px solid var(--border);
         }
 
         /* --- Content --- */
@@ -131,103 +113,105 @@
         }
 
         .post-content p {
-            margin-bottom: 1.4rem;
-            font-size: 0.92rem;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
         }
 
         .post-content h2 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--green);
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--amber);
             margin: 3rem 0 1rem;
+            position: relative;
+            padding-left: 1rem;
         }
 
+        /* The trick: amber line beside h2 that glows on hover */
         .post-content h2::before {
-            content: "## ";
-            color: var(--text-dim);
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.2rem;
+            width: 3px;
+            height: 1em;
+            background: var(--amber);
+            opacity: 0.4;
+            transition: opacity 0.4s, height 0.4s, box-shadow 0.4s;
+        }
+
+        .post-content h2:hover::before {
+            opacity: 1;
+            height: 100%;
+            box-shadow: 0 0 12px var(--amber-glow), 0 0 4px var(--amber-dim);
         }
 
         .post-content h3 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--cyan);
+            font-size: 1.15rem;
+            font-weight: 500;
             margin: 2.5rem 0 0.8rem;
-        }
-
-        .post-content h3::before {
-            content: "### ";
-            color: var(--text-dim);
+            color: var(--text);
         }
 
         .post-content h4 {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--amber);
+            font-family: 'DM Mono', monospace;
+            font-size: 0.78rem;
+            font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.08em;
             margin: 2rem 0 0.6rem;
+            color: var(--text-dim);
         }
 
         .post-content a {
-            color: var(--cyan);
+            color: var(--amber);
             text-decoration: none;
-            border-bottom: 1px solid var(--cyan);
+            border-bottom: 1px solid var(--border);
+            transition: border-color 0.3s;
         }
 
         .post-content a:hover {
-            color: var(--green);
-            border-color: var(--green);
-            text-shadow: 0 0 8px var(--green-glow);
+            border-color: var(--amber);
         }
 
+        /* Blockquotes: red safelight tint */
         .post-content blockquote {
-            border-left: 3px solid var(--green);
-            padding: 0.5rem 1.2rem;
-            margin: 1.5rem 0;
-            background: var(--surface);
-            color: var(--green-dim);
+            border-left: 2px solid var(--amber-dim);
+            padding: 0.8rem 1.5rem;
+            margin: 2rem 0;
+            background: rgba(102, 26, 26, 0.08);
             font-style: italic;
+            color: var(--text-dim);
         }
 
-        .post-content blockquote p {
-            margin-bottom: 0.4rem;
-        }
-
-        .post-content blockquote p:last-child {
-            margin-bottom: 0;
-        }
+        .post-content blockquote p { margin-bottom: 0.4rem; }
+        .post-content blockquote p:last-child { margin-bottom: 0; }
 
         .post-content ul, .post-content ol {
             padding-left: 1.5rem;
-            margin-bottom: 1.4rem;
+            margin-bottom: 1.5rem;
         }
 
         .post-content li {
-            margin-bottom: 0.3rem;
-            font-size: 0.92rem;
+            margin-bottom: 0.4rem;
+            font-weight: 300;
         }
 
-        .post-content li::marker {
-            color: var(--green);
-        }
+        .post-content li::marker { color: var(--amber-dim); }
 
         .post-content code {
-            font-family: inherit;
-            font-size: 0.88rem;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.84rem;
             background: var(--surface);
-            border: 1px solid var(--border);
             padding: 2px 5px;
+            border: 1px solid var(--border);
             color: var(--amber);
         }
 
         .post-content pre {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-left: 3px solid var(--cyan);
             padding: 1.2rem 1.5rem;
-            margin: 1.5rem 0;
+            margin: 2rem 0;
             overflow-x: auto;
         }
 
@@ -236,112 +220,112 @@
             border: none;
             padding: 0;
             color: var(--text);
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             line-height: 1.7;
         }
 
+        /* The trick: images "develop" — start dark, fade in like a photo in developer fluid */
         .post-content img {
             max-width: 100%;
             height: auto;
+            margin: 2rem 0;
             border: 1px solid var(--border);
-            margin: 1.5rem 0;
+            animation: develop 2s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes develop {
+            0% { opacity: 0; filter: brightness(0.1) sepia(1) saturate(0.3); }
+            40% { opacity: 0.6; filter: brightness(0.5) sepia(0.5) saturate(0.7); }
+            100% { opacity: 1; filter: brightness(1) sepia(0) saturate(1); }
         }
 
         .post-content hr {
             border: none;
             height: 1px;
-            background: var(--border);
+            background: linear-gradient(90deg, transparent, var(--amber-dim), transparent);
             margin: 3rem 0;
+            opacity: 0.4;
         }
 
         .post-content table {
             width: 100%;
             border-collapse: collapse;
-            margin: 1.5rem 0;
-            font-size: 0.85rem;
+            margin: 2rem 0;
+            font-size: 0.88rem;
         }
 
         .post-content th {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
             text-align: left;
             padding: 0.5rem 0.8rem;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            color: var(--green);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            color: var(--amber-dim);
+            border-bottom: 1px solid var(--border);
         }
 
         .post-content td {
             padding: 0.5rem 0.8rem;
-            border: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
         }
 
         /* --- Footer --- */
         .post-footer {
             max-width: var(--max-width);
             margin: 0 auto;
-            padding: 2rem 1.5rem 4rem;
+            padding: 2rem 1.5rem 5rem;
             border-top: 1px solid var(--border);
         }
 
         .post-footer a {
-            font-size: 0.8rem;
-            color: var(--green);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-        .post-footer a:hover {
-            text-shadow: 0 0 10px var(--green-glow);
-        }
-
-        .post-footer a::before {
-            content: "$ cd ";
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
             color: var(--text-dim);
+            text-decoration: none;
+            transition: color 0.3s;
         }
+
+        .post-footer a:hover { color: var(--amber); }
 
         @media (max-width: 640px) {
-            html { font-size: 14px; }
-            .post-header { padding: 3rem 1.2rem 1.5rem; }
+            html { font-size: 15px; }
+            .post-header { padding: 3.5rem 1.2rem 2rem; }
+            .post-title { font-size: 1.9rem; }
             .post-content { padding: 0 1.2rem 3rem; }
-            .post-title { font-size: 1.8rem; }
         }
     </style>
 </head>
 <body>
-    <div class="prompt-bar">
-        <span>Write where you think <span class="path">~/posts/ephemeral-shiny-chrome</span></span>
-        <span>9m read</span>
-    </div>
+    <div class="post-wrapper">
+        <div class="safelight"></div>
 
-    <article>
-        <header class="post-header">
-            <div class="post-meta">
-                <time datetime="2026-04-01T22:19:40.402552+00:00">April 1, 2026</time>
-                <span class="sep">|</span>
-                <span>9 min read</span>
-            </div>
-            <h1 class="post-title">Ephemeral. Shiny. Chrome</h1>
-            
-            <div class="post-tags">
+        <article>
+            <header class="post-header">
+                <div class="post-meta">
+                    <time datetime="2026-04-03T20:55:03.808945+00:00">April 3, 2026</time>
+                    <span class="dot"></span>
+                    <span>9 min read</span>
+                </div>
+                <h1 class="post-title">Ephemeral. Shiny. Chrome</h1>
                 
-                <span>architecture</span>
+                <div class="post-tags">
+                    
+                    <span>architecture</span>
+                    
+                    <span>philosophy</span>
+                    
+                    <span>infrastructure</span>
+                    
+                    <span>note2cms</span>
+                    
+                </div>
                 
-                <span>philosophy</span>
-                
-                <span>infrastructure</span>
-                
-                <span>note2cms</span>
-                
-            </div>
-            
-        </header>
+            </header>
 
-        <div class="post-content">
-            <p>Most servers are built to survive. They are heavy, lumbering monuments to overhead, clinging to a 99.9% uptime they never earned. They sit on cloud instances consuming memory between requests, aggregating logs nobody reads, and rotting from the inside with every unpatched dependency. They are the computational web at its most stagnant &ndash; a standing army guarding an empty room.</p>
+            <div class="post-content">
+                <p>Most servers are built to survive. They are heavy, lumbering monuments to overhead, clinging to a 99.9% uptime they never earned. They sit on cloud instances consuming memory between requests, aggregating logs nobody reads, and rotting from the inside with every unpatched dependency. They are the computational web at its most stagnant &ndash; a standing army guarding an empty room.</p>
 <p>The note2cms pipeline worker is not that.</p>
 <p>It is a stateless projectile. Born from a single HTTP POST, it wakes in the dark, parses your frontmatter, renders your Markdown through a Jinja2 template, pushes four files to a GitHub repo, returns a permalink, and self-terminates. The entire lifespan is measured in milliseconds. By the time you read the permalink in your terminal, the process that created it no longer exists.</p>
 <p>Seven super slow libraries of super slow Python. One second. Then nothing.</p>
@@ -382,11 +366,12 @@
 <p>The ephemeral worker is the cure. Not because it is better at being a server. Because it refuses to be a server at all.</p>
 <p>Markdown in. Permalink out. Awake. Work. Die.</p>
 <p>Ephemeral. Shiny. Chrome.</p>
-        </div>
-    </article>
+            </div>
+        </article>
 
-    <footer class="post-footer">
-        <a href="https://mortalezz.github.io/blog/posts/">../posts/</a>
-    </footer>
+        <footer class="post-footer">
+            <a href="https://mortalezz.github.io/blog/posts/">← all posts</a>
+        </footer>
+    </div>
 </body>
 </html>
