@@ -12,187 +12,226 @@
     <link rel="canonical" href="https://mortalezz.github.io/blog/posts/the-internet-peaked-in-1997/">
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+JP:wght@300;400;500&display=swap');
 
         :root {
-            --bg: #0a0e14;
-            --surface: #0d1117;
-            --green: #00ff88;
-            --green-dim: #00cc6a;
-            --green-glow: rgba(0, 255, 136, 0.15);
-            --amber: #ffb300;
-            --cyan: #00e5ff;
-            --text: #c0c8d8;
-            --text-dim: #5a6577;
-            --border: #1a2233;
-            --max-width: 48rem;
+            --ink: #1a1714;
+            --paper: #f5f0e8;
+            --wash: #e8e0d0;
+            --vermillion: #cc3333;
+            --stone: #6b5f52;
+            --faded: #9a8f80;
+            --max-width: 40rem;
         }
 
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --ink: #e0d8cc;
+                --paper: #171412;
+                --wash: #221e1a;
+                --vermillion: #e04040;
+                --stone: #9a8e80;
+                --faded: #5a5248;
+            }
         }
 
-        html { font-size: 16px; }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 18px; }
 
         body {
-            font-family: 'Fira Code', 'SF Mono', monospace;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.7;
+            font-family: 'Cormorant Garamond', 'Noto Sans JP', Georgia, serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
             min-height: 100vh;
-            position: relative;
         }
 
-        /* CRT scanline effect */
-        body::after {
+        /* Subtle paper texture */
+        body::before {
             content: "";
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 2px,
-                rgba(0, 0, 0, 0.08) 2px,
-                rgba(0, 0, 0, 0.08) 4px
-            );
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
             pointer-events: none;
-            z-index: 1000;
+            z-index: 0;
         }
 
-        /* --- Prompt bar --- */
-        .prompt-bar {
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            padding: 0.6rem 1.5rem;
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .prompt-bar .path {
-            color: var(--cyan);
+        .post-wrapper {
+            position: relative;
+            z-index: 1;
         }
 
         /* --- Header --- */
         .post-header {
             max-width: var(--max-width);
             margin: 0 auto;
-            padding: 4rem 1.5rem 2rem;
+            padding: 6rem 1.5rem 3rem;
+            text-align: center;
         }
 
         .post-meta {
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            margin-bottom: 1rem;
-            display: flex;
-            gap: 1rem;
-            align-items: center;
+            font-size: 0.72rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--stone);
+            margin-bottom: 2rem;
         }
 
         .post-meta .sep {
-            color: var(--green);
+            margin: 0 0.8rem;
+            color: var(--faded);
         }
 
         .post-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.4rem;
-            font-weight: 700;
-            line-height: 1.15;
-            color: var(--green);
-            margin-bottom: 1.2rem;
-            text-shadow: 0 0 30px var(--green-glow);
+            font-size: 2.6rem;
+            font-weight: 400;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        /* The trick: ink brushstroke under title */
+        .post-title::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 10%;
+            width: 80%;
+            height: 3px;
+            background: var(--vermillion);
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: brushstroke 1.2s ease-out 0.5s forwards;
+        }
+
+        @keyframes brushstroke {
+            0% { transform: scaleX(0); opacity: 0.3; }
+            60% { transform: scaleX(1.05); opacity: 1; }
+            100% { transform: scaleX(1); opacity: 0.8; }
         }
 
         .post-tags {
             display: flex;
-            gap: 0.5rem;
+            justify-content: center;
+            gap: 0.6rem;
             flex-wrap: wrap;
         }
 
         .post-tags span {
-            font-size: 0.7rem;
-            color: var(--amber);
-            padding: 0.2rem 0.6rem;
-            border: 1px solid var(--amber);
-            border-radius: 2px;
+            font-size: 0.68rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--stone);
+            padding: 0.15rem 0.5rem;
+            border: 1px solid var(--faded);
         }
 
         /* --- Content --- */
         .post-content {
             max-width: var(--max-width);
             margin: 0 auto;
-            padding: 0 1.5rem 4rem;
+            padding: 0 1.5rem 5rem;
         }
 
         .post-content p {
-            margin-bottom: 1.4rem;
-            font-size: 0.92rem;
+            margin-bottom: 1.6rem;
+            font-weight: 400;
+            font-size: 1.05rem;
         }
 
         .post-content h2 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--green);
-            margin: 3rem 0 1rem;
+            font-size: 1.6rem;
+            font-weight: 400;
+            margin: 3.5rem 0 1rem;
+            padding-bottom: 0.4rem;
+            position: relative;
         }
 
-        .post-content h2::before {
-            content: "## ";
-            color: var(--text-dim);
+        /* Brushstroke under h2 — appears on scroll */
+        .post-content h2::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 3rem;
+            height: 2px;
+            background: var(--vermillion);
+            opacity: 0.7;
+            transition: width 0.6s ease;
+        }
+
+        .post-content h2:hover::after {
+            width: 100%;
         }
 
         .post-content h3 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--cyan);
+            font-size: 1.2rem;
+            font-weight: 500;
             margin: 2.5rem 0 0.8rem;
-        }
-
-        .post-content h3::before {
-            content: "### ";
-            color: var(--text-dim);
+            color: var(--ink);
         }
 
         .post-content h4 {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--amber);
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
+            color: var(--stone);
             margin: 2rem 0 0.6rem;
         }
 
         .post-content a {
-            color: var(--cyan);
+            color: var(--ink);
             text-decoration: none;
-            border-bottom: 1px solid var(--cyan);
+            border-bottom: 1px solid var(--vermillion);
+            transition: border-width 0.2s;
         }
 
         .post-content a:hover {
-            color: var(--green);
-            border-color: var(--green);
-            text-shadow: 0 0 8px var(--green-glow);
+            border-bottom-width: 2px;
         }
 
+        /* The trick: blockquotes get a vermillion chop mark */
         .post-content blockquote {
-            border-left: 3px solid var(--green);
-            padding: 0.5rem 1.2rem;
-            margin: 1.5rem 0;
-            background: var(--surface);
-            color: var(--green-dim);
+            border: none;
+            padding: 1.5rem 2rem 1.5rem 2.5rem;
+            margin: 2.5rem 0;
             font-style: italic;
+            font-weight: 400;
+            color: var(--stone);
+            position: relative;
+            background: transparent;
+        }
+
+        .post-content blockquote::before {
+            content: "";
+            position: absolute;
+            top: 0.8rem;
+            left: 0;
+            width: 4px;
+            height: calc(100% - 1.6rem);
+            background: var(--vermillion);
+            opacity: 0.5;
+        }
+
+        /* Red chop mark (hanko) */
+        .post-content blockquote::after {
+            content: "◆";
+            position: absolute;
+            bottom: -0.5rem;
+            right: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--vermillion);
+            opacity: 0.4;
+            font-style: normal;
         }
 
         .post-content blockquote p {
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
         }
 
         .post-content blockquote p:last-child {
@@ -201,147 +240,140 @@
 
         .post-content ul, .post-content ol {
             padding-left: 1.5rem;
-            margin-bottom: 1.4rem;
+            margin-bottom: 1.6rem;
         }
 
         .post-content li {
-            margin-bottom: 0.3rem;
-            font-size: 0.92rem;
+            margin-bottom: 0.4rem;
+            font-weight: 400;
         }
 
         .post-content li::marker {
-            color: var(--green);
+            color: var(--vermillion);
         }
 
         .post-content code {
-            font-family: inherit;
-            font-size: 0.88rem;
-            background: var(--surface);
-            border: 1px solid var(--border);
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.82rem;
+            background: var(--wash);
             padding: 2px 5px;
-            color: var(--amber);
+            border-radius: 2px;
         }
 
         .post-content pre {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-left: 3px solid var(--cyan);
-            padding: 1.2rem 1.5rem;
-            margin: 1.5rem 0;
+            background: var(--ink);
+            color: var(--paper);
+            padding: 1.5rem;
+            margin: 2rem 0;
             overflow-x: auto;
+            border-radius: 2px;
         }
 
         .post-content pre code {
             background: none;
-            border: none;
             padding: 0;
-            color: var(--text);
-            font-size: 0.85rem;
+            color: inherit;
+            font-size: 0.8rem;
             line-height: 1.7;
         }
 
         .post-content img {
             max-width: 100%;
             height: auto;
-            border: 1px solid var(--border);
-            margin: 1.5rem 0;
+            margin: 2rem 0;
         }
 
         .post-content hr {
             border: none;
-            height: 1px;
-            background: var(--border);
+            text-align: center;
             margin: 3rem 0;
+        }
+
+        .post-content hr::after {
+            content: "◇ ◇ ◇";
+            color: var(--faded);
+            font-size: 0.7rem;
+            letter-spacing: 0.5rem;
         }
 
         .post-content table {
             width: 100%;
             border-collapse: collapse;
-            margin: 1.5rem 0;
-            font-size: 0.85rem;
+            margin: 2rem 0;
+            font-size: 0.9rem;
+        }
+
+        .post-content th, .post-content td {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid var(--wash);
+            text-align: left;
         }
 
         .post-content th {
-            text-align: left;
-            padding: 0.5rem 0.8rem;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            color: var(--green);
-            font-size: 0.75rem;
+            font-size: 0.72rem;
+            font-weight: 500;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .post-content td {
-            padding: 0.5rem 0.8rem;
-            border: 1px solid var(--border);
+            letter-spacing: 0.08em;
+            color: var(--stone);
         }
 
         /* --- Footer --- */
         .post-footer {
             max-width: var(--max-width);
             margin: 0 auto;
-            padding: 2rem 1.5rem 4rem;
-            border-top: 1px solid var(--border);
+            padding: 2.5rem 1.5rem 6rem;
+            border-top: 1px solid var(--wash);
+            text-align: center;
         }
 
         .post-footer a {
-            font-size: 0.8rem;
-            color: var(--green);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--stone);
             text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
+            transition: color 0.2s;
         }
 
         .post-footer a:hover {
-            text-shadow: 0 0 10px var(--green-glow);
-        }
-
-        .post-footer a::before {
-            content: "$ cd ";
-            color: var(--text-dim);
+            color: var(--vermillion);
         }
 
         @media (max-width: 640px) {
-            html { font-size: 14px; }
-            .post-header { padding: 3rem 1.2rem 1.5rem; }
-            .post-content { padding: 0 1.2rem 3rem; }
-            .post-title { font-size: 1.8rem; }
+            html { font-size: 16px; }
+            .post-header { padding: 4rem 1.2rem 2rem; }
+            .post-title { font-size: 2rem; }
+            .post-content { padding: 0 1.2rem 4rem; }
         }
     </style>
 </head>
 <body>
-    <div class="prompt-bar">
-        <span>Write where you think <span class="path">~/posts/the-internet-peaked-in-1997</span></span>
-        <span>7m read</span>
-    </div>
+    <div class="post-wrapper">
+        <article>
+            <header class="post-header">
+                <div class="post-meta">
+                    <time datetime="2026-04-03T19:55:12.173622+00:00">April 3, 2026</time>
+                    <span class="sep">·</span>
+                    <span>7 min read</span>
+                </div>
+                <h1 class="post-title">The Internet Peaked in 1997</h1>
+                
+                <div class="post-tags">
+                    
+                    <span>design</span>
+                    
+                    <span>theming</span>
+                    
+                    <span>vaporwave</span>
+                    
+                    <span>philosophy</span>
+                    
+                </div>
+                
+            </header>
 
-    <article>
-        <header class="post-header">
-            <div class="post-meta">
-                <time datetime="2026-04-03T19:14:14.653682+00:00">April 3, 2026</time>
-                <span class="sep">|</span>
-                <span>7 min read</span>
-            </div>
-            <h1 class="post-title">The Internet Peaked in 1997</h1>
-            
-            <div class="post-tags">
-                
-                <span>design</span>
-                
-                <span>theming</span>
-                
-                <span>vaporwave</span>
-                
-                <span>philosophy</span>
-                
-            </div>
-            
-        </header>
-
-        <div class="post-content">
-            <p>There is a generation of people who believe the internet peaked in the late 1990s. They are correct.</p>
+            <div class="post-content">
+                <p>There is a generation of people who believe the internet peaked in the late 1990s. They are correct.</p>
 <p>Not technologically. Technologically the 90s internet was a disaster &ndash; 56k modems, table-based layouts, animated GIF counters, auto-playing MIDI files, and the blink tag. The infrastructure was amateur. The code was criminal. The bandwidth was a joke.</p>
 <p>But the feeling was real.</p>
 <h2 id="what-was-lost">What Was Lost</h2>
@@ -385,11 +417,12 @@
 <p>Until now.</p>
 <hr />
 <p><em>The internet peaked in 1997. Not technologically. Emotionally. The Vaporwave theme is a memorial for the internet that felt like a place. Static HTML. Zero JavaScript. All atmosphere.</em></p>
-        </div>
-    </article>
+            </div>
+        </article>
 
-    <footer class="post-footer">
-        <a href="https://mortalezz.github.io/blog/posts/">../posts/</a>
-    </footer>
+        <footer class="post-footer">
+            <a href="https://mortalezz.github.io/blog/posts/">← All posts</a>
+        </footer>
+    </div>
 </body>
 </html>
