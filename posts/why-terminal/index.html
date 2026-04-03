@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Terminal — Write where you think</title>
+    <meta name="description" content="People see the Terminal theme and think: hacker aesthetic. Green text on black. Minimal. Another developer blog that looks like a terminal because the developer could not be bothered to choose a real…">
+    <meta property="og:title" content="Why Terminal">
+    <meta property="og:description" content="People see the Terminal theme and think: hacker aesthetic. Green text on black. Minimal. Another developer blog that looks like a terminal because the developer could not be bothered to choose a real…">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://mortalezz.github.io/blog/posts/why-terminal/">
+    <link rel="canonical" href="https://mortalezz.github.io/blog/posts/why-terminal/">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap');
+
+        :root {
+            --bg: #0a0e14;
+            --surface: #0d1117;
+            --green: #00ff88;
+            --green-dim: #00cc6a;
+            --green-glow: rgba(0, 255, 136, 0.15);
+            --amber: #ffb300;
+            --cyan: #00e5ff;
+            --text: #c0c8d8;
+            --text-dim: #5a6577;
+            --border: #1a2233;
+            --max-width: 48rem;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html { font-size: 16px; }
+
+        body {
+            font-family: 'Fira Code', 'SF Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* CRT scanline effect */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.08) 2px,
+                rgba(0, 0, 0, 0.08) 4px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* --- Prompt bar --- */
+        .prompt-bar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0.6rem 1.5rem;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .prompt-bar .path {
+            color: var(--cyan);
+        }
+
+        /* --- Header --- */
+        .post-header {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 4rem 1.5rem 2rem;
+        }
+
+        .post-meta {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .post-meta .sep {
+            color: var(--green);
+        }
+
+        .post-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--green);
+            margin-bottom: 1.2rem;
+            text-shadow: 0 0 30px var(--green-glow);
+        }
+
+        .post-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .post-tags span {
+            font-size: 0.7rem;
+            color: var(--amber);
+            padding: 0.2rem 0.6rem;
+            border: 1px solid var(--amber);
+            border-radius: 2px;
+        }
+
+        /* --- Content --- */
+        .post-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        .post-content p {
+            margin-bottom: 1.4rem;
+            font-size: 0.92rem;
+        }
+
+        .post-content h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--green);
+            margin: 3rem 0 1rem;
+        }
+
+        .post-content h2::before {
+            content: "## ";
+            color: var(--text-dim);
+        }
+
+        .post-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--cyan);
+            margin: 2.5rem 0 0.8rem;
+        }
+
+        .post-content h3::before {
+            content: "### ";
+            color: var(--text-dim);
+        }
+
+        .post-content h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--amber);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 2rem 0 0.6rem;
+        }
+
+        .post-content a {
+            color: var(--cyan);
+            text-decoration: none;
+            border-bottom: 1px solid var(--cyan);
+        }
+
+        .post-content a:hover {
+            color: var(--green);
+            border-color: var(--green);
+            text-shadow: 0 0 8px var(--green-glow);
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--green);
+            padding: 0.5rem 1.2rem;
+            margin: 1.5rem 0;
+            background: var(--surface);
+            color: var(--green-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote p {
+            margin-bottom: 0.4rem;
+        }
+
+        .post-content blockquote p:last-child {
+            margin-bottom: 0;
+        }
+
+        .post-content ul, .post-content ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.4rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.3rem;
+            font-size: 0.92rem;
+        }
+
+        .post-content li::marker {
+            color: var(--green);
+        }
+
+        .post-content code {
+            font-family: inherit;
+            font-size: 0.88rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 2px 5px;
+            color: var(--amber);
+        }
+
+        .post-content pre {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--cyan);
+            padding: 1.2rem 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .post-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: var(--text);
+            font-size: 0.85rem;
+            line-height: 1.7;
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border);
+            margin: 1.5rem 0;
+        }
+
+        .post-content hr {
+            border: none;
+            height: 1px;
+            background: var(--border);
+            margin: 3rem 0;
+        }
+
+        .post-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.85rem;
+        }
+
+        .post-content th {
+            text-align: left;
+            padding: 0.5rem 0.8rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--green);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .post-content td {
+            padding: 0.5rem 0.8rem;
+            border: 1px solid var(--border);
+        }
+
+        /* --- Footer --- */
+        .post-footer {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .post-footer a {
+            font-size: 0.8rem;
+            color: var(--green);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .post-footer a:hover {
+            text-shadow: 0 0 10px var(--green-glow);
+        }
+
+        .post-footer a::before {
+            content: "$ cd ";
+            color: var(--text-dim);
+        }
+
+        @media (max-width: 640px) {
+            html { font-size: 14px; }
+            .post-header { padding: 3rem 1.2rem 1.5rem; }
+            .post-content { padding: 0 1.2rem 3rem; }
+            .post-title { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="prompt-bar">
+        <span>Write where you think <span class="path">~/posts/why-terminal</span></span>
+        <span>8m read</span>
+    </div>
+
+    <article>
+        <header class="post-header">
+            <div class="post-meta">
+                <time datetime="2026-04-03T19:35:22.263189+00:00">April 3, 2026</time>
+                <span class="sep">|</span>
+                <span>8 min read</span>
+            </div>
+            <h1 class="post-title">Why Terminal</h1>
+            
+            <div class="post-tags">
+                
+                <span>design</span>
+                
+                <span>theming</span>
+                
+                <span>philosophy</span>
+                
+                <span>terminal</span>
+                
+            </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>People see the Terminal theme and think: hacker aesthetic. Green text on black. Minimal. Another developer blog that looks like a terminal because the developer could not be bothered to choose a real design.</p>
+<p>They are wrong about every part of that.</p>
+<h2 id="not-minimal">Not Minimal</h2>
+<p>Count what is actually in the CSS.</p>
+<p>CRT scanlines. A repeating linear gradient overlaying the entire viewport, drawing a semi-transparent line every four pixels. A full-screen pseudo-element running on every page. That is not minimal. That is a constant visual effect covering every pixel the reader sees.</p>
+<p>Phosphor glow. The headings do not just display text. They emit light. A text-shadow at <code>0 0 20px rgba(51,255,51,0.15)</code> creates a halo around every heading, simulating the electron-excited phosphor coating on a cathode ray tube. The text is not printed on the page. It is projected onto it.</p>
+<p>Filesystem paths. The header of every post reads <code>~/posts/the-post-slug</code>. The blog pretends to be a filesystem. You did not navigate to this post through a menu. You <code>cd</code>&lsquo;d into it. The path is not decoration. It is world-building.</p>
+<p>Markdown syntax in headings. Section headers are prefixed with <code>##</code>. The rendered HTML preserves the Markdown source notation. The theme breaks the fourth wall &ndash; showing you the markup language inside the markup&rsquo;s own output. You are reading a document that admits it was written in Markdown.</p>
+<p>Command prompt footer. Every page ends with <code>$ cd ../posts/</code> and a blinking cursor. The blog does not end. The session does not close. The terminal waits for your next command. You are not done. The machine is not done. There is always another post to read, another directory to enter.</p>
+<p>The blinking cursor. A CSS animation on a one-second infinite cycle. A rectangle of phosphor green appearing and disappearing. The universal signal that the machine is listening. Present on every page. Always.</p>
+<p>Six visual elements. Six tricks. This theme does not follow the one-trick rule.</p>
+<p>But it does not feel like six tricks. It feels like one place. And that is the key.</p>
+<h2 id="one-world-not-one-trick">One World, Not One Trick</h2>
+<p>The Brutalist theme has one trick &ndash; the hover inversion &ndash; because Brutalist is an aesthetic. An aesthetic has a baseline and one violation. The baseline is austerity. The violation is the inversion. The tension between the two creates the memory.</p>
+<p>Terminal is not an aesthetic. Terminal is a world.</p>
+<p>Every visual element serves the same metaphor: you are inside a terminal session. The scanlines say CRT monitor. The glow says phosphor coating. The path says filesystem. The <code>##</code> says source code. The footer says command prompt. The cursor says the machine is alive and waiting.</p>
+<p>Six details. One fiction. The details do not compete because they do not come from different directions. They all point at the same place. The reader does not perceive six tricks. The reader perceives one environment. They are inside a terminal. Everything confirms this. Nothing contradicts it.</p>
+<p>This is why Terminal breaks the one-trick rule without violating the visual flair principle. The principle says: earn your tricks through context. Terminal&rsquo;s context is so total &ndash; so committed to the fiction of being a terminal session &ndash; that every detail is earned by the world itself. The scanlines are not a trick. They are what CRT monitors look like. The glow is not a trick. It is what phosphor does. The blinking cursor is not a trick. It is what terminals do.</p>
+<p>The theme is not decorated. The theme is inhabited.</p>
+<h2 id="the-fiction">The Fiction</h2>
+<p>When you open a post on the Terminal theme, the page tells you a story before you read a word.</p>
+<p>The path in the header &ndash; <code>~/posts/his-name-is-daniel</code> &ndash; says: this file exists in a directory on a machine. The machine has a filesystem. The filesystem has a home directory. The home directory has a posts folder. You navigated here.</p>
+<p>The date and reading time &ndash; <code>April 2, 2026 | 8 min read</code> &ndash; are metadata. File attributes. <code>ls -la</code> output. When was this file last modified. How large is it.</p>
+<p>The tags &ndash; <code>open-source</code>, <code>philosophy</code>, <code>curl</code>, <code>heroes</code> &ndash; are not categories. They are file attributes. Metadata tags on a document in a system that organizes by tagging rather than by hierarchy.</p>
+<p>The content is the file&rsquo;s contents. You are reading the output of <code>cat ~/posts/his-name-is-daniel</code>. The post is not displayed. It is printed to stdout.</p>
+<p>The footer &ndash; <code>$ cd ../posts/</code> &ndash; is the command you would type next. Go back to the posts directory. List the files. Choose another one. The blog is a filesystem and reading it is navigation.</p>
+<p>This fiction is never stated. There is no &ldquo;welcome to my terminal-themed blog&rdquo; disclaimer. The theme simply behaves as if it is a terminal and trusts the reader to understand. The reader does understand &ndash; instantly, unconsciously &ndash; because the metaphor is so consistent that it requires no explanation.</p>
+<h2 id="why-it-works-for-this-blog">Why It Works for This Blog</h2>
+<p>Every post on this blog reads like something typed into a terminal at two in the morning.</p>
+<p>Short declarative sentences. No hedging. No qualifiers. No &ldquo;it could be argued that&rdquo; or &ldquo;one might consider.&rdquo; Statements. Assertions. Theses delivered as commands.</p>
+<p>&ldquo;You cannot exploit a ghost.&rdquo; That is a terminal command. An assertion executed without confirmation.</p>
+<p>&ldquo;The money is on the table. I can see it from here. I am not picking it up.&rdquo; Three commands. Three executions. No prompt between them. The operator knows what they are doing.</p>
+<p>&ldquo;Say his name.&rdquo; An imperative. Typed at a blinking cursor. Waiting for the user to comply.</p>
+<p>The voice and the environment fused. The content does not wear the theme. The content lives inside the theme. The phosphor green matches the fury. The scanlines match the urgency. The blinking cursor matches the feeling that there is always one more manifesto to write.</p>
+<p>Brutalist would frame this content in black borders and dare it to be worthy. Ink would set it on rice paper and ask it to be elegant. Vaporwave would float it on gradients and ask it to be dreamy. Terminal does not frame or set or float the content. Terminal becomes the content&rsquo;s natural environment. These posts were not written for Terminal. But Terminal is where they belong.</p>
+<h2 id="the-hacker-question">The Hacker Question</h2>
+<p>Is this a hacker aesthetic?</p>
+<p>Yes and no. It uses the visual language of hacking &ndash; green on black, monospace, terminal interfaces. But it does not perform hacking. It does not have matrix-falling-code animations. It does not have fake typing effects. It does not have ASCII art borders or glitch animations or &ldquo;access granted&rdquo; splash screens.</p>
+<p>The theme does not cosplay as a hacker. The theme IS a terminal. The difference is honesty. A hacker-aesthetic theme borrows the visual language and applies it to content that has nothing to do with terminals. A recipe blog in green monospace is cosplay. A manifesto about ephemeral worker pipelines in green monospace is honest.</p>
+<p>Terminal works for note2cms because note2cms is actually built in a terminal. The API is tested with curl &ndash; a terminal command. The deployment is triggered from a terminal. The posts are published from a terminal. The logs are read in a terminal. The theme does not simulate the development environment. The theme IS the development environment, rendered as the reading environment.</p>
+<p>The reader sees what the developer sees. The terminal where the blog was built is the terminal where the blog is read. The tool and the output share an aesthetic because they share a reality. There is no translation layer. No designer interpreting the developer&rsquo;s world for a general audience. The developer&rsquo;s world is presented directly. Take it or leave it.</p>
+<h2 id="the-warmth-of-cold-light">The Warmth of Cold Light</h2>
+<p>There is one more thing about Terminal that nobody mentions. Phosphor green on black is warm.</p>
+<p>This sounds wrong. Green on black should feel cold, clinical, machine-like. But CRT phosphor has a specific quality that LCD screens do not &ndash; it glows. The text does not sit on the surface. It floats above it. The text-shadow creates a halo that softens the edges without reducing the contrast. The letters are sharp but the light around them is soft.</p>
+<p>This is the light of a monitor left on overnight. The light of a screen in a dark room at three in the morning. The light of a machine that has been thinking while you were sleeping. It is not the cold light of an office fluorescent. It is the warm light of a dedicated tool doing its job in the dark.</p>
+<p>The scanlines add texture. Not noise &ndash; texture. Like the grain in a photograph. The image is not degraded by the scanlines. It is authenticated by them. The scanlines say: this is a real screen. This is not a simulation. This light came from phosphor excited by electrons. This text was displayed by a machine that cares about nothing except displaying text.</p>
+<p>The warmth comes from the dedication. The CRT monitor does not multitask. It does not show notifications. It does not switch between apps. It displays text. That is all it does. The entire machine exists to show you these words. The warmth is the warmth of undivided attention.</p>
+<p>Terminal&rsquo;s phosphor green is the visual equivalent of being the only person a machine is talking to. In a world of notifications and distractions and split attention, the CRT says: right now, this screen is yours. Right now, these words are the only thing this machine is displaying. Read them. The cursor will wait.</p>
+<hr />
+<p><em>The theme is not decorated. The theme is inhabited. The cursor blinks. The machine waits. The words glow in phosphor green because phosphor green is the color of a machine giving you its undivided attention.</em></p>
+        </div>
+    </article>
+
+    <footer class="post-footer">
+        <a href="https://mortalezz.github.io/blog/posts/">../posts/</a>
+    </footer>
+</body>
+</html>
