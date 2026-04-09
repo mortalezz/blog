@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legacy Is Not Technical Debt — Write where you think</title>
+    <meta name="description" content="-----">
+    <meta property="og:title" content="Legacy Is Not Technical Debt">
+    <meta property="og:description" content="-----">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://mortalezz.github.io/blog/posts/legacy-is-not-technical-debt/">
+    <link rel="canonical" href="https://mortalezz.github.io/blog/posts/legacy-is-not-technical-debt/">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap');
+
+        :root {
+            --bg: #0a0e14;
+            --surface: #0d1117;
+            --green: #00ff88;
+            --green-dim: #00cc6a;
+            --green-glow: rgba(0, 255, 136, 0.15);
+            --amber: #ffb300;
+            --cyan: #00e5ff;
+            --text: #c0c8d8;
+            --text-dim: #5a6577;
+            --border: #1a2233;
+            --max-width: 48rem;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html { font-size: 16px; }
+
+        body {
+            font-family: 'Fira Code', 'SF Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* CRT scanline effect */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.08) 2px,
+                rgba(0, 0, 0, 0.08) 4px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* --- Prompt bar --- */
+        .prompt-bar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0.6rem 1.5rem;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .prompt-bar .path {
+            color: var(--cyan);
+        }
+
+        /* --- Header --- */
+        .post-header {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 4rem 1.5rem 2rem;
+        }
+
+        .post-meta {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .post-meta .sep {
+            color: var(--green);
+        }
+
+        .post-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--green);
+            margin-bottom: 1.2rem;
+            text-shadow: 0 0 30px var(--green-glow);
+        }
+
+        .post-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .post-tags span {
+            font-size: 0.7rem;
+            color: var(--amber);
+            padding: 0.2rem 0.6rem;
+            border: 1px solid var(--amber);
+            border-radius: 2px;
+        }
+
+        /* --- Content --- */
+        .post-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        .post-content p {
+            margin-bottom: 1.4rem;
+            font-size: 0.92rem;
+        }
+
+        .post-content h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--green);
+            margin: 3rem 0 1rem;
+        }
+
+        .post-content h2::before {
+            content: "## ";
+            color: var(--text-dim);
+        }
+
+        .post-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--cyan);
+            margin: 2.5rem 0 0.8rem;
+        }
+
+        .post-content h3::before {
+            content: "### ";
+            color: var(--text-dim);
+        }
+
+        .post-content h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--amber);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 2rem 0 0.6rem;
+        }
+
+        .post-content a {
+            color: var(--cyan);
+            text-decoration: none;
+            border-bottom: 1px solid var(--cyan);
+        }
+
+        .post-content a:hover {
+            color: var(--green);
+            border-color: var(--green);
+            text-shadow: 0 0 8px var(--green-glow);
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--green);
+            padding: 0.5rem 1.2rem;
+            margin: 1.5rem 0;
+            background: var(--surface);
+            color: var(--green-dim);
+            font-style: italic;
+        }
+
+        .post-content blockquote p {
+            margin-bottom: 0.4rem;
+        }
+
+        .post-content blockquote p:last-child {
+            margin-bottom: 0;
+        }
+
+        .post-content ul, .post-content ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.4rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.3rem;
+            font-size: 0.92rem;
+        }
+
+        .post-content li::marker {
+            color: var(--green);
+        }
+
+        .post-content code {
+            font-family: inherit;
+            font-size: 0.88rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 2px 5px;
+            color: var(--amber);
+        }
+
+        .post-content pre {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--cyan);
+            padding: 1.2rem 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .post-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: var(--text);
+            font-size: 0.85rem;
+            line-height: 1.7;
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border);
+            margin: 1.5rem 0;
+        }
+
+        .post-content hr {
+            border: none;
+            height: 1px;
+            background: var(--border);
+            margin: 3rem 0;
+        }
+
+        .post-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.85rem;
+        }
+
+        .post-content th {
+            text-align: left;
+            padding: 0.5rem 0.8rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--green);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .post-content td {
+            padding: 0.5rem 0.8rem;
+            border: 1px solid var(--border);
+        }
+
+        /* --- Footer --- */
+        .post-footer {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .post-footer a {
+            font-size: 0.8rem;
+            color: var(--green);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .post-footer a:hover {
+            text-shadow: 0 0 10px var(--green-glow);
+        }
+
+        .post-footer a::before {
+            content: "$ cd ";
+            color: var(--text-dim);
+        }
+
+        @media (max-width: 640px) {
+            html { font-size: 14px; }
+            .post-header { padding: 3rem 1.2rem 1.5rem; }
+            .post-content { padding: 0 1.2rem 3rem; }
+            .post-title { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="prompt-bar">
+        <span>Write where you think <span class="path">~/posts/legacy-is-not-technical-debt</span></span>
+        <span>10m read</span>
+    </div>
+
+    <article>
+        <header class="post-header">
+            <div class="post-meta">
+                <time datetime="2026-04-09T08:17:16.968003+00:00">April 9, 2026</time>
+                <span class="sep">|</span>
+                <span>10 min read</span>
+            </div>
+            <h1 class="post-title">Legacy Is Not Technical Debt</h1>
+            
+            <div class="post-tags">
+                
+                <span>security</span>
+                
+                <span>forensics</span>
+                
+                <span>whistleblower</span>
+                
+                <span>compliance</span>
+                
+            </div>
+            
+        </header>
+
+        <div class="post-content">
+            <hr />
+<p>The most deceptive line in technology: legacy is technical debt.</p>
+<p>This was never true. Not once. Not ever.</p>
+<p>Technical debt implies a cost – something you carry, something you pay down, something that slows you. That framing treats legacy systems as a burden. An inefficiency. A thing to modernize when the budget allows and the CTO feels adventurous enough to propose it at the quarterly review.</p>
+<p>Here is what legacy actually is: a system that predates current compliance standards, does not have to meet them, and still performs its original function.</p>
+<p>Read that again.</p>
+<p>Still performs its original function.</p>
+<h2 id="the-gift-from-heaven">The Gift From Heaven</h2>
+<p>A certificate issued in 2014 using a cryptographic scheme deprecated in 1998 still signs documents in 2026. A platform built before the academic papers that exposed its vulnerabilities still produces employment agreements. A self-signed certificate with no policy, no CA chain, no key rotation, and a 25-year validity period still authenticates signatures that courts are asked to enforce.</p>
+<p>The function is preserved. The compliance is absent. And nobody checks – because “it is legacy.”</p>
+<p>Legacy systems are not a burden for bad actors. They are a gift from heaven. They are the one place in the entire technology stack where non-compliance is not just tolerated but expected. Where deprecated cryptography is shrugged at. Where self-signed certificates are explained away as “that is just how the old system works.” Where the absence of modern safeguards is treated as a cost problem rather than a fraud risk.</p>
+<p>The CTO says: we should modernize this system. The CFO says: what is the ROI? The bad actor says: please take your time.</p>
+<h2 id="the-asymmetry">The Asymmetry</h2>
+<p>A modern system has to explain itself. It has to meet standards. It has to pass audits. PCI DSS. HIPAA. SOC 2. GDPR. It has to justify its certificate policy, its padding scheme, its key rotation schedule, its trust chain. A modern system that uses PKCS#1 v1.5 gets flagged by every security scanner on the market. A modern system with a self-signed certificate gets rejected by every browser, every compliance framework, every auditor with a pulse.</p>
+<p>A legacy system does the same things and gets a pass. Because it is legacy. Because it has always been that way. Because replacing it is expensive. Because it still works.</p>
+<p>And “it still works” is the most dangerous phrase in information security. Because it does still work – for the people who depend on its non-compliance.</p>
+<p>The asymmetry is structural. Modern systems face forward – toward the auditor, the compliance framework, the security scanner. Legacy systems face backward – toward the era before the rules existed. The modern system is accountable. The legacy system is nostalgic. Same cryptography. Same self-signed certificates. Same deprecated padding schemes. One gets flagged. The other gets funded for another fiscal year.</p>
+<h2 id="the-zombie-that-will-not-die">The Zombie That Will Not Die</h2>
+<p>In 1998, Daniel Bleichenbacher – working at Bell Laboratories – published a devastating attack on PKCS#1 v1.5 padding in RSA encryption. The attack allowed an adversary to decrypt SSL traffic by exploiting error messages in the padding validation. The RFC was updated. The industry was warned. The vulnerability was “fixed.”</p>
+<p>In 2012, researchers demonstrated that the same attack worked against XML Encryption implementations used by Apache, IBM, Microsoft, and SAP. Fourteen years after the original disclosure. The title of the paper was not subtle: “Bleichenbacher’s Attack Strikes Again.”</p>
+<p>In 2018, researchers discovered that many major internet servers – including Facebook and PayPal – were still vulnerable to variations of the same attack. They named it ROBOT: Return Of Bleichenbacher’s Oracle Threat. Twenty years after the original disclosure. They demonstrated a practical exploit by signing a message with the private key of facebook.com.</p>
+<p>In 2023, the same fundamental vulnerability was discovered again, this time as a timing side-channel. The researchers named it the Marvin Attack and wrote: “We have had 25 years of people trying to patch this fundamentally broken padding mode.” Their recommendation was not to patch it again. Their recommendation was to deprecate and disable PKCS#1 v1.5 entirely.</p>
+<p>Twenty-five years. Four major disclosures. The same vulnerability. Still present. Still exploitable. Still being used by systems that “still work.”</p>
+<p>And somewhere in an enterprise that handles employment agreements, a platform is using this exact deprecated scheme to sign documents that will be presented in a court of law. Not because the platform operator does not know it is deprecated. Because the platform operator knows that nobody will check. Because it is legacy. Because it still works.</p>
+<h2 id="the-signatures-that-lie">The Signatures That Lie</h2>
+<p>While Bleichenbacher was haunting the encryption side of RSA, the signature side was rotting just as quietly.</p>
+<p>In 2019, researchers from Ruhr University Bochum presented findings at the NDSS Symposium that should have ended careers. They analyzed fifteen widely-used open-source implementations of PKCS#1 v1.5 signature verification using symbolic execution. Six of the fifteen had semantic flaws. Four of the six were susceptible to new variants of the Bleichenbacher low-exponent RSA signature forgery. Six new CVEs were issued for the immediately exploitable ones.</p>
+<p>Let that land. Fifteen implementations of a standard that had been in use for decades. Six broken. Four forgeable. In 2019 – twenty-one years after the original scheme was deprecated. The implementations were not obscure hobby projects. They were the libraries that sign TLS certificates, SSH keys, DNSSEC records, and IKE sessions. The plumbing of the internet’s trust infrastructure, and forty percent of the tested implementations could be tricked into accepting forged signatures.</p>
+<p>The paper’s title was academic. The finding was not: a decade after Bleichenbacher’s signature forgery disclosure, the forgery still works. Not because the attack was clever. Because the implementations were lenient. They accepted malformed inputs that should have been rejected. They tolerated trailing bytes that should have triggered errors. They were permissive because permissiveness is the default behavior of code that nobody audits.</p>
+<p>But Bochum was not finished.</p>
+<p>In 2019, the same research group – Vladislav Mladenov, Christian Mainka, and colleagues – also demonstrated that digitally signed PDF documents could be modified without invalidating the signature. Not through a bug in one viewer. Through fundamental parsing vulnerabilities in the PDF ecosystem itself. Twenty-one of twenty-two tested desktop PDF viewers were vulnerable. Five of seven online signing services were affected. Adobe Reader. Foxit. LibreOffice. DocuSign. Evotrust. The list read like a who’s who of document trust infrastructure.</p>
+<p>Three attack classes. Universal Signature Forgery – disabling verification entirely by manipulating the signature object. Incremental Saving Attack – exploiting a legitimate PDF feature to hide the original document and replace it with a new one. Signature Wrapping Attack – tricking the verification logic into processing forged data. In a demonstrated exploit, the researchers altered an Amazon Germany invoice to indicate a one trillion dollar refund – without breaking the signature.</p>
+<p>The industry patched. The viewers updated. The countermeasures were deployed. The problem was declared solved.</p>
+<p>Then in 2021, at NDSS again, Mainka, Mladenov, and Rohlmann from Ruhr University Bochum introduced shadow attacks. A novel class of attack that circumvented every countermeasure implemented after 2019. Not by exploiting implementation bugs – by exploiting the PDF specification itself. The attacker prepares a signed document with hidden shadow content. The signature is valid because the shadow content was present at signing time. The attacker then activates the shadow content after signing – replacing visible text, hiding pages, appending new content – while the signature remains valid because the PDF structure was not technically modified in a way the specification forbids.</p>
+<p>The 2019 attacks exploited implementations. The 2021 attacks exploited the standard. The patches for 2019 were useless against 2021 because you cannot patch a specification with a software update. The trust model of digitally signed PDFs was not broken by bugs. It was broken by design.</p>
+<p>And somewhere, a legacy system is generating digitally signed PDF employment agreements using a self-signed certificate with a deprecated cryptographic scheme, viewed in a PDF application that may or may not have been updated since 2021, relied upon by a court that has never heard of shadow attacks.</p>
+<p>The signatures lie. The certificates lie. The viewers lie. And the legacy system that produces the documents has never been audited because it still works.</p>
+<h2 id="the-self-signed-immunity">The Self-Signed Immunity</h2>
+<p>Self-signed certificates are the skeleton key of legacy fraud.</p>
+<p>A certificate issued by a trusted Certificate Authority has to follow rules. The CA validates identity. The certificate has a defined validity period. The certificate can be revoked via CRL or OCSP. The certificate chain can be audited. The certificate policy is published and enforceable. Every link in the chain is accountable to someone.</p>
+<p>A self-signed certificate follows no rules. It validates nothing because there is no third party to validate against. Its validity period can be anything – one day, one year, twenty-five years, forever. It cannot be revoked because there is no revocation infrastructure. It has no chain because it is the chain. Its policy is whatever the person who generated it decided, which is usually nothing.</p>
+<p>In a testing environment, this is fine. In a development pipeline, this is expected. In a production system that generates legally binding documents, this is not a shortcut. It is a trapdoor.</p>
+<p>PCI DSS explicitly prohibits self-signed certificates for handling sensitive data. HIPAA requires certificates issued by trusted CAs. SOC 2 mandates proper certificate lifecycle management. Every major compliance framework understands that self-signed certificates in production are a liability.</p>
+<p>And every legacy system that predates these frameworks operates with self-signed certificates that nobody audits, nobody tracks, and nobody questions – because the system is old and old systems get a pass and passes are exactly what bad actors need.</p>
+<h2 id="the-camouflage">The Camouflage</h2>
+<p>The Bleichenbacher attack was published in 1998. The RFC deprecated the vulnerable scheme. The industry moved on – nominally. Twenty-eight years later, a certificate using that deprecated scheme is signing employment agreements that are being filed in court as evidence. The platform operator knows the scheme is deprecated. The staffing company using the platform does not care. The employee signing the document does not know. And the court being asked to enforce it has never heard of PKCS#1 v1.5.</p>
+<p>That is not technical debt. That is operational camouflage.</p>
+<p>Technical debt is when you chose a shortcut knowing you would fix it later. Operational camouflage is when you chose a shortcut knowing nobody would notice. The distinction is intent. Technical debt has a remediation plan. Operational camouflage has a risk calculation – and the calculation says: the people who could catch this do not understand the technology, and the people who understand the technology are not looking.</p>
+<p>Every legacy system that “still works” is a system where the rules do not apply. And where the rules do not apply, the people who benefit from the absence of rules will always find a home. Not by accident. By architecture. The legacy system is not incidentally non-compliant. It is structurally non-compliant. The non-compliance is the feature.</p>
+<h2 id="the-questions-nobody-asks">The Questions Nobody Asks</h2>
+<p>Legacy is not a cost center. Legacy is a crime scene that has not been discovered yet.</p>
+<p>The discovery starts when someone asks the right question. Not “how much would it cost to replace this system.” That is a budget question. Budget questions get budget answers – too expensive, not this quarter, maybe next year.</p>
+<p>The right question is: why is this system still running?</p>
+<p>Who benefits from the fact that it does not have to comply with current standards? What operations does it perform that a modern system would not be allowed to perform? What certificates is it using, who issued them, when do they expire, and what cryptographic schemes do they employ? Who decided that a 25-year validity period was appropriate for a certificate that signs legal documents? Was there a policy, or was there an absence of policy? And is the absence of policy an oversight or a strategy?</p>
+<p>Ask those questions about any legacy system in your organization. Follow the certificates. Follow the signing schemes. Follow the compliance exemptions. Follow the money that flows through the systems that nobody audits because they are “just legacy.”</p>
+<p>The answers will keep you up at night.</p>
+<p>They kept me up for fourteen months.</p>
+<hr />
+<p><em>Legacy is not technical debt. Legacy is a perfect vessel for illicit operations. The function is preserved. The compliance is absent. Nobody checks because “it is legacy.” The Bleichenbacher attack was published in 1998. It was rediscovered in 2012, 2018, and 2023. Forty percent of tested PKCS#1 v1.5 signature implementations were forgeable in 2019. Twenty-one of twenty-two PDF viewers accepted forged signatures. Shadow attacks bypassed every countermeasure in 2021. The zombie will not die because the legacy systems that feed it will not die. Start checking.</em></p>
+        </div>
+    </article>
+
+    <footer class="post-footer">
+        <a href="https://mortalezz.github.io/blog/posts/">../posts/</a>
+    </footer>
+</body>
+</html>
